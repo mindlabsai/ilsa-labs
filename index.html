@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ILSA LABS</title>
-<meta name="description" content="ILSA LABS — Intelligence + Living Systems. Technology with a pulse.">
+<meta name="description" content="ILSA LABS. Intelligence + Living Systems. Technology with a pulse.">
 <meta name="theme-color" content="#E9EBEE">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +94,16 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 .winghead .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
 
 .grid{display:grid;gap:clamp(18px,3vw,32px);grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));padding-bottom:clamp(10px,2vw,20px)}
+.bench{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));
+  gap:clamp(14px,2.4vw,26px);padding-bottom:clamp(10px,2vw,20px)}
+.person{padding:clamp(20px,3vw,28px);
+  background:linear-gradient(180deg,#F4F5F7 0%,#E4E6EA 100%);
+  border:1px solid rgba(58,64,72,.14);border-radius:10px;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
+.pname{font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  font-size:clamp(16px,2.4vw,20px);color:var(--ink)}
+.prole{margin-top:8px;font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
 
 /* chamber */
 .chamber{
@@ -233,6 +243,9 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
   transition:background .25s;
 }
 .prism .enter:hover{background:rgba(58,64,72,.06)}
+.prism .enter[hidden]{display:none}
+.prism .enter.preview{border-color:rgba(58,64,72,.28);color:var(--grey);cursor:default;pointer-events:none}
+.prism .enter.preview:hover{background:transparent}
 .prism-actions{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
 .prism-actions .enter{margin-top:0}
 .askthis{
@@ -348,7 +361,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   <button class="askilsa" id="askilsa-tile" type="button" aria-describedby="askilsa-tip">
     <span class="orbdot" aria-hidden="true"></span>
     Ask ILSA
-    <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab — a voice that can answer anything about ILSA and every platform inside it.</span>
+    <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab, a voice that can answer anything about ILSA and every platform inside it.</span>
   </button>
 </header>
 
@@ -357,7 +370,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   <p>Technology with a pulse.</p>
   <button class="herotalk" type="button" data-talk>
     <span class="orbdot" aria-hidden="true"></span>
-    Talk to ILSA — it will show you around
+    Talk to ILSA. It will show you around
   </button>
 </section>
 
@@ -375,12 +388,12 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
             <line x1="96" y1="60" x2="104" y2="60" stroke="#4A5058" stroke-width="1.5"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>Two people join one session.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>Two people. One hard conversation.</p><span class="welcome">Welcome →</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 01</span><span class="led on"><i></i>Live</span></div>
           <div class="name lower">teo</div>
-          <p class="desc"><b>Two people. One conversation.</b> AI facilitation for the conversations you've been meaning to have.</p>
+          <p class="desc"><b>Two people. One conversation.</b> teo sits between you, listening to both sides, keeping it safe, helping the conversations you've been meaning to have.</p>
         </div>
       </div>
     </a>
@@ -390,17 +403,17 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
             <rect x="55" y="25" width="90" height="70" fill="rgba(255,255,255,.55)" stroke="#4A5058" stroke-width="1.5"/>
-            <line class="gate" x1="100" y1="18" x2="100" y2="102" stroke="#4A5058" stroke-width="2"/>
-            <text x="66" y="65" font-family="Space Mono,monospace" font-size="9" letter-spacing="1" fill="#4A5058">ALLOW</text>
-            <text x="112" y="65" font-family="Space Mono,monospace" font-size="9" letter-spacing="1" fill="#A8AEB6">DENY</text>
+            <circle class="pulse" cx="100" cy="54" r="15" fill="none" stroke="#4A5058" stroke-width="1.5"/>
+            <circle cx="100" cy="54" r="4" fill="#4A5058"/>
+            <line x1="68" y1="82" x2="132" y2="82" stroke="#4A5058" stroke-width="1.2"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>An AI wants to use a face, a voice, a work.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>AI can generate anyone.</p><span class="welcome">Welcome →</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 02</span><span class="led on"><i></i>Live</span></div>
           <div class="name">37T</div>
-          <p class="desc"><b>The permission layer between humans and machines.</b> Verify, license, approve or deny AI use of identity and work.</p>
+          <p class="desc"><b>Your face. Your voice. Your work. Yours to keep.</b> Digital likeness and authorship. Verified, licensed and paid on the world's permission exchange.</p>
         </div>
       </div>
     </a>
@@ -418,17 +431,17 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
             <line class="scan" x1="56" y1="60" x2="144" y2="60" stroke="#4A5058" stroke-width="1"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>A clinician opens a screen.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>A child someone needs to understand.</p><span class="welcome">Welcome →</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 03</span><span class="led on"><i></i>Live</span></div>
           <div class="name">Aston</div>
-          <p class="desc"><b>Screening for observable neurodivergence.</b> A structured digital instrument for health and education professionals.</p>
+          <p class="desc"><b>Advanced Screening Tool for Observable Neurodivergence.</b> Multiple informants. Parent, teacher, clinician. One clear picture of the child.</p>
         </div>
       </div>
     </a>
 
-    <a class="chamber" data-prism="texlex" href="https://texlex.ai" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="texlex" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -442,17 +455,17 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
             </g>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>Assessment data goes in.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>The future of neurodivergent assessment.</p><span class="welcome">Preview only</span></div>
         </div>
         <div class="plaque">
-          <div class="id"><span>Lab 04</span><span class="led on"><i></i>Live</span></div>
+          <div class="id"><span>Lab 04</span><span class="led dev"><i></i>Beta preview</span></div>
           <div class="name">Texlex</div>
-          <p class="desc"><b>Intelligent reports.</b> Assessment data to publication-quality clinical reports, in the clinician's own voice.</p>
+          <p class="desc"><b>The future of neurodivergent assessment and intelligent reporting.</b> ASD, ADHD and SLD. A diagnostic mind that writes in yours.</p>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a class="chamber" data-prism="inner" href="https://innerlayer.ai" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="inner" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -462,15 +475,15 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
             <circle cx="100" cy="60" r="3" fill="#4A5058"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>A conversation streams in.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>A conversation streams in.</p><span class="welcome">Preview only</span></div>
         </div>
         <div class="plaque">
-          <div class="id"><span>Lab 05</span><span class="led on"><i></i>Live</span></div>
+          <div class="id"><span>Lab 05</span><span class="led dev"><i></i>Beta preview</span></div>
           <div class="name">InnerLayer</div>
-          <p class="desc"><b>Decision intelligence.</b> Conversation intelligence on a proprietary 24-marker clinical taxonomy.</p>
+          <p class="desc"><b>Decision intelligence.</b> InnerLayer reads what's really happening beneath a conversation. 24 clinical markers, one API.</p>
         </div>
       </div>
-    </a>
+    </div>
 
     <a class="chamber" data-prism="oton" href="https://otonomy.ai" target="_blank" rel="noopener">
       <div class="inner">
@@ -489,7 +502,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
         <div class="plaque">
           <div class="id"><span>Lab 06</span><span class="led res"><i></i>Research</span></div>
           <div class="name lower">oton/omy</div>
-          <p class="desc"><b>A new kind of personal intelligence.</b> Built to help you understand yourself more deeply, in real time.</p>
+          <p class="desc">OTO/NOMY brings your body, mind and technology into one continuous conversation. It learns from how you sleep, move, recover, respond and feel, pulling those signals together to understand how you're actually doing in real time, not just showing you another dashboard full of numbers.</p>
         </div>
       </div>
     </a>
@@ -512,12 +525,12 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
             </g>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>Plant-derived compounds.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>Animal sciences.</p><span class="welcome">Welcome →</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 07</span><span class="led dev"><i></i>In development</span></div>
           <div class="name">Anima&nbsp;Lab</div>
-          <p class="desc"><b>Plant-derived therapeutics for animal health.</b> Evidence-led formulations within Australia's veterinary regulatory pathway.</p>
+          <p class="desc"><b>Animal sciences.</b> Plant-derived therapeutics for the animals we live with. Evidence-led, formulated in Australia.</p>
         </div>
       </div>
     </a>
@@ -534,12 +547,29 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 08</span><span class="led res"><i></i>Research</span></div>
-          <div class="name">Biohacking</div>
-          <p class="desc"><b>Human performance, measured and optimised.</b> Sleep, cognition, recovery and longevity.</p>
+          <div class="name">Humantech</div>
+          <p class="desc"><b>Human performance, measured and optimised.</b> Sleep, cognition, recovery, longevity. The lab turned on ourselves.</p>
         </div>
       </div>
     </a>
 
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="winghead">
+    <h2>Behind the Lab</h2>
+    <span class="mono">Founders</span>
+  </div>
+  <div class="bench">
+    <div class="plaque">
+      <div class="name">Vishal Maharaj</div>
+      <p class="desc">Founder &amp; Chief of Human Technology</p>
+    </div>
+    <div class="plaque">
+      <div class="name">Ilahn Maharaj</div>
+      <p class="desc">Founding Engineer</p>
+    </div>
   </div>
 </div>
 
@@ -553,6 +583,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   <div class="dots" id="prism-dots"></div>
   <div class="prism-actions">
     <a class="enter" id="prism-enter" href="#" target="_blank" rel="noopener">Enter platform →</a>
+    <span class="enter preview" id="prism-preview" hidden>Beta preview only</span>
     <button class="askthis" id="prism-ask" type="button" data-talk>
       <span class="orbdot" aria-hidden="true"></span>
       <span id="prism-ask-label">Ask ILSA about this lab</span>
@@ -576,11 +607,11 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
     <h3>Write to the lab</h3>
     <p class="sub">Pick a starting point, or just write.</p>
     <div class="chips" id="writer-chips">
-      <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs — I'd like to explore a partnership with ">Partner with a lab</button>
-      <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs — I'm interested in piloting ">Pilot a platform</button>
-      <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs — I'd like to talk about investing in ">Invest</button>
-      <button type="button" data-subject="Media enquiry" data-body="Hi ILSA Labs — I'm writing a piece on ">Media</button>
-      <button type="button" data-subject="Hello" data-body="Hi ILSA Labs — ">Something else</button>
+      <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs. I'd like to explore a partnership with ">Partner with a lab</button>
+      <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs. I'm interested in piloting ">Pilot a platform</button>
+      <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs. I'd like to talk about investing in ">Invest</button>
+      <button type="button" data-subject="Media enquiry" data-body="Hi ILSA Labs. I'm writing a piece on ">Media</button>
+      <button type="button" data-subject="Hello" data-body="Hi ILSA Labs. ">Something else</button>
     </div>
     <div class="wfields">
       <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name">
@@ -588,7 +619,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
     </div>
     <textarea id="writer-text" placeholder="Your message…" aria-label="Your message"></textarea>
     <button class="send" id="writer-send" type="button">Send →</button>
-    <div class="addr">Delivers to living@ilsalabs.com</div>
+    <div class="addr">Delivers to human@ilsalabs.com</div>
   </div>
 </div>
 
@@ -619,34 +650,32 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   /* ---------- PRISM SEQUENCES ---------- */
   var PRISMS={
     teo:{id:"Lab 01 · Intelligence",name:"teo",lower:true,beats:[
-      "Two people join one session.",
-      "teo listens to both sides — tone, timing, what's underneath.",
-      "And helps the conversation actually land."]},
+      "Two people. One hard conversation.",
+      "teo listens to both sides and keeps it safe.",
+      "Say the thing. teo helps it land."]},
     t37:{id:"Lab 02 · Intelligence",name:"37T",beats:[
-      "An AI wants to use a face, a voice, a work.",
-      "37T checks verified identity, licence, scope and live presence.",
-      "ALLOW. DENY. UNKNOWN. Permission before use."]},
+      "AI can generate anyone.",
+      "Your face. Your voice. Your work. Yours to keep.",
+      "Verified. Licensed. Paid. You decide who gets permission."]},
     aston:{id:"Lab 03 · Intelligence",name:"Aston",beats:[
-      "A clinician opens a screen.",
-      "Structured items capture observable neurodevelopmental traits.",
-      "A clear signal, ready for assessment."]},
+      "A child someone needs to understand.",
+      "Parent. Teacher. Clinician. Every perspective, one pathway.",
+      "Observable signal, before the assessment begins."]},
     texlex:{id:"Lab 04 · Intelligence",name:"Texlex",beats:[
-      "Assessment data goes in.",
-      "The engine drafts in the clinician's own voice.",
-      "A publication-quality report comes out."]},
+      "ASD. ADHD. SLD.",
+      "A diagnostic mind that writes in yours.",
+      "The future of neurodivergent assessment is already reporting."]},
     inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",beats:[
       "A conversation streams in.",
       "24 clinical markers read what's beneath the words.",
-      "Decision intelligence comes back."]},
+      "Understanding comes back as an API."]},
     oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,beats:[
-      "You, in real time.",
-      "Patterns you can't see from the inside.",
-      "A new kind of personal intelligence."]},
+      "Body, Mind, Technology speaking together."]},
     anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",beats:[
-      "Plant-derived compounds.",
-      "Formulated to veterinary evidence standards.",
+      "Animal sciences.",
+      "Plant-derived, evidence-led formulation.",
       "For the animals we live with."]},
-    bio:{id:"Lab 08 · Living Systems",name:"Biohacking",beats:[
+    bio:{id:"Lab 08 · Living Systems",name:"Humantech",beats:[
       "Sleep. Cognition. Recovery.",
       "Measured, not guessed.",
       "Human performance, optimised."]}
@@ -659,6 +688,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
       elBeat=document.getElementById('prism-beat'),
       elDots=document.getElementById('prism-dots'),
       elEnter=document.getElementById('prism-enter'),
+      elPreview=document.getElementById('prism-preview'),
       elClose=document.getElementById('prism-close');
   var timer=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -669,7 +699,15 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
     elName.className='lab-name'+(p.lower?' lower':'');
     elStage.innerHTML='';
     if(svg)elStage.appendChild(svg.cloneNode(true));
-    elEnter.href=href;
+    if(href){
+      elEnter.href=href;
+      elEnter.hidden=false;
+      if(elPreview)elPreview.hidden=true;
+    }else{
+      elEnter.removeAttribute('href');
+      elEnter.hidden=true;
+      if(elPreview)elPreview.hidden=false;
+    }
     elDots.innerHTML=p.beats.map(function(){return '<i></i>'}).join('');
     overlay.classList.add('open');
     document.body.style.overflow='hidden';
@@ -699,10 +737,15 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   overlay.addEventListener('click',function(e){if(e.target===overlay)closePrism()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closePrism()});
 
-  document.querySelectorAll('a.chamber[data-prism]').forEach(function(a){
-    a.addEventListener('click',function(e){
-      var svg=a.querySelector('svg');
-      if(openPrism(a.dataset.prism,a.href,svg))e.preventDefault();
+  document.querySelectorAll('.chamber[data-prism]').forEach(function(card){
+    function openCard(e){
+      var svg=card.querySelector('svg');
+      var href=card.getAttribute('href');
+      if(openPrism(card.dataset.prism,href,svg)&&e)e.preventDefault();
+    }
+    card.addEventListener('click',openCard);
+    card.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openCard();}
     });
   });
 
@@ -756,8 +799,8 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
       wEmail=document.getElementById('writer-email'),
       wSend=document.getElementById('writer-send');
   function mailtoFallback(){
-    var body=wText.value+'\n\n— '+(wName.value||'')+(wEmail.value?' · '+wEmail.value:'');
-    location.href='mailto:living@ilsalabs.com?subject='+encodeURIComponent(wSubject)+'&body='+encodeURIComponent(body);
+    var body=wText.value+'\n\n'+(wName.value||'')+(wEmail.value?' · '+wEmail.value:'');
+    location.href='mailto:human@ilsalabs.com?subject='+encodeURIComponent(wSubject)+'&body='+encodeURIComponent(body);
   }
   wSend.addEventListener('click',function(){
     var email=wEmail.value.trim();

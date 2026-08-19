@@ -13,10 +13,10 @@
 1. Create a free account at resend.com → copy the API key.
 2. Vercel → Project → Settings → Environment Variables:
    - `RESEND_API_KEY` = your key   (required)
-   - `CONTACT_TO` = living@ilsalabs.com   (optional, this is the default)
+   - `CONTACT_TO` = human@ilsalabs.com   (optional, this is the default)
    - `CONTACT_FROM` = ILSA Labs <hello@ilsalabs.com>   (optional; requires verifying
      ilsalabs.com in Resend → Domains. Until then the default resend.dev sender works.)
-3. Redeploy. Test the writer — message should arrive at living@ilsalabs.com with
+3. Redeploy. Test the writer — message should arrive at human@ilsalabs.com with
    reply-to set to the visitor, so you just hit Reply.
 
 Note: if the endpoint is missing or fails, the writer automatically falls back to

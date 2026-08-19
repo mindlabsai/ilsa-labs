@@ -2,7 +2,7 @@
 // Sends the glass-writer message to CONTACT_TO via Resend, reply-to set to the visitor.
 // Env vars required (Vercel → Project → Settings → Environment Variables):
 //   RESEND_API_KEY  — from resend.com (free tier is fine)
-//   CONTACT_TO      — optional, defaults to living@ilsalabs.com
+//   CONTACT_TO      — optional, defaults to human@ilsalabs.com
 //   CONTACT_FROM    — optional, a verified sender on your Resend domain,
 //                     defaults to onboarding@resend.dev (works before domain setup)
 
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Not configured' });
 
-  const to = process.env.CONTACT_TO || 'living@ilsalabs.com';
+  const to = process.env.CONTACT_TO || 'human@ilsalabs.com';
   const from = process.env.CONTACT_FROM || 'ILSA Labs <onboarding@resend.dev>';
 
   const esc = (t) =>
