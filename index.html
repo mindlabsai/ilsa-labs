@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ILSA LABS</title>
+<meta name="description" content="ILSA LABS — Intelligence + Living Systems. Technology with a pulse.">
+<meta name="theme-color" content="#E9EBEE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --env-top:#EEF0F3;--env-bot:#DFE2E7;
+  --ink:#3A4048;--deep:#2E343C;--grey:#8A9099;
+  --steel-1:#FBFCFD;--steel-2:#C9CDD4;--steel-3:#9AA0A9;
+  --led-green:#2FD26A;--led-amber:#F4B23E;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:linear-gradient(180deg,var(--env-top),var(--env-bot));
+  min-height:100vh;color:var(--ink);
+  font-family:'Manrope',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(18px,4.5vw,56px)}
+header{
+  position:sticky;top:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:clamp(12px,2.2vw,18px) 0;
+  border-bottom:1px solid rgba(58,64,72,.12);
+  background:linear-gradient(180deg,rgba(238,240,243,.94),rgba(238,240,243,.8));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.askilsa{
+  position:relative;display:inline-flex;align-items:center;gap:8px;
+  flex-shrink:0;align-self:center;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink);background:transparent;
+  border:1px solid rgba(58,64,72,.45);border-radius:2px;
+  padding:9px 16px;cursor:pointer;
+  transition:background .25s,border-color .25s;
+}
+.askilsa:hover,.askilsa:focus-visible{border-color:var(--ink)}
+.askilsa:hover,.askilsa:focus-visible{background:rgba(58,64,72,.06)}
+.orbdot{
+  width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#CFE4FF,#3E8CFF 60%);
+  box-shadow:0 0 8px rgba(62,140,255,.9);
+}
+@media (prefers-reduced-motion:no-preference){
+  .orbdot{animation:orbbreathe 2.4s ease-in-out infinite}
+  @keyframes orbbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+}
+.tip{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:min(74vw,280px);padding:12px 14px;border-radius:10px;
+  background:#fff;color:var(--ink);
+  font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:400;
+  letter-spacing:0;text-transform:none;line-height:1.5;text-align:left;
+  box-shadow:0 14px 30px rgba(58,64,72,.16),0 0 0 1px rgba(58,64,72,.06);
+  opacity:0;transform:translateY(-4px);pointer-events:none;
+  transition:opacity .25s,transform .25s;
+}
+.tip::before{
+  content:'';position:absolute;top:-5px;right:26px;
+  width:10px;height:10px;background:#fff;transform:rotate(45deg);
+  box-shadow:-1px -1px 0 rgba(58,64,72,.06);
+}
+.askilsa:hover .tip,.askilsa:focus-visible .tip{opacity:1;transform:translateY(0)}
+.wordmark{font-weight:600;letter-spacing:.42em;font-size:clamp(14px,2vw,17px);text-transform:uppercase}
+header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--grey);text-transform:uppercase}
+
+.hero{padding:clamp(40px,7vw,96px) 0 clamp(30px,5vw,60px);text-align:center;display:flex;flex-direction:column;align-items:center}
+.hero h1{font-weight:800;font-size:clamp(30px,5.8vw,70px);line-height:1.05;letter-spacing:-.015em}
+.hero p{
+  margin-top:16px;font-family:'Space Mono',monospace;font-weight:400;
+  font-size:clamp(10px,1.4vw,12px);color:var(--grey);
+  letter-spacing:.34em;text-transform:lowercase;
+}
+.herotalk{
+  margin-top:30px;display:inline-flex;align-items:center;gap:11px;
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);background:transparent;
+  border:1px solid var(--ink);border-radius:2px;
+  padding:16px 30px;cursor:pointer;
+  transition:background .25s;
+}
+.herotalk:hover,.herotalk:focus-visible{background:rgba(58,64,72,.06)}
+
+.winghead{display:flex;justify-content:space-between;align-items:baseline;padding:clamp(28px,4.5vw,48px) 0 clamp(14px,2.5vw,22px)}
+.winghead h2{font-weight:800;letter-spacing:.3em;text-transform:uppercase;font-size:clamp(14px,2.2vw,20px)}
+.winghead .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+.grid{display:grid;gap:clamp(18px,3vw,32px);grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));padding-bottom:clamp(10px,2vw,20px)}
+
+/* chamber */
+.chamber{
+  position:relative;display:block;text-decoration:none;color:var(--ink);
+  border-radius:14px;padding:9px;cursor:pointer;border:0;text-align:left;
+  font-family:inherit;
+  background:linear-gradient(160deg,var(--steel-1) 0%,var(--steel-2) 45%,var(--steel-3) 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 -1px 0 rgba(0,0,0,.15) inset,
+    0 18px 34px -14px rgba(46,52,60,.26),0 4px 10px rgba(46,52,60,.08);
+  transition:transform .35s ease,box-shadow .35s ease;
+}
+.chamber:hover,.chamber:focus-visible{
+  transform:translateY(-4px);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 -1px 0 rgba(0,0,0,.15) inset,
+    0 30px 50px -16px rgba(46,52,60,.32),0 8px 16px rgba(46,52,60,.10);
+}
+.inner{border-radius:7px;overflow:hidden;background:#3A4048}
+.room{
+  position:relative;height:clamp(200px,26vw,250px);
+  background:
+    radial-gradient(120% 90% at 50% -12%,rgba(255,255,255,.95) 0%,rgba(244,246,248,.55) 34%,rgba(210,214,220,0) 62%),
+    linear-gradient(180deg,#F2F4F6 0%,#E6E9EC 52%,#C9CDD3 66%,#B4B9C0 67%,#DDE0E5 78%,#EDEFF2 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.room::before{
+  content:'';position:absolute;left:50%;top:69%;transform:translateX(-50%);
+  width:56%;height:12%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(46,52,60,.22) 0%,rgba(20,24,30,0) 70%);
+}
+.room svg{position:relative;width:min(58%,225px);height:auto;overflow:visible;transform:translateY(-8%);filter:drop-shadow(0 3px 2px rgba(46,52,60,.15))}
+.glass{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,.5) 38%,rgba(255,255,255,.08) 46%,rgba(255,255,255,0) 50%,rgba(255,255,255,.16) 68%,rgba(255,255,255,0) 74%),
+    linear-gradient(158deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 26%),
+    linear-gradient(90deg,rgba(150,190,175,.10) 0%,rgba(150,190,175,0) 6%,rgba(150,190,175,0) 94%,rgba(150,190,175,.10) 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 2px 6px rgba(255,255,255,.25) inset;
+}
+/* smoky mirror hover preview */
+.fog{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;padding:22px;text-align:center;
+  background:rgba(243,245,247,.28);
+  backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);
+  opacity:0;transition:opacity .4s ease;pointer-events:none;
+}
+.fog p{text-shadow:0 1px 6px rgba(243,245,247,.9),0 0 14px rgba(243,245,247,.8)}
+.fog .welcome{background:rgba(243,245,247,.65)}
+.chamber:hover .fog,.chamber:focus-visible .fog{opacity:1}
+.fog p{font-weight:300;font-size:clamp(13px,1.7vw,15.5px);color:var(--ink);max-width:24ch;line-height:1.55}
+.fog .welcome{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink);border:1px solid rgba(58,64,72,.5);border-radius:2px;padding:8px 16px;
+}
+@media (hover:none){.fog{display:none}}
+.plaque{
+  position:relative;padding:clamp(15px,2.4vw,20px) clamp(16px,2.6vw,22px);
+  background:linear-gradient(180deg,#F4F5F7 0%,#E4E6EA 100%);
+  border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -1px 0 rgba(0,0,0,.12);
+}
+.plaque .id{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.led{display:inline-flex;align-items:center;gap:7px}
+.led i{width:7px;height:7px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.12) inset}
+.led.on i{background:radial-gradient(circle at 35% 30%,#B9FFD4,var(--led-green) 60%);box-shadow:0 0 7px rgba(47,210,106,.8)}
+.led.dev i{background:radial-gradient(circle at 35% 30%,#FFE9C2,var(--led-amber) 60%);box-shadow:0 0 7px rgba(244,178,62,.7)}
+.led.res i{background:radial-gradient(circle at 35% 30%,#EDEFF2,#AEB4BC 60%)}
+.led.talk i{background:radial-gradient(circle at 35% 30%,#CFE4FF,#3E8CFF 60%);box-shadow:0 0 7px rgba(62,140,255,.8)}
+.plaque .name{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:clamp(17px,2.6vw,21px)}
+.plaque .name.lower{text-transform:lowercase;letter-spacing:.02em;font-weight:600}
+.plaque .desc{margin-top:7px;font-weight:300;font-size:13.5px;line-height:1.55;color:var(--grey)}
+.plaque .desc b{color:var(--ink);font-weight:600}
+
+/* instrument animations */
+@media (prefers-reduced-motion:no-preference){
+  .pulse{animation:pulse 3.2s ease-in-out infinite}
+  .pulse2{animation:pulse 3.2s ease-in-out infinite 1.6s}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.1);opacity:1}}
+  .spin{animation:spin 26s linear infinite;transform-origin:center}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .scan{animation:scan 4s ease-in-out infinite}
+  @keyframes scan{0%,100%{transform:translateY(-30px)}50%{transform:translateY(30px)}}
+  .typed line{stroke-dasharray:120;stroke-dashoffset:120;animation:type 5s ease infinite}
+  .typed line:nth-child(2){animation-delay:.5s}
+  .typed line:nth-child(3){animation-delay:1s}
+  .typed line:nth-child(4){animation-delay:1.5s}
+  .typed line:nth-child(5){animation-delay:2s}
+  @keyframes type{0%{stroke-dashoffset:120}45%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+  .breathe{animation:breathe 4.5s ease-in-out infinite;transform-origin:center}
+  .breathe:nth-child(2){animation-delay:.7s}
+  .breathe:nth-child(3){animation-delay:1.4s}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.05);opacity:1}}
+  .ecg{stroke-dasharray:300;stroke-dashoffset:300;animation:ecg 3.4s linear infinite}
+  @keyframes ecg{0%{stroke-dashoffset:300}70%{stroke-dashoffset:0}100%{stroke-dashoffset:-40}}
+  .gate{animation:gate 5s ease-in-out infinite}
+  @keyframes gate{0%,40%,100%{transform:translateX(0)}55%,80%{transform:translateX(9px)}}
+  .orbit{animation:spin 14s linear infinite;transform-origin:center}
+  .wave{animation:wave 2.2s ease-in-out infinite;transform-origin:center bottom}
+  .wave:nth-child(2){animation-delay:.25s}
+  .wave:nth-child(3){animation-delay:.5s}
+  .wave:nth-child(4){animation-delay:.75s}
+  @keyframes wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+}
+
+/* ============ PRISM OVERLAY ============ */
+.prism{
+  position:fixed;inset:0;z-index:60;display:none;
+  background:
+    radial-gradient(130% 100% at 50% -20%,rgba(255,255,255,.98) 0%,rgba(240,242,245,.9) 40%,rgba(214,218,224,.96) 100%);
+  backdrop-filter:blur(6px);
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(20px,5vw,60px);text-align:center;
+}
+.prism.open{display:flex}
+.prism .stage{
+  width:min(86vw,520px);height:min(44vh,320px);
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.prism .stage svg{width:min(70%,330px);height:auto;overflow:visible;filter:drop-shadow(0 6px 8px rgba(46,52,60,.16))}
+.prism .lab-id{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--grey)}
+.prism .lab-name{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:clamp(26px,5vw,44px);margin-top:10px}
+.prism .lab-name.lower{text-transform:lowercase;letter-spacing:.02em;font-weight:600}
+.prism .beat{
+  margin-top:18px;min-height:3.2em;
+  font-weight:300;font-size:clamp(17px,2.6vw,24px);color:var(--ink);
+  max-width:34ch;opacity:0;transition:opacity .6s;
+}
+.prism .beat.show{opacity:1}
+.prism .dots{display:flex;gap:8px;margin-top:10px;justify-content:center}
+.prism .dots i{width:6px;height:6px;border-radius:50%;background:rgba(58,64,72,.16);transition:background .3s}
+.prism .dots i.on{background:var(--ink)}
+.prism .enter{
+  margin-top:30px;display:inline-block;text-decoration:none;
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink);background:transparent;
+  border:1px solid var(--ink);border-radius:2px;padding:15px 32px;
+  transition:background .25s;
+}
+.prism .enter:hover{background:rgba(58,64,72,.06)}
+.prism-actions{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
+.prism-actions .enter{margin-top:0}
+.askthis{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);background:rgba(255,255,255,.8);
+  border:1px solid rgba(58,64,72,.22);border-radius:100px;
+  padding:14px 24px;cursor:pointer;
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.askthis:hover,.askthis:focus-visible{transform:translateY(-2px);border-color:var(--ink);box-shadow:0 10px 22px rgba(58,64,72,.14)}
+.prism .close{
+  position:absolute;top:clamp(16px,3.5vw,32px);right:clamp(16px,3.5vw,32px);
+  width:44px;height:44px;border-radius:50%;border:1px solid rgba(58,64,72,.18);
+  background:rgba(255,255,255,.7);cursor:pointer;font-size:17px;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+}
+.prism .skipnote{margin-top:14px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+.contact{padding:clamp(50px,8vw,100px) 0 clamp(54px,9vw,108px)}
+.contact .label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
+.contact{display:flex;flex-direction:column;align-items:center;text-align:center}
+.curious{font-weight:600;font-size:clamp(15px,2.2vw,19px);letter-spacing:.02em;color:var(--ink)}
+.contact .herotalk{margin-top:22px}
+.contact .backup{margin-top:18px;font-weight:300;font-size:13px;color:var(--grey)}
+.contact .backup button{
+  background:none;border:none;cursor:pointer;font-family:inherit;
+  color:var(--grey);font-weight:400;font-size:13px;
+  border-bottom:1px solid rgba(58,64,72,.35);padding-bottom:2px;
+  transition:color .25s,border-color .25s;
+}
+.contact .backup button:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ---------- glass writer ---------- */
+.writer{
+  position:fixed;inset:0;z-index:70;display:none;
+  align-items:center;justify-content:center;
+  padding:clamp(16px,4vw,40px);
+  background:rgba(232,235,239,.38);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.writer.open{display:flex}
+.writer .card{
+  width:min(94vw,560px);padding:clamp(10px,2vw,20px);
+  background:none;border:0;box-shadow:none;
+  position:relative;text-align:center;
+}
+.writer h3{font-weight:600;font-size:clamp(17px,2.6vw,22px);color:var(--ink)}
+.writer .sub{margin-top:5px;font-weight:300;font-size:12.5px;color:var(--grey)}
+.writer .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;justify-content:center}
+.writer .chips button{
+  font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--grey);background:rgba(255,255,255,.28);
+  border:1px solid rgba(58,64,72,.3);border-radius:2px;
+  padding:8px 13px;cursor:pointer;transition:all .2s;
+}
+.writer .chips button:hover,.writer .chips button.sel{color:var(--ink);border-color:var(--ink);background:rgba(255,255,255,.75)}
+.wfields{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.wfields input{
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
+  background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.35);
+  padding:8px 4px;outline:none;text-align:center;min-width:190px;
+  transition:border-color .2s;
+}
+.wfields input:focus{border-bottom-color:var(--ink)}
+.wfields input::placeholder{color:var(--grey)}
+.writer .sent{font-weight:300;font-size:clamp(16px,2.4vw,20px);color:var(--ink);padding:40px 0}
+.writer textarea{
+  width:100%;margin-top:20px;min-height:110px;resize:vertical;
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:15px;line-height:1.65;color:var(--ink);
+  background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.35);
+  padding:10px 4px;outline:none;transition:border-color .2s;text-align:center;
+}
+.writer textarea:focus{border-bottom-color:var(--ink)}
+.writer textarea::placeholder{color:var(--grey)}
+.writer .send{
+  margin-top:16px;display:inline-flex;align-items:center;gap:9px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink);background:transparent;border:1px solid var(--ink);border-radius:2px;
+  padding:13px 26px;cursor:pointer;transition:background .25s;
+}
+.writer .send:hover{background:rgba(58,64,72,.06)}
+.writer .wclose{
+  position:fixed;top:clamp(16px,3.5vw,32px);right:clamp(16px,3.5vw,32px);
+  width:44px;height:44px;border:0;background:none;
+  cursor:pointer;font-size:19px;color:var(--ink);
+}
+.writer .addr{margin-top:12px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+footer{
+  border-top:1px solid rgba(58,64,72,.12);
+  padding:clamp(22px,4vw,34px) 0 clamp(34px,5vw,48px);
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--grey);
+}
+footer .fwordmark{font-family:'Manrope',sans-serif;font-weight:600;letter-spacing:.42em;font-size:12px;color:var(--ink)}
+footer .fright{display:flex;gap:26px;flex-wrap:wrap}
+@media (max-width:640px){footer{flex-direction:column;align-items:flex-start;gap:12px}}
+
+/* nudge ring around the ElevenLabs launcher when Ask ILSA tile is tapped */
+@keyframes nudge{0%{box-shadow:0 0 0 0 rgba(62,140,255,.55)}100%{box-shadow:0 0 0 26px rgba(62,140,255,0)}}
+.nudge-ring{
+  position:fixed;right:14px;bottom:14px;width:72px;height:72px;border-radius:50%;
+  pointer-events:none;z-index:55;animation:nudge 1.1s ease-out 3;
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="wordmark">Ilsa&nbsp;Labs</div>
+  <button class="askilsa" id="askilsa-tile" type="button" aria-describedby="askilsa-tip">
+    <span class="orbdot" aria-hidden="true"></span>
+    Ask ILSA
+    <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab — a voice that can answer anything about ILSA and every platform inside it.</span>
+  </button>
+</header>
+
+<section class="hero wrap">
+  <h1>Intelligence + Living Systems.</h1>
+  <p>Technology with a pulse.</p>
+  <button class="herotalk" type="button" data-talk>
+    <span class="orbdot" aria-hidden="true"></span>
+    Talk to ILSA — it will show you around
+  </button>
+</section>
+
+<div class="wrap">
+  <div class="winghead"><h2>Intelligence</h2><span class="mono">Wing I · Software</span></div>
+
+  <div class="grid">
+
+    <a class="chamber" data-prism="teo" href="https://helloteo.com.au" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <circle class="pulse" cx="70" cy="60" r="26" fill="rgba(255,255,255,.5)" stroke="#4A5058" stroke-width="1.5"/>
+            <circle class="pulse2" cx="130" cy="60" r="26" fill="rgba(255,255,255,.5)" stroke="#4A5058" stroke-width="1.5"/>
+            <line x1="96" y1="60" x2="104" y2="60" stroke="#4A5058" stroke-width="1.5"/>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>Two people join one session.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 01</span><span class="led on"><i></i>Live</span></div>
+          <div class="name lower">teo</div>
+          <p class="desc"><b>Two people. One conversation.</b> AI facilitation for the conversations you've been meaning to have.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="t37" href="https://www.37t.io" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <rect x="55" y="25" width="90" height="70" fill="rgba(255,255,255,.55)" stroke="#4A5058" stroke-width="1.5"/>
+            <line class="gate" x1="100" y1="18" x2="100" y2="102" stroke="#4A5058" stroke-width="2"/>
+            <text x="66" y="65" font-family="Space Mono,monospace" font-size="9" letter-spacing="1" fill="#4A5058">ALLOW</text>
+            <text x="112" y="65" font-family="Space Mono,monospace" font-size="9" letter-spacing="1" fill="#A8AEB6">DENY</text>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>An AI wants to use a face, a voice, a work.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 02</span><span class="led on"><i></i>Live</span></div>
+          <div class="name">37T</div>
+          <p class="desc"><b>The permission layer between humans and machines.</b> Verify, license, approve or deny AI use of identity and work.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="aston" href="https://astonax.com" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <rect x="52" y="26" width="96" height="68" rx="4" fill="rgba(255,255,255,.55)" stroke="#4A5058" stroke-width="1.2"/>
+            <g fill="#4A5058">
+              <circle cx="70" cy="44" r="2"/><circle cx="100" cy="44" r="2"/><circle cx="130" cy="44" r="2"/>
+              <circle cx="70" cy="60" r="2"/><circle cx="100" cy="60" r="2"/><circle cx="130" cy="60" r="2"/>
+              <circle cx="70" cy="76" r="2"/><circle cx="100" cy="76" r="2"/><circle cx="130" cy="76" r="2"/>
+            </g>
+            <line class="scan" x1="56" y1="60" x2="144" y2="60" stroke="#4A5058" stroke-width="1"/>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>A clinician opens a screen.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 03</span><span class="led on"><i></i>Live</span></div>
+          <div class="name">Aston</div>
+          <p class="desc"><b>Screening for observable neurodivergence.</b> A structured digital instrument for health and education professionals.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="texlex" href="https://texlex.ai" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <rect x="60" y="22" width="80" height="76" fill="rgba(255,255,255,.7)" stroke="#4A5058" stroke-width="1.5"/>
+            <g class="typed" stroke="#4A5058" stroke-width="1.5">
+              <line x1="70" y1="40" x2="130" y2="40"/>
+              <line x1="70" y1="52" x2="122" y2="52"/>
+              <line x1="70" y1="64" x2="130" y2="64"/>
+              <line x1="70" y1="76" x2="114" y2="76"/>
+              <line x1="70" y1="88" x2="126" y2="88"/>
+            </g>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>Assessment data goes in.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 04</span><span class="led on"><i></i>Live</span></div>
+          <div class="name">Texlex</div>
+          <p class="desc"><b>Intelligent reports.</b> Assessment data to publication-quality clinical reports, in the clinician's own voice.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="inner" href="https://innerlayer.ai" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <circle class="breathe" cx="100" cy="60" r="40" fill="none" stroke="#4A5058" stroke-width="1"/>
+            <circle class="breathe" cx="100" cy="60" r="27" fill="rgba(255,255,255,.35)" stroke="#4A5058" stroke-width="1.2"/>
+            <circle class="breathe" cx="100" cy="60" r="14" fill="rgba(255,255,255,.6)" stroke="#4A5058" stroke-width="1.5"/>
+            <circle cx="100" cy="60" r="3" fill="#4A5058"/>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>A conversation streams in.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 05</span><span class="led on"><i></i>Live</span></div>
+          <div class="name">InnerLayer</div>
+          <p class="desc"><b>Decision intelligence.</b> Conversation intelligence on a proprietary 24-marker clinical taxonomy.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="oton" href="https://otonomy.ai" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <circle cx="100" cy="60" r="24" fill="rgba(255,255,255,.5)" stroke="#4A5058" stroke-width="1.5"/>
+            <g class="orbit">
+              <circle cx="100" cy="22" r="4" fill="#4A5058"/>
+              <circle cx="100" cy="60" r="38" fill="none" stroke="#4A5058" stroke-width=".7" stroke-dasharray="2 5"/>
+            </g>
+            <line x1="88" y1="74" x2="112" y2="46" stroke="#4A5058" stroke-width="1.5"/>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>You, in real time.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 06</span><span class="led res"><i></i>Research</span></div>
+          <div class="name lower">oton/omy</div>
+          <p class="desc"><b>A new kind of personal intelligence.</b> Built to help you understand yourself more deeply, in real time.</p>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="winghead"><h2>Living Systems</h2><span class="mono">Wing II · Bio</span></div>
+
+  <div class="grid">
+
+    <a class="chamber" data-prism="anima" href="https://animalab.com.au" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <g class="spin">
+              <polygon points="100,32 124,46 124,74 100,88 76,74 76,46" fill="rgba(255,255,255,.5)" stroke="#4A5058" stroke-width="1.5"/>
+              <circle cx="100" cy="32" r="3.5" fill="#4A5058"/>
+              <circle cx="124" cy="74" r="3.5" fill="#4A5058"/>
+              <circle cx="76" cy="74" r="3.5" fill="#4A5058"/>
+            </g>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>Plant-derived compounds.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 07</span><span class="led dev"><i></i>In development</span></div>
+          <div class="name">Anima&nbsp;Lab</div>
+          <p class="desc"><b>Plant-derived therapeutics for animal health.</b> Evidence-led formulations within Australia's veterinary regulatory pathway.</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="chamber" data-prism="bio" href="https://biohack.ilsalabs.com" target="_blank" rel="noopener">
+      <div class="inner">
+        <div class="room" aria-hidden="true">
+          <svg viewBox="0 0 200 120">
+            <rect x="42" y="30" width="116" height="60" rx="5" fill="rgba(255,255,255,.55)" stroke="#4A5058" stroke-width="1.2"/>
+            <polyline class="ecg" points="52,60 78,60 88,42 98,78 108,52 114,60 148,60" fill="none" stroke="#4A5058" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <div class="glass"></div>
+          <div class="fog"><p>Sleep. Cognition. Recovery.</p><span class="welcome">Welcome →</span></div>
+        </div>
+        <div class="plaque">
+          <div class="id"><span>Lab 08</span><span class="led res"><i></i>Research</span></div>
+          <div class="name">Biohacking</div>
+          <p class="desc"><b>Human performance, measured and optimised.</b> Sleep, cognition, recovery and longevity.</p>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- PRISM OVERLAY -->
+<div class="prism" id="prism" role="dialog" aria-modal="true" aria-label="Platform preview">
+  <button class="close" id="prism-close" aria-label="Close">✕</button>
+  <div class="lab-id" id="prism-id"></div>
+  <div class="lab-name" id="prism-name"></div>
+  <div class="stage" id="prism-stage"></div>
+  <div class="beat" id="prism-beat"></div>
+  <div class="dots" id="prism-dots"></div>
+  <div class="prism-actions">
+    <a class="enter" id="prism-enter" href="#" target="_blank" rel="noopener">Enter platform →</a>
+    <button class="askthis" id="prism-ask" type="button" data-talk>
+      <span class="orbdot" aria-hidden="true"></span>
+      <span id="prism-ask-label">Ask ILSA about this lab</span>
+    </button>
+  </div>
+  <div class="skipnote">esc to close</div>
+</div>
+
+<section class="contact wrap">
+  <h3 class="curious">Curious to learn more?</h3>
+  <button class="herotalk" type="button" data-talk>
+    <span class="orbdot" aria-hidden="true"></span>
+    Talk to ILSA
+  </button>
+  <p class="backup"><button type="button" id="open-writer">Prefer to write?</button></p>
+</section>
+
+<div class="writer" id="writer" role="dialog" aria-modal="true" aria-label="Write to ILSA Labs">
+  <div class="card">
+    <button class="wclose" id="writer-close" aria-label="Close">✕</button>
+    <h3>Write to the lab</h3>
+    <p class="sub">Pick a starting point, or just write.</p>
+    <div class="chips" id="writer-chips">
+      <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs — I'd like to explore a partnership with ">Partner with a lab</button>
+      <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs — I'm interested in piloting ">Pilot a platform</button>
+      <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs — I'd like to talk about investing in ">Invest</button>
+      <button type="button" data-subject="Media enquiry" data-body="Hi ILSA Labs — I'm writing a piece on ">Media</button>
+      <button type="button" data-subject="Hello" data-body="Hi ILSA Labs — ">Something else</button>
+    </div>
+    <div class="wfields">
+      <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name">
+      <input type="email" id="writer-email" placeholder="Your email" aria-label="Your email" autocomplete="email">
+    </div>
+    <textarea id="writer-text" placeholder="Your message…" aria-label="Your message"></textarea>
+    <button class="send" id="writer-send" type="button">Send →</button>
+    <div class="addr">Delivers to living@ilsalabs.com</div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <span class="fwordmark">Ilsa&nbsp;Labs</span>
+  <div class="fright">
+    <span>Intelligence · Living Systems</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+<!-- ===== ASK ILSA · ElevenLabs Conversational AI =====
+     1. Create your agent at elevenlabs.io (Agents), set it Public (Advanced tab)
+     2. Add ilsalabs.com to the Allowlist (Security tab)
+     3. Replace YOUR_AGENT_ID below with your agent ID -->
+<elevenlabs-convai
+  agent-id="YOUR_AGENT_ID"
+  avatar-orb-color-1="#0B0C0E"
+  avatar-orb-color-2="#7C828B"
+  action-text="Ask ILSA"
+  start-call-text="Talk to the lab"
+  end-call-text="End">
+</elevenlabs-convai>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+<script>
+(function(){
+  /* ---------- PRISM SEQUENCES ---------- */
+  var PRISMS={
+    teo:{id:"Lab 01 · Intelligence",name:"teo",lower:true,beats:[
+      "Two people join one session.",
+      "teo listens to both sides — tone, timing, what's underneath.",
+      "And helps the conversation actually land."]},
+    t37:{id:"Lab 02 · Intelligence",name:"37T",beats:[
+      "An AI wants to use a face, a voice, a work.",
+      "37T checks verified identity, licence, scope and live presence.",
+      "ALLOW. DENY. UNKNOWN. Permission before use."]},
+    aston:{id:"Lab 03 · Intelligence",name:"Aston",beats:[
+      "A clinician opens a screen.",
+      "Structured items capture observable neurodevelopmental traits.",
+      "A clear signal, ready for assessment."]},
+    texlex:{id:"Lab 04 · Intelligence",name:"Texlex",beats:[
+      "Assessment data goes in.",
+      "The engine drafts in the clinician's own voice.",
+      "A publication-quality report comes out."]},
+    inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",beats:[
+      "A conversation streams in.",
+      "24 clinical markers read what's beneath the words.",
+      "Decision intelligence comes back."]},
+    oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,beats:[
+      "You, in real time.",
+      "Patterns you can't see from the inside.",
+      "A new kind of personal intelligence."]},
+    anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",beats:[
+      "Plant-derived compounds.",
+      "Formulated to veterinary evidence standards.",
+      "For the animals we live with."]},
+    bio:{id:"Lab 08 · Living Systems",name:"Biohacking",beats:[
+      "Sleep. Cognition. Recovery.",
+      "Measured, not guessed.",
+      "Human performance, optimised."]}
+  };
+
+  var overlay=document.getElementById('prism'),
+      elId=document.getElementById('prism-id'),
+      elName=document.getElementById('prism-name'),
+      elStage=document.getElementById('prism-stage'),
+      elBeat=document.getElementById('prism-beat'),
+      elDots=document.getElementById('prism-dots'),
+      elEnter=document.getElementById('prism-enter'),
+      elClose=document.getElementById('prism-close');
+  var timer=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function openPrism(key,href,svg){
+    var p=PRISMS[key];if(!p)return false;
+    elId.textContent=p.id;
+    elName.textContent=p.name;
+    elName.className='lab-name'+(p.lower?' lower':'');
+    elStage.innerHTML='';
+    if(svg)elStage.appendChild(svg.cloneNode(true));
+    elEnter.href=href;
+    elDots.innerHTML=p.beats.map(function(){return '<i></i>'}).join('');
+    overlay.classList.add('open');
+    document.body.style.overflow='hidden';
+
+    var i=0,dots=elDots.children;
+    function showBeat(){
+      if(!overlay.classList.contains('open'))return;
+      elBeat.classList.remove('show');
+      setTimeout(function(){
+        elBeat.textContent=p.beats[i];
+        elBeat.classList.add('show');
+        for(var d=0;d<dots.length;d++)dots[d].className=d===i?'on':'';
+        i=(i+1)%p.beats.length;
+        timer=setTimeout(showBeat,reduced?6000:3400);
+      },reduced?0:350);
+    }
+    showBeat();
+    elClose.focus();
+    return true;
+  }
+  function closePrism(){
+    overlay.classList.remove('open');
+    document.body.style.overflow='';
+    if(timer)clearTimeout(timer);
+  }
+  elClose.addEventListener('click',closePrism);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closePrism()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closePrism()});
+
+  document.querySelectorAll('a.chamber[data-prism]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var svg=a.querySelector('svg');
+      if(openPrism(a.dataset.prism,a.href,svg))e.preventDefault();
+    });
+  });
+
+  /* ---------- ILSA-led: every talk button nudges/opens the voice orb ---------- */
+  function summonIlsa(){
+    var w=document.querySelector('elevenlabs-convai');
+    if(!w)return;
+    var ring=document.createElement('div');
+    ring.className='nudge-ring';
+    document.body.appendChild(ring);
+    setTimeout(function(){ring.remove()},3500);
+  }
+  document.querySelectorAll('[data-talk]').forEach(function(b){
+    b.addEventListener('click',function(){
+      closePrism();
+      summonIlsa();
+    });
+  });
+  document.getElementById('askilsa-tile').addEventListener('click',summonIlsa);
+
+  /* prism ask-button carries the lab name */
+  var askLabel=document.getElementById('prism-ask-label');
+  var _open=openPrism;
+  openPrism=function(key,href,svg){
+    var ok=_open(key,href,svg);
+    if(ok&&askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
+    return ok;
+  };
+  /* ---------- glass writer ---------- */
+  var writer=document.getElementById('writer'),
+      wChips=document.getElementById('writer-chips'),
+      wText=document.getElementById('writer-text'),
+      wSubject='Hello';
+  document.getElementById('open-writer').addEventListener('click',function(){
+    writer.classList.add('open');document.body.style.overflow='hidden';wText.focus();
+  });
+  function closeWriter(){writer.classList.remove('open');document.body.style.overflow='';}
+  document.getElementById('writer-close').addEventListener('click',closeWriter);
+  writer.addEventListener('click',function(e){if(e.target===writer)closeWriter()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeWriter()});
+  wChips.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    wChips.querySelectorAll('button').forEach(function(x){x.classList.remove('sel')});
+    b.classList.add('sel');
+    wSubject=b.dataset.subject;
+    wText.value=b.dataset.body;
+    wText.focus();
+    wText.setSelectionRange(wText.value.length,wText.value.length);
+  });
+  var wName=document.getElementById('writer-name'),
+      wEmail=document.getElementById('writer-email'),
+      wSend=document.getElementById('writer-send');
+  function mailtoFallback(){
+    var body=wText.value+'\n\n— '+(wName.value||'')+(wEmail.value?' · '+wEmail.value:'');
+    location.href='mailto:living@ilsalabs.com?subject='+encodeURIComponent(wSubject)+'&body='+encodeURIComponent(body);
+  }
+  wSend.addEventListener('click',function(){
+    var email=wEmail.value.trim();
+    if(!wText.value.trim()){wText.focus();return;}
+    if(!email||email.indexOf('@')<1){wEmail.focus();wEmail.style.borderBottomColor='#B45050';return;}
+    wSend.disabled=true;wSend.textContent='Sending…';
+    fetch('/api/contact',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:wName.value.trim(),email:email,subject:wSubject,message:wText.value.trim()})
+    }).then(function(r){
+      if(!r.ok)throw new Error('api');
+      document.querySelector('.writer .card').innerHTML='<p class="sent">Sent. We\'ll be in touch.</p>';
+      setTimeout(closeWriter,2600);
+    }).catch(function(){
+      wSend.disabled=false;wSend.textContent='Send →';
+      mailtoFallback();
+    });
+  });
+})();
+</script>
+</body>
+</html>
