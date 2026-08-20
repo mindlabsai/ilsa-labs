@@ -23,10 +23,13 @@ Note: if the endpoint is missing or fails, the writer automatically falls back t
 opening the visitor's mail app (mailto), so no lead is ever lost.
 
 ## Wire Ask ILSA (voice)
-1. elevenlabs.io → Agents → create the agent (paste in ask-ilsa-agent-config.md).
-2. Advanced tab: set agent to **Public**. Security tab: Allowlist → add ilsalabs.com and www.ilsalabs.com.
-3. Copy the agent ID → in `index.html`, replace `YOUR_AGENT_ID`.
-4. Set a monthly usage cap in your ElevenLabs account.
+1. elevenlabs.io → Agents → create the agent. Paste the System prompt, first message and dynamic variables from `ask-ilsa-agent-config.md`.
+2. Advanced tab: set agent to **Public**. Security tab: Allowlist → add ilsalabs.com, www.ilsalabs.com and ilsa-labs.vercel.app.
+3. Widget tab: enable Voice + text so people can talk or type.
+4. Copy the agent ID → in `index.html`, replace `YOUR_AGENT_ID`.
+5. Set a monthly usage cap in your ElevenLabs account.
+
+The site tells ILSA which lab the visitor opened (`focus_lab`). Ask ILSA about teo starts on teo. Hero and header start on the lab as a whole.
 
 ## Before launch checklist
 - [ ] Replace `YOUR_AGENT_ID` (Ask ILSA won't appear until you do)

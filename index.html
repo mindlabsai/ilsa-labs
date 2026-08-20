@@ -642,12 +642,16 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
      2. Add ilsalabs.com to the Allowlist (Security tab)
      3. Replace YOUR_AGENT_ID below with your agent ID -->
 <elevenlabs-convai
-  agent-id="YOUR_AGENT_ID"
-  avatar-orb-color-1="#0B0C0E"
-  avatar-orb-color-2="#7C828B"
+  id="ilsa"
+  agent-id="agent_6901m0fbpj0kfjssaw9qwz3mshva"
+  avatar-orb-color-1="#3E8CFF"
+  avatar-orb-color-2="#0B0C0E"
+  avatar-image-url="/apple-touch-icon.png"
   action-text="Ask ILSA"
-  start-call-text="Talk to the lab"
-  end-call-text="End">
+  start-call-text="Talk to ILSA"
+  expand-text="Chat with ILSA"
+  end-call-text="End"
+  dynamic-variables='{"focus_lab":"ILSA Labs","focus_status":"guide","focus_note":"Visitor is on the homepage."}'>
 </elevenlabs-convai>
 <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
@@ -655,36 +659,30 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 (function(){
   /* ---------- PRISM SEQUENCES ---------- */
   var PRISMS={
-    teo:{id:"Lab 01 · Intelligence",name:"teo",lower:true,beats:[
-      "Two people. One hard conversation.",
-      "teo listens to both sides and keeps it safe.",
-      "Say the thing. teo helps it land."]},
-    t37:{id:"Lab 02 · Intelligence",name:"37T",beats:[
-      "AI can generate anyone.",
-      "Your face. Your voice. Your work. Yours to keep.",
-      "Verified. Licensed. Paid. You decide who gets permission."]},
-    aston:{id:"Lab 03 · Intelligence",name:"Aston",beats:[
-      "A child someone needs to understand.",
-      "Parent. Teacher. Clinician. Every perspective, one pathway.",
-      "Observable signal, before the assessment begins."]},
-    texlex:{id:"Lab 04 · Intelligence",name:"Texlex",beats:[
-      "ASD. ADHD. SLD.",
-      "A diagnostic mind that writes in yours.",
-      "The future of neurodivergent assessment is already reporting."]},
-    inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",beats:[
-      "A conversation streams in.",
-      "24 clinical markers read what's beneath the words.",
-      "Understanding comes back as an API."]},
-    oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,beats:[
-      "Body, Mind, Technology speaking together."]},
-    anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",beats:[
-      "Animal sciences.",
-      "Plant-derived, evidence-led formulation.",
-      "For the animals we live with."]},
-    bio:{id:"Lab 08 · Living Systems",name:"Humantech",beats:[
-      "Sleep. Cognition. Recovery.",
-      "Measured, not guessed.",
-      "Human performance, optimised."]}
+    teo:{id:"Lab 01 · Intelligence",name:"teo",lower:true,status:"Live",
+      brief:"Two people. One conversation. teo sits between them and keeps it safe. Live at helloteo.com.au.",
+      beats:["Two people. One hard conversation.","teo listens to both sides and keeps it safe.","Say the thing. teo helps it land."]},
+    t37:{id:"Lab 02 · Intelligence",name:"37T",status:"Live",
+      brief:"Your face, voice and work. Yours to keep. Permission exchange. Live at 37t.io.",
+      beats:["AI can generate anyone.","Your face. Your voice. Your work. Yours to keep.","Verified. Licensed. Paid. You decide who gets permission."]},
+    aston:{id:"Lab 03 · Intelligence",name:"Aston",status:"Live",
+      brief:"Screening for observable neurodivergence. Parent, teacher, clinician. Live at astonax.com. Not a diagnosis.",
+      beats:["A child someone needs to understand.","Parent. Teacher. Clinician. Every perspective, one pathway.","Observable signal, before the assessment begins."]},
+    texlex:{id:"Lab 04 · Intelligence",name:"Texlex",status:"Beta preview",
+      brief:"Intelligent reporting for ASD, ADHD and SLD. Beta preview only. No public site.",
+      beats:["ASD. ADHD. SLD.","A diagnostic mind that writes in yours.","The future of neurodivergent assessment is already reporting."]},
+    inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",status:"Beta preview",
+      brief:"Decision intelligence. 24 clinical markers, one API. Beta preview only. No public site.",
+      beats:["A conversation streams in.","24 clinical markers read what's beneath the words.","Understanding comes back as an API."]},
+    oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,status:"Research",
+      brief:"Body, mind and technology in one conversation. Research. otonomy.ai.",
+      beats:["Body, Mind, Technology speaking together."]},
+    anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",status:"In development",
+      brief:"Plant-derived animal therapeutics. Evidence-led, formulated in Australia. animalab.com.au.",
+      beats:["Animal sciences.","Plant-derived, evidence-led formulation.","For the animals we live with."]},
+    bio:{id:"Lab 08 · Living Systems",name:"Humantech",status:"Research",
+      brief:"Human performance. Sleep, cognition, recovery, longevity. Research.",
+      beats:["Sleep. Cognition. Recovery.","Measured, not guessed.","Human performance, optimised."]}
   };
 
   var overlay=document.getElementById('prism'),
@@ -755,29 +753,45 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
     });
   });
 
-  /* ---------- ILSA-led: every talk button nudges/opens the voice orb ---------- */
-  function summonIlsa(){
-    var w=document.querySelector('elevenlabs-convai');
+  /* ---------- ILSA-led: talk buttons open the orb with lab context ---------- */
+  var lastPrism=null;
+  function summonIlsa(key){
+    var w=document.getElementById('ilsa')||document.querySelector('elevenlabs-convai');
     if(!w)return;
+    var focus='ILSA Labs',status='guide',note='Visitor is on the homepage.';
+    var p=key&&PRISMS[key];
+    if(p){
+      focus=p.name;
+      status=p.status||'';
+      note=p.brief||'';
+    }
+    w.setAttribute('dynamic-variables',JSON.stringify({
+      focus_lab:focus,focus_status:status,focus_note:note
+    }));
     var ring=document.createElement('div');
     ring.className='nudge-ring';
     document.body.appendChild(ring);
     setTimeout(function(){ring.remove()},3500);
+    try{if(typeof w.startConversation==='function')w.startConversation();}catch(e){}
   }
   document.querySelectorAll('[data-talk]').forEach(function(b){
     b.addEventListener('click',function(){
+      var key=b.id==='prism-ask'?lastPrism:null;
       closePrism();
-      summonIlsa();
+      summonIlsa(key);
     });
   });
-  document.getElementById('askilsa-tile').addEventListener('click',summonIlsa);
+  document.getElementById('askilsa-tile').addEventListener('click',function(){summonIlsa();});
 
   /* prism ask-button carries the lab name */
   var askLabel=document.getElementById('prism-ask-label');
   var _open=openPrism;
   openPrism=function(key,href,svg){
     var ok=_open(key,href,svg);
-    if(ok&&askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
+    if(ok){
+      lastPrism=key;
+      if(askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
+    }
     return ok;
   };
   /* ---------- glass writer ---------- */
