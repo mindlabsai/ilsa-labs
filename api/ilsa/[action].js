@@ -1,7 +1,6 @@
 // /api/ilsa/[action].js  — Vercel serverless handler for ILSA server tools.
 // Three actions: capture_lead, request_demo, log_unanswered.
-// ElevenLabs calls these as webhooks. Verify the request signature header name
-// and scheme against current ElevenLabs docs before going live.
+// ElevenLabs calls these as webhooks. Auth is a shared secret in x-ilsa-secret.
 
 const crypto = require("node:crypto");
 
@@ -27,11 +26,13 @@ const schemas = {
   },
 };
 
-function verify(req, rawBody) {
+function verify(req) {
   if (!SECRET) return true; // dev only — set the secret in production
-  const sig = req.headers["x-ilsa-signature"] || "";
-  const expected = crypto.createHmac("sha256", SECRET).update(rawBody).digest("hex");
-  return sig.length === expected.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
+  const got = String(req.headers["x-ilsa-secret"] || "");
+  const a = Buffer.from(got);
+  const b = Buffer.from(SECRET);
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 function clean(s, max = 500) {
@@ -67,7 +68,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
   const raw = typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {});
-  if (!verify(req, raw)) return res.status(401).json({ error: "bad signature" });
+  if (!verify(req)) return res.status(401).json({ error: "bad signature" });
 
   const action = req.query.action;
   const { data, error } = validate(action, typeof req.body === "string" ? JSON.parse(raw) : req.body ?? {});
