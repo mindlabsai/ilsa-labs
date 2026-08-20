@@ -355,29 +355,68 @@ footer .fwordmark{font-family:'Manrope',sans-serif;font-weight:600;letter-spacin
 footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 @media (max-width:640px){footer{flex-direction:column;align-items:center;gap:12px}}
 
-/* ILSA voice orb + slim glass sheet — no ElevenLabs chrome */
+/* ILSA voice: page glow + orb + optional glass sheet */
+.ilsa-glow{
+  position:fixed;inset:0;z-index:48;pointer-events:none;
+  opacity:0;transform:scale(1);
+  --ilsa-glow:0;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
+    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
+    radial-gradient(ellipse 55% 90% at -8% 50%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
+    radial-gradient(ellipse 55% 90% at 108% 50%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.ilsa-glow.live{opacity:1;transition:opacity .3s ease,transform .3s ease}
 .ilsa-orb{
   position:fixed;right:max(16px,env(safe-area-inset-right));
   bottom:max(18px,env(safe-area-inset-bottom));
   z-index:62;width:56px;height:56px;border-radius:50%;border:0;padding:0;
+  --ilsa-orb-scale:1;
   background:radial-gradient(circle at 35% 30%,#CFE4FF,#3E8CFF 62%);
   box-shadow:0 0 16px rgba(62,140,255,.45),0 8px 20px rgba(46,52,60,.16);
-  cursor:pointer;opacity:0;pointer-events:none;transform:scale(.92);
-  transition:opacity .3s,transform .3s,filter .3s;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transform:scale(var(--ilsa-orb-scale));
+  transition:opacity .3s,filter .3s,box-shadow .3s;
 }
-.ilsa-orb.on{opacity:1;pointer-events:auto;transform:scale(1)}
+.ilsa-orb.on{opacity:1;pointer-events:auto}
 .ilsa-orb.idle{filter:saturate(.55) brightness(.86);box-shadow:0 0 8px rgba(62,140,255,.2)}
-.ilsa-orb.listening{filter:none}
+.ilsa-orb.listening{filter:none;box-shadow:0 0 10px rgba(62,140,255,.28)}
 .ilsa-orb.speaking{filter:none}
 @media (prefers-reduced-motion:no-preference){
   .ilsa-orb.speaking{animation:ilsa-breathe 1.6s ease-in-out infinite}
-  .ilsa-orb.listening{animation:ilsa-pulse 2.2s ease-in-out infinite}
-  @keyframes ilsa-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
-  @keyframes ilsa-pulse{
-    0%,100%{box-shadow:0 0 10px rgba(62,140,255,.35)}
-    50%{box-shadow:0 0 22px rgba(62,140,255,.7)}
+  @keyframes ilsa-breathe{
+    0%,100%{box-shadow:0 0 16px rgba(62,140,255,.4)}
+    50%{box-shadow:0 0 28px rgba(39,146,220,.72)}
   }
 }
+.ilsa-chat{
+  position:fixed;z-index:62;
+  right:calc(16px + 56px + 10px + env(safe-area-inset-right));
+  bottom:max(24px,env(safe-area-inset-bottom));
+  width:40px;height:40px;border-radius:50%;padding:0;
+  display:none;align-items:center;justify-content:center;
+  color:var(--ink);cursor:pointer;
+  background:rgba(251,252,253,.72);
+  border:1px solid rgba(58,64,72,.14);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 8px 18px rgba(46,52,60,.12);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.ilsa-chat.on{display:flex}
+.ilsa-chat svg{width:18px;height:18px;display:block}
+.ilsa-hint{
+  position:fixed;z-index:62;pointer-events:none;
+  right:max(16px,env(safe-area-inset-right));
+  bottom:calc(56px + 28px + env(safe-area-inset-bottom));
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);padding:7px 10px;border-radius:2px;
+  background:rgba(251,252,253,.78);
+  border:1px solid rgba(58,64,72,.12);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;
+}
+.ilsa-hint.on{opacity:1;transform:translateY(0)}
 .ilsa-sheet{
   position:fixed;left:50%;bottom:0;z-index:63;
   width:min(100%,540px);max-height:35vh;
@@ -419,10 +458,13 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 }
 .ilsa-bar button[aria-pressed="true"]{color:var(--grey);border-color:rgba(58,64,72,.18)}
 .ilsa-bar .end{border-color:var(--ink)}
-body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(35vh + 14px)}
+body:has(#ilsa-sheet.open) #ilsa-orb.on,
+body:has(#ilsa-sheet.open) #ilsa-chat.on{bottom:calc(35vh + 14px)}
+body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 @media (min-width:720px){
   .ilsa-sheet{bottom:18px;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh}
-  body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(28vh + 36px)}
+  body:has(#ilsa-sheet.open) #ilsa-orb.on,
+  body:has(#ilsa-sheet.open) #ilsa-chat.on{bottom:calc(28vh + 36px)}
 }
 </style>
 </head>
@@ -700,7 +742,14 @@ body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(35vh + 14px)}
   <span>ILSA LABS PTY LTD 65 693 769 658 2026</span>
 </footer>
 
+<div class="ilsa-glow" id="ilsa-glow" hidden aria-hidden="true"></div>
 <button class="ilsa-orb" id="ilsa-orb" type="button" aria-label="Talk to ILSA" hidden></button>
+<button class="ilsa-chat" id="ilsa-chat" type="button" aria-label="Show transcript" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+    <path d="M5 16.5V8.2A2.2 2.2 0 0 1 7.2 6h9.6A2.2 2.2 0 0 1 19 8.2v5.1A2.2 2.2 0 0 1 16.8 15.5H9.2L5 19v-2.5Z"/>
+  </svg>
+</button>
+<div class="ilsa-hint" id="ilsa-hint" hidden>Hold to end</div>
 <div class="ilsa-sheet" id="ilsa-sheet" hidden>
   <div class="ilsa-lines" id="ilsa-lines" aria-live="polite"></div>
   <div class="ilsa-bar">
@@ -906,29 +955,139 @@ const PRISM_TO_LAB = {
 };
 
 const orb = document.getElementById("ilsa-orb");
+const chat = document.getElementById("ilsa-chat");
+const hint = document.getElementById("ilsa-hint");
+const glow = document.getElementById("ilsa-glow");
 const sheet = document.getElementById("ilsa-sheet");
 const lines = document.getElementById("ilsa-lines");
 const micBtn = document.getElementById("ilsa-mic");
 const typeIn = document.getElementById("ilsa-type");
 const endBtn = document.getElementById("ilsa-end");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let session = null;
 let starting = false;
 let textOnly = false;
 let muted = false;
+let sheetUserOpen = false;
+let voiceMode = "idle";
+let lastUiMode = "idle";
+let outVol = 0;
+let inVol = 0;
+let glowLevel = 0;
+let raf = 0;
+let pollId = 0;
+let hintTimer = 0;
+let holdTimer = 0;
+let held = false;
 const turns = [];
 
 function setMode(mode) {
+  voiceMode = mode || "idle";
   orb.classList.remove("speaking", "listening", "idle");
-  orb.classList.add(mode || "idle");
+  orb.classList.add(voiceMode);
+}
+
+function openSheet() {
+  sheet.hidden = false;
+  requestAnimationFrame(() => sheet.classList.add("open"));
+}
+
+function collapseSheet() {
+  sheetUserOpen = false;
+  sheet.classList.remove("open");
+}
+
+function showHint() {
+  if (localStorage.getItem("ilsa.holdHintSeen") === "1") return;
+  hint.hidden = false;
+  requestAnimationFrame(() => hint.classList.add("on"));
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => {
+    hint.classList.remove("on");
+    localStorage.setItem("ilsa.holdHintSeen", "1");
+  }, 3400);
+}
+
+function applyLevel(speaking) {
+  const target = speaking
+    ? (reduceMotion ? 0.12 : 0.07 + Math.min(1, outVol) * 0.2)
+    : 0;
+  const ease = speaking ? 0.28 : 0.1;
+  glowLevel += (target - glowLevel) * ease;
+  if (glowLevel < 0.004 && !speaking) glowLevel = 0;
+  glow.style.setProperty("--ilsa-glow", glowLevel.toFixed(3));
+  glow.classList.toggle("live", speaking || glowLevel > 0.02);
+  glow.style.transform = speaking ? `scale(${(1 + glowLevel * 0.04).toFixed(3)})` : "scale(1)";
+  let scale = 1;
+  if (speaking) scale = 1 + glowLevel * 0.85;
+  else if (voiceMode === "listening") scale = 0.92;
+  orb.style.setProperty("--ilsa-orb-scale", scale.toFixed(3));
+}
+
+function readVol(method) {
+  if (!session || typeof session[method] !== "function") return;
+  try {
+    const v = session[method]();
+    Promise.resolve(v).then((n) => {
+      const num = Number(n) || 0;
+      if (method === "getOutputVolume") outVol = num;
+      else inVol = num;
+    }).catch(() => {});
+  } catch {}
+}
+
+function startLevelLoop() {
+  stopLevelLoop();
+  glow.hidden = false;
+  pollId = setInterval(() => {
+    readVol("getOutputVolume");
+    readVol("getInputVolume");
+  }, 80);
+  const tick = () => {
+    const speaking = voiceMode === "speaking";
+    applyLevel(speaking);
+    if (!textOnly && sheetUserOpen && voiceMode === "listening" && inVol > 0.18) collapseSheet();
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+
+function stopLevelLoop() {
+  cancelAnimationFrame(raf);
+  clearInterval(pollId);
+  raf = 0;
+  pollId = 0;
+  outVol = 0;
+  inVol = 0;
+  glowLevel = 0;
+  glow.style.setProperty("--ilsa-glow", "0");
+  glow.classList.remove("live");
+  orb.style.setProperty("--ilsa-orb-scale", "1");
 }
 
 function showVoice(on) {
   orb.hidden = !on;
-  sheet.hidden = !on;
+  chat.hidden = !on;
+  glow.hidden = !on;
   orb.classList.toggle("on", on);
-  sheet.classList.toggle("open", on);
-  if (!on) {
+  chat.classList.toggle("on", on);
+  if (on) {
+    sheet.hidden = false;
+    if (textOnly) {
+      sheetUserOpen = true;
+      openSheet();
+    } else {
+      collapseSheet();
+    }
+    showHint();
+    startLevelLoop();
+  } else {
+    collapseSheet();
+    sheet.hidden = true;
+    hint.classList.remove("on");
+    hint.hidden = true;
+    stopLevelLoop();
     setMode("idle");
     turns.length = 0;
     lines.innerHTML = "";
@@ -1005,7 +1164,12 @@ async function talk(trigger) {
     session = await startILSA(Conversation, {
       textOnly,
       onDisconnect: () => { session = null; starting = false; showVoice(false); },
-      onModeChange: (m) => setMode(m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle"),
+      onModeChange: (m) => {
+        const mode = m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle";
+        setMode(mode);
+        if (!textOnly && sheetUserOpen && mode === "speaking" && lastUiMode !== "speaking") collapseSheet();
+        lastUiMode = mode;
+      },
       onMessage: (msg) => {
         if (isPartial(msg)) return;
         const who = roleOf(msg);
@@ -1021,6 +1185,7 @@ async function talk(trigger) {
   }
 
   starting = false;
+  lastUiMode = textOnly ? "idle" : "listening";
   showVoice(true);
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
@@ -1031,7 +1196,31 @@ if (!window.__ilsaUiBound) {
   window.__ilsaUiBound = true;
   const header = document.getElementById("askilsa-tile");
   header.addEventListener("click", () => talk(header));
-  orb.addEventListener("click", () => talk(orb));
+  orb.addEventListener("pointerdown", (e) => {
+    if (!session || e.button) return;
+    held = false;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { held = true; closeSession(); }, 560);
+  });
+  const clearHold = () => clearTimeout(holdTimer);
+  orb.addEventListener("pointerup", clearHold);
+  orb.addEventListener("pointercancel", clearHold);
+  orb.addEventListener("pointerleave", clearHold);
+  orb.addEventListener("click", (e) => {
+    if (held) { e.preventDefault(); held = false; return; }
+    talk(orb);
+  });
+  chat.addEventListener("click", () => {
+    if (!session) return;
+    sheetUserOpen = true;
+    openSheet();
+    typeIn.focus();
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (!sheet.classList.contains("open") || textOnly) return;
+    if (sheet.contains(e.target) || chat.contains(e.target) || orb.contains(e.target)) return;
+    collapseSheet();
+  });
   endBtn.addEventListener("click", closeSession);
   micBtn.addEventListener("click", () => {
     if (!session || textOnly) return;
