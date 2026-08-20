@@ -892,7 +892,7 @@ body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(35vh + 14px)}
 </script>
 <script type="module">
 import { Conversation } from "https://esm.sh/@elevenlabs/client";
-import { startILSA, setFocusLab } from "/site/ilsa.js";
+import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab } from "/site/ilsa.js";
 
 const PRISM_TO_LAB = {
   teo: "teo",
@@ -913,6 +913,7 @@ const typeIn = document.getElementById("ilsa-type");
 const endBtn = document.getElementById("ilsa-end");
 
 let session = null;
+let starting = false;
 let textOnly = false;
 let muted = false;
 const turns = [];
@@ -977,17 +978,16 @@ function isPartial(msg) {
   return /tentative|partial|interim/i.test(String(msg.type || msg.event || ""));
 }
 
-async function endILSA() {
-  const conv = session;
+async function closeSession() {
   session = null;
+  starting = false;
   showVoice(false);
-  if (conv) {
-    try { await conv.endSession(); } catch (e) { console.error("ILSA error", e); }
-  }
+  await stopILSA();
 }
 
 async function talk(trigger) {
-  if (session) return;
+  if (session || starting) return;
+  starting = true;
   if (trigger?.id === "prism-ask" && window.__ilsaLastPrism) {
     setFocusLab(PRISM_TO_LAB[window.__ilsaLastPrism] || null);
   }
@@ -1004,7 +1004,7 @@ async function talk(trigger) {
   try {
     session = await startILSA(Conversation, {
       textOnly,
-      onDisconnect: () => { session = null; showVoice(false); },
+      onDisconnect: () => { session = null; starting = false; showVoice(false); },
       onModeChange: (m) => setMode(m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle"),
       onMessage: (msg) => {
         if (isPartial(msg)) return;
@@ -1015,44 +1015,49 @@ async function talk(trigger) {
   } catch (err) {
     console.error("ILSA error", err);
     session = null;
+    starting = false;
     showVoice(false);
     return;
   }
 
+  starting = false;
   showVoice(true);
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
   if (textOnly) typeIn.focus();
 }
 
-orb.addEventListener("click", () => talk(orb));
-endBtn.addEventListener("click", endILSA);
-micBtn.addEventListener("click", () => {
-  if (!session || textOnly) return;
-  muted = !muted;
-  session.setMicMuted(muted);
-  micBtn.setAttribute("aria-pressed", String(muted));
-  micBtn.textContent = muted ? "Muted" : "Mic";
-});
-typeIn.addEventListener("input", () => { try { session?.sendUserActivity?.(); } catch (e) {} });
-typeIn.addEventListener("keydown", (e) => {
-  if (e.key !== "Enter") return;
-  const value = typeIn.value.trim();
-  if (!value || !session) return;
-  e.preventDefault();
-  session.sendUserMessage(value);
-  pushTurn("You", value);
-  typeIn.value = "";
-});
-
-document.getElementById("askilsa-tile").addEventListener("click", () => talk());
-document.querySelectorAll("[data-talk]").forEach((b) => {
-  b.addEventListener("click", () => talk(b));
-});
-
-window.addEventListener("ilsa:prism-open", (e) => {
-  setFocusLab(PRISM_TO_LAB[e.detail?.key] || null);
-});
+if (!window.__ilsaUiBound) {
+  window.__ilsaUiBound = true;
+  const header = document.getElementById("askilsa-tile");
+  header.addEventListener("click", () => talk(header));
+  orb.addEventListener("click", () => talk(orb));
+  endBtn.addEventListener("click", closeSession);
+  micBtn.addEventListener("click", () => {
+    if (!session || textOnly) return;
+    muted = !muted;
+    session.setMicMuted(muted);
+    micBtn.setAttribute("aria-pressed", String(muted));
+    micBtn.textContent = muted ? "Muted" : "Mic";
+  });
+  typeIn.addEventListener("input", () => { try { session?.sendUserActivity?.(); } catch (e) {} });
+  typeIn.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const value = typeIn.value.trim();
+    if (!value || !session) return;
+    e.preventDefault();
+    session.sendUserMessage(value);
+    noteUserUtterance(value);
+    pushTurn("You", value);
+    typeIn.value = "";
+  });
+  document.querySelectorAll("[data-talk]").forEach((b) => {
+    b.addEventListener("click", () => talk(b));
+  });
+  window.addEventListener("ilsa:prism-open", (e) => {
+    setFocusLab(PRISM_TO_LAB[e.detail?.key] || null);
+  });
+}
 </script>
 </body>
 </html>

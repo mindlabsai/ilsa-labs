@@ -107,11 +107,67 @@ const clientTools = {
   },
 };
 
-// ---------- Start ----------
+// ---------- Start (one session at a time) ----------
+
+let activeConversation = null;
+let ending = false;
+let farewellPending = false;
+let lastMode = null;
+
+function messageText(msg) {
+  if (typeof msg === "string") return msg;
+  return String(msg?.message || msg?.text || msg?.content || "");
+}
+
+function messageRole(msg) {
+  const s = String(msg?.source || msg?.role || "").toLowerCase();
+  if (s === "ai" || s === "agent" || s === "assistant") return "agent";
+  if (s === "user" || s === "human") return "user";
+  return "";
+}
+
+function isGoodbye(text) {
+  return /\b(good\s*bye|goodbye|bye-?bye|see you|that(?:'s| is) all)\b/i.test(text);
+}
+
+function isPartial(msg) {
+  if (!msg || typeof msg !== "object") return false;
+  if (msg.is_final === false || msg.isFinal === false) return true;
+  return /tentative|partial|interim/i.test(String(msg.type || msg.event || ""));
+}
+
+export function noteUserUtterance(text) {
+  if (!ending && isGoodbye(text)) farewellPending = true;
+}
+
+export async function endILSA() {
+  if (ending && !activeConversation) return;
+  ending = true;
+  farewellPending = false;
+  const conv = activeConversation;
+  activeConversation = null;
+  const resolved = conv && typeof conv.then === "function"
+    ? await conv.catch(() => null)
+    : conv;
+  if (resolved && typeof resolved.endSession === "function") {
+    try { await resolved.endSession(); } catch (e) { console.error("ILSA error", e); }
+  }
+}
 
 export async function startILSA(Conversation, extra = {}) {
+  if (activeConversation) {
+    console.log("ILSA startSession reused", new Date().toISOString());
+    return activeConversation;
+  }
+
+  ending = false;
+  farewellPending = false;
+  lastMode = null;
+
   const textOnly = extra.textOnly === true;
-  const conversation = await Conversation.startSession({
+  console.log("ILSA startSession", new Date().toISOString());
+
+  const pending = Conversation.startSession({
     agentId: ILSA_AGENT_ID,
     dynamicVariables: buildDynamicVariables(),
     clientTools,
@@ -125,17 +181,45 @@ export async function startILSA(Conversation, extra = {}) {
     },
     onDisconnect: (info) => {
       console.log("ILSA disconnect", info);
+      activeConversation = null;
       extra.onDisconnect?.(info);
     },
     onError: (e) => {
       console.error("ILSA error", e);
       extra.onError?.(e);
     },
-    onModeChange: extra.onModeChange,
-    onMessage: extra.onMessage,
+    onModeChange: (m) => {
+      extra.onModeChange?.(m);
+      const mode = m?.mode;
+      if (farewellPending && lastMode === "speaking" && mode && mode !== "speaking") {
+        farewellPending = false;
+        endILSA();
+      }
+      lastMode = mode;
+    },
+    onMessage: (msg) => {
+      if (ending) return;
+      extra.onMessage?.(msg);
+      if (isPartial(msg)) return;
+      const role = messageRole(msg);
+      const text = messageText(msg);
+      if (role === "user" && isGoodbye(text)) farewellPending = true;
+      if (role === "agent" && farewellPending && textOnly) {
+        farewellPending = false;
+        queueMicrotask(() => endILSA());
+      }
+    },
     onStatusChange: (status) => console.log("ILSA status", status),
+  }).then((conversation) => {
+    activeConversation = conversation;
+    return conversation;
+  }).catch((err) => {
+    activeConversation = null;
+    throw err;
   });
-  return conversation;
+
+  activeConversation = pending;
+  return pending;
 }
 
 // Usage in the page:
