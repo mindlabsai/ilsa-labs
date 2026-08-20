@@ -6,13 +6,19 @@
 <title>ILSA LABS</title>
 <meta name="description" content="ILSA LABS. Intelligence + Living Systems. Technology with a pulse.">
 <meta name="theme-color" content="#E9EBEE">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:title" content="ILSA LABS">
+<meta property="og:description" content="Intelligence + Living Systems. Technology with a pulse.">
+<meta property="og:image" content="https://ilsalabs.com/ilsa-og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
   --env-top:#EEF0F3;--env-bot:#DFE2E7;
-  --ink:#3A4048;--deep:#2E343C;--grey:#8A9099;
+  --ink:#3A4048;--deep:#2E343C;--grey:#63696F;
   --steel-1:#FBFCFD;--steel-2:#C9CDD4;--steel-3:#9AA0A9;
   --led-green:#2FD26A;--led-amber:#F4B23E;
 }
@@ -79,13 +85,14 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
   font-size:clamp(10px,1.4vw,12px);color:var(--grey);
   letter-spacing:.34em;text-transform:lowercase;
 }
+.herowhat{margin-top:22px;font-family:'Manrope',sans-serif!important;font-weight:300!important;font-size:clamp(15px,2vw,19px)!important;color:var(--ink)!important;letter-spacing:0!important;text-transform:none!important;max-width:52ch;line-height:1.6}
 .herotalk{
   margin-top:30px;display:inline-flex;align-items:center;gap:11px;
   font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink);background:transparent;
   border:1px solid var(--ink);border-radius:2px;
   padding:16px 30px;cursor:pointer;
-  transition:background .25s;
+  transition:background .25s;text-decoration:none;
 }
 .herotalk:hover,.herotalk:focus-visible{background:rgba(58,64,72,.06)}
 
@@ -124,7 +131,7 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 }
 .inner{border-radius:7px;overflow:hidden;background:#3A4048}
 .room{
-  position:relative;height:clamp(200px,26vw,250px);
+  position:relative;height:clamp(150px,26vw,250px);
   background:
     radial-gradient(120% 90% at 50% -12%,rgba(255,255,255,.95) 0%,rgba(244,246,248,.55) 34%,rgba(210,214,220,0) 62%),
     linear-gradient(180deg,#F2F4F6 0%,#E6E9EC 52%,#C9CDD3 66%,#B4B9C0 67%,#DDE0E5 78%,#EDEFF2 100%);
@@ -370,13 +377,11 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 <section class="hero wrap">
   <h1>Intelligence + Living Systems.</h1>
   <p>Technology with a pulse.</p>
-  <button class="herotalk" type="button" data-talk>
-    <span class="orbdot" aria-hidden="true"></span>
-    Talk to ILSA, our guide.
-  </button>
+  <p class="herowhat">Asia-Pacific human technology lab operating at the intersection of intelligence, identity and human performance. Our portfolio spans AI platforms, applied research and emerging systems conceived, built and developed in-house.</p>
+  <a class="herotalk" href="#labs">See the labs ↓</a>
 </section>
 
-<div class="wrap">
+<div class="wrap" id="labs">
   <div class="winghead"><h2>Intelligence</h2><span class="mono">Wing I · Software</span></div>
 
   <div class="grid">
@@ -796,10 +801,6 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   var wName=document.getElementById('writer-name'),
       wEmail=document.getElementById('writer-email'),
       wSend=document.getElementById('writer-send');
-  function mailtoFallback(){
-    var body=wText.value+'\n\n'+(wName.value||'')+(wEmail.value?' · '+wEmail.value:'');
-    location.href='mailto:human@ilsalabs.com?subject='+encodeURIComponent(wSubject)+'&body='+encodeURIComponent(body);
-  }
   wSend.addEventListener('click',function(){
     var email=wEmail.value.trim();
     if(!wText.value.trim()){wText.focus();return;}
@@ -813,8 +814,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
       document.querySelector('.writer .card').innerHTML='<p class="sent">Sent. We\'ll be in touch.</p>';
       setTimeout(closeWriter,2600);
     }).catch(function(){
-      wSend.disabled=false;wSend.textContent='Send →';
-      mailtoFallback();
+      wSend.disabled=false;wSend.textContent='Send again';
     });
   });
 })();
