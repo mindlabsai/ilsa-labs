@@ -71,8 +71,8 @@ export function buildOpeningLine() {
   const lab = state.focusLab ? LABS[state.focusLab] : null;
   const hi = salutation();
   if (!lab) return `${hi}, I'm ILSA, your guide through our labs. Is there something I can help you with?`;
-  if (state.returning) return `${hi} again, it's ILSA. You're back on ${lab.name}. What can I help with?`;
-  return `${hi}, I'm ILSA, your guide through our labs. You're on ${lab.name}. Is there something I can help you with?`;
+  if (state.returning) return `${hi} again, it's ILSA. You're looking at ${lab.name} — ${lab.tagline}. What would you like to know?`;
+  return `${hi}, I'm ILSA. You're looking at ${lab.name} — ${lab.tagline}. What would you like to know?`;
 }
 
 export function buildDynamicVariables() {
@@ -86,6 +86,7 @@ export function buildDynamicVariables() {
     visitor_segment: inferSegment(),
     returning: String(state.returning),
     time_of_day: timeOfDay(),
+    time_of_day_perth: timeOfDay(),
   };
 }
 
@@ -171,15 +172,19 @@ export async function startILSA(Conversation, extra = {}) {
   lastMode = null;
 
   const textOnly = extra.textOnly === true;
-  console.log("ILSA startSession", new Date().toISOString());
+  const vars = buildDynamicVariables();
+  console.log("ILSA startSession", new Date().toISOString(), vars);
 
   const pending = Conversation.startSession({
     agentId: ILSA_AGENT_ID,
-    dynamicVariables: buildDynamicVariables(),
+    dynamicVariables: vars,
     clientTools,
     textOnly,
     connectionType: textOnly ? "websocket" : undefined,
-    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
+    overrides: {
+      agent: { firstMessage: buildOpeningLine() },
+      ...(textOnly ? { conversation: { textOnly: true } } : {}),
+    },
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);

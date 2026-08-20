@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ILSA LABS</title>
 <meta name="description" content="ILSA LABS. Intelligence + Living Systems. Technology with a pulse.">
 <meta name="theme-color" content="#E9EBEE">
@@ -358,16 +358,16 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 /* ILSA voice: page glow + orb + optional glass sheet */
 .ilsa-glow{
   position:fixed;inset:0;z-index:48;pointer-events:none;
-  opacity:0;transform:scale(1);
-  --ilsa-glow:0;
-  background:
-    radial-gradient(ellipse 90% 55% at 50% -8%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
-    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
-    radial-gradient(ellipse 55% 90% at -8% 50%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%),
-    radial-gradient(ellipse 55% 90% at 108% 50%,rgba(39,146,220,var(--ilsa-glow)) 0%,transparent 58%);
-  transition:opacity .6s ease,transform .6s ease;
+  opacity:0;
+  background-color:rgba(39,146,220,.16);
+  background-image:
+    linear-gradient(180deg,rgba(39,146,220,.55) 0%,rgba(39,146,220,.18) 22%,transparent 42%),
+    linear-gradient(0deg,rgba(39,146,220,.55) 0%,rgba(39,146,220,.18) 22%,transparent 42%),
+    linear-gradient(90deg,rgba(39,146,220,.48) 0%,rgba(39,146,220,.14) 18%,transparent 36%),
+    linear-gradient(270deg,rgba(39,146,220,.48) 0%,rgba(39,146,220,.14) 18%,transparent 36%);
+  transition:opacity .6s ease;
 }
-.ilsa-glow.live{opacity:1;transition:opacity .3s ease,transform .3s ease}
+.ilsa-glow.live{opacity:var(--ilsa-glow-opacity,.62);transition:opacity .3s ease}
 .ilsa-orb{
   position:fixed;right:max(16px,env(safe-area-inset-right));
   bottom:max(18px,env(safe-area-inset-bottom));
@@ -393,8 +393,8 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 .ilsa-chat{
   position:fixed;z-index:62;
   right:calc(16px + 56px + 10px + env(safe-area-inset-right));
-  bottom:max(24px,env(safe-area-inset-bottom));
-  width:40px;height:40px;border-radius:50%;padding:0;
+  bottom:max(23px,env(safe-area-inset-bottom));
+  width:46px;height:46px;border-radius:50%;padding:0;
   display:none;align-items:center;justify-content:center;
   color:var(--ink);cursor:pointer;
   background:rgba(251,252,253,.72);
@@ -403,7 +403,21 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
 .ilsa-chat.on{display:flex}
-.ilsa-chat svg{width:18px;height:18px;display:block}
+.ilsa-chat svg{width:21px;height:21px;display:block}
+.ilsa-hangup{
+  position:fixed;z-index:62;
+  right:calc(16px + 56px + 10px + 46px + 8px + env(safe-area-inset-right));
+  bottom:max(23px,env(safe-area-inset-bottom));
+  height:46px;padding:0 14px;border-radius:23px;
+  display:none;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);cursor:pointer;
+  background:rgba(251,252,253,.72);
+  border:1px solid rgba(58,64,72,.28);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 8px 18px rgba(46,52,60,.12);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.ilsa-hangup.on{display:flex}
 .ilsa-hint{
   position:fixed;z-index:62;pointer-events:none;
   right:max(16px,env(safe-area-inset-right));
@@ -418,10 +432,11 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 }
 .ilsa-hint.on{opacity:1;transform:translateY(0)}
 .ilsa-sheet{
-  position:fixed;left:50%;bottom:0;z-index:63;
-  width:min(100%,540px);max-height:35vh;
+  position:fixed;z-index:63;bottom:0;left:50%;right:auto;
+  width:min(360px, calc(100% - 32px));
+  max-height:32vh;
   transform:translate(-50%,110%);
-  padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom));
   background:rgba(251,252,253,.78);
   border:1px solid rgba(58,64,72,.12);border-bottom:0;
   border-radius:14px 14px 0 0;
@@ -429,6 +444,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   display:flex;flex-direction:column;gap:10px;
   transition:transform .35s ease;
+  overflow-x:hidden;
 }
 .ilsa-sheet.open{transform:translate(-50%,0)}
 .ilsa-lines{
@@ -441,7 +457,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--grey);margin-right:8px;
 }
-.ilsa-bar{display:flex;align-items:center;gap:8px}
+.ilsa-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .ilsa-bar input{
   flex:1;min-width:0;
   font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
@@ -459,12 +475,19 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 .ilsa-bar button[aria-pressed="true"]{color:var(--grey);border-color:rgba(58,64,72,.18)}
 .ilsa-bar .end{border-color:var(--ink)}
 body:has(#ilsa-sheet.open) #ilsa-orb.on,
-body:has(#ilsa-sheet.open) #ilsa-chat.on{bottom:calc(35vh + 14px)}
+body:has(#ilsa-sheet.open) #ilsa-chat.on,
+body:has(#ilsa-sheet.open) #ilsa-hangup.on{bottom:calc(35vh + 14px)}
 body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 @media (min-width:720px){
-  .ilsa-sheet{bottom:18px;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh}
+  .ilsa-sheet{
+    width:min(400px, calc(100% - 48px));
+    bottom:18px;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh;
+    transform:translate(-50%,110%);
+  }
+  .ilsa-sheet.open{transform:translate(-50%,0)}
   body:has(#ilsa-sheet.open) #ilsa-orb.on,
-  body:has(#ilsa-sheet.open) #ilsa-chat.on{bottom:calc(28vh + 36px)}
+  body:has(#ilsa-sheet.open) #ilsa-chat.on,
+  body:has(#ilsa-sheet.open) #ilsa-hangup.on{bottom:calc(28vh + 36px)}
 }
 </style>
 </head>
@@ -749,6 +772,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     <path d="M5 16.5V8.2A2.2 2.2 0 0 1 7.2 6h9.6A2.2 2.2 0 0 1 19 8.2v5.1A2.2 2.2 0 0 1 16.8 15.5H9.2L5 19v-2.5Z"/>
   </svg>
 </button>
+<button class="ilsa-hangup" id="ilsa-hangup" type="button" hidden>End</button>
 <div class="ilsa-hint" id="ilsa-hint" hidden>Hold to end</div>
 <div class="ilsa-sheet" id="ilsa-sheet" hidden>
   <div class="ilsa-lines" id="ilsa-lines" aria-live="polite"></div>
@@ -866,6 +890,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     if(ok){
       lastPrism=key;
       window.__ilsaLastPrism=key;
+      var askBtn=document.getElementById('prism-ask');
+      var labKey={teo:'teo',t37:'37t',aston:'aston',texlex:'texlex',inner:'innerlayer',oton:'otonomy',anima:'anima',bio:'humantech'}[key];
+      if(askBtn&&labKey)askBtn.setAttribute('data-focus-lab',labKey);
       if(askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
       window.dispatchEvent(new CustomEvent('ilsa:prism-open',{detail:{key:key}}));
     }
@@ -941,7 +968,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 </script>
 <script type="module">
 import { Conversation } from "https://esm.sh/@elevenlabs/client";
-import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab } from "/site/ilsa.js";
+import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab, buildDynamicVariables } from "/site/ilsa.js";
 
 const PRISM_TO_LAB = {
   teo: "teo",
@@ -956,6 +983,7 @@ const PRISM_TO_LAB = {
 
 const orb = document.getElementById("ilsa-orb");
 const chat = document.getElementById("ilsa-chat");
+const hangup = document.getElementById("ilsa-hangup");
 const hint = document.getElementById("ilsa-hint");
 const glow = document.getElementById("ilsa-glow");
 const sheet = document.getElementById("ilsa-sheet");
@@ -1011,16 +1039,15 @@ function showHint() {
 
 function applyLevel(speaking) {
   const target = speaking
-    ? (reduceMotion ? 0.12 : 0.07 + Math.min(1, outVol) * 0.2)
+    ? (reduceMotion ? 0.4 : 0.38 + Math.min(1, outVol) * 0.45)
     : 0;
   const ease = speaking ? 0.28 : 0.1;
   glowLevel += (target - glowLevel) * ease;
   if (glowLevel < 0.004 && !speaking) glowLevel = 0;
-  glow.style.setProperty("--ilsa-glow", glowLevel.toFixed(3));
+  glow.style.setProperty("--ilsa-glow-opacity", glowLevel.toFixed(3));
   glow.classList.toggle("live", speaking || glowLevel > 0.02);
-  glow.style.transform = speaking ? `scale(${(1 + glowLevel * 0.04).toFixed(3)})` : "scale(1)";
   let scale = 1;
-  if (speaking) scale = 1 + glowLevel * 0.85;
+  if (speaking) scale = 1 + Math.min(1, outVol) * 0.12;
   else if (voiceMode === "listening") scale = 0.92;
   orb.style.setProperty("--ilsa-orb-scale", scale.toFixed(3));
 }
@@ -1061,7 +1088,7 @@ function stopLevelLoop() {
   outVol = 0;
   inVol = 0;
   glowLevel = 0;
-  glow.style.setProperty("--ilsa-glow", "0");
+  glow.style.setProperty("--ilsa-glow-opacity", "0");
   glow.classList.remove("live");
   orb.style.setProperty("--ilsa-orb-scale", "1");
 }
@@ -1069,9 +1096,11 @@ function stopLevelLoop() {
 function showVoice(on) {
   orb.hidden = !on;
   chat.hidden = !on;
+  hangup.hidden = !on;
   glow.hidden = !on;
   orb.classList.toggle("on", on);
   chat.classList.toggle("on", on);
+  hangup.classList.toggle("on", on);
   if (on) {
     sheet.hidden = false;
     if (textOnly) {
@@ -1144,12 +1173,36 @@ async function closeSession() {
   await stopILSA();
 }
 
+function focusFromAsk(trigger) {
+  if (trigger?.id !== "prism-ask") return false;
+  const key = trigger.dataset.focusLab || PRISM_TO_LAB[window.__ilsaLastPrism] || null;
+  setFocusLab(key);
+  return Boolean(key);
+}
+
+function remindLab(conversation) {
+  const vars = buildDynamicVariables();
+  if (!vars.focus_lab || vars.focus_lab === "none") return;
+  const note = `The visitor asked about ${vars.focus_lab}. ${vars.focus_lab_tagline}. Speak about this lab now.`;
+  try { conversation.sendContextualUpdate?.(note); } catch (err) { console.error("ILSA error", err); }
+}
+
 async function talk(trigger) {
-  if (session || starting) return;
-  starting = true;
-  if (trigger?.id === "prism-ask" && window.__ilsaLastPrism) {
-    setFocusLab(PRISM_TO_LAB[window.__ilsaLastPrism] || null);
+  const fromLab = focusFromAsk(trigger);
+  if (session) {
+    if (fromLab) {
+      remindLab(session);
+      const vars = buildDynamicVariables();
+      const ask = `Tell me about ${vars.focus_lab}.`;
+      try {
+        session.sendUserMessage(ask);
+        noteUserUtterance(ask);
+      } catch (err) { console.error("ILSA error", err); }
+    }
+    return;
   }
+  if (starting) return;
+  starting = true;
 
   textOnly = false;
   try {
@@ -1189,6 +1242,7 @@ async function talk(trigger) {
   showVoice(true);
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
+  if (fromLab) remindLab(session);
   if (textOnly) typeIn.focus();
 }
 
@@ -1218,9 +1272,10 @@ if (!window.__ilsaUiBound) {
   });
   document.addEventListener("pointerdown", (e) => {
     if (!sheet.classList.contains("open") || textOnly) return;
-    if (sheet.contains(e.target) || chat.contains(e.target) || orb.contains(e.target)) return;
+    if (sheet.contains(e.target) || chat.contains(e.target) || orb.contains(e.target) || hangup.contains(e.target)) return;
     collapseSheet();
   });
+  hangup.addEventListener("click", closeSession);
   endBtn.addEventListener("click", closeSession);
   micBtn.addEventListener("click", () => {
     if (!session || textOnly) return;
