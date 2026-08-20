@@ -14,7 +14,7 @@ const LABS = {
   teo:        { name: "teo",        tagline: "An AI facilitator for conversations between two people", url: "https://helloteo.com.au" },
   innerlayer: { name: "InnerLayer", tagline: "Conversation intelligence that reads what's happening underneath the words, not yet released", url: null },
   texlex:     { name: "Texlex",     tagline: "The report engine for neurodevelopmental assessment, in beta", url: null },
-  otonomy:    { name: "oton/omy",   tagline: "Our personal intelligence lab, research stage", url: null },
+  otonomy:    { name: "OTON/OMY",   tagline: "Your body, mind and technology in one continuous conversation, research stage", url: null },
   anima:      { name: "Anima Lab",  tagline: "Plant-derived therapeutics for the animals we live with, in development", url: null },
   humantech:  { name: "Humantech",  tagline: "Human performance, measured and improved, research stage", url: null },
 };
@@ -47,9 +47,14 @@ function entryPath() {
   return location.pathname === "/" ? "direct" : location.pathname;
 }
 
-function perthTimeOfDay() {
-  const h = Number(new Intl.DateTimeFormat("en-AU", { hour: "numeric", hour12: false, timeZone: "Australia/Perth" }).format(new Date()));
-  return h < 5 ? "late night" : h < 12 ? "morning" : h < 17 ? "afternoon" : h < 21 ? "evening" : "night";
+function timeOfDay() {
+  const h = new Date().getHours(); // visitor's local clock
+  return h < 5 ? "night" : h < 12 ? "morning" : h < 17 ? "afternoon" : h < 21 ? "evening" : "night";
+}
+
+function salutation() {
+  const t = timeOfDay();
+  return t === "morning" ? "Good morning" : t === "afternoon" ? "Good afternoon" : t === "evening" ? "Good evening" : "Hello";
 }
 
 function inferSegment() {
@@ -64,9 +69,10 @@ function inferSegment() {
 
 export function buildOpeningLine() {
   const lab = state.focusLab ? LABS[state.focusLab] : null;
-  if (!lab) return "Hello, I'm ILSA, your guide through our labs. Is there something I can help you with?";
-  if (state.returning) return `Hello again, it's ILSA. You're back on ${lab.name}. What can I help with?`;
-  return `Hello, I'm ILSA, your guide through our labs. You're on ${lab.name}. Is there something I can help you with?`;
+  const hi = salutation();
+  if (!lab) return `${hi}, I'm ILSA, your guide through our labs. Is there something I can help you with?`;
+  if (state.returning) return `${hi} again, it's ILSA. You're back on ${lab.name}. What can I help with?`;
+  return `${hi}, I'm ILSA, your guide through our labs. You're on ${lab.name}. Is there something I can help you with?`;
 }
 
 export function buildDynamicVariables() {
@@ -79,7 +85,7 @@ export function buildDynamicVariables() {
     entry_path: entryPath(),
     visitor_segment: inferSegment(),
     returning: String(state.returning),
-    time_of_day_perth: perthTimeOfDay(),
+    time_of_day: timeOfDay(),
   };
 }
 
