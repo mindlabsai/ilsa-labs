@@ -255,6 +255,7 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 .prism .enter[hidden]{display:none}
 .prism .enter.preview{border-color:rgba(58,64,72,.28);color:var(--grey);cursor:default;pointer-events:none}
 .prism .enter.preview:hover{background:transparent}
+.prism.just-opened .prism-actions{pointer-events:none}
 .prism-actions{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
 .prism-actions .enter{margin-top:0}
 .askthis{
@@ -272,8 +273,6 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
   background:rgba(255,255,255,.7);cursor:pointer;font-size:17px;color:var(--ink);
   display:flex;align-items:center;justify-content:center;
 }
-.prism .skipnote{margin-top:14px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
-
 .contact{padding:clamp(50px,8vw,100px) 0 clamp(54px,9vw,108px)}
 .contact .label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
 .contact{display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -598,7 +597,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
         <div class="plaque">
           <div class="id"><span>Lab 04</span><span class="led dev"><i></i>Beta preview</span></div>
           <div class="name">Texlex</div>
-          <p class="desc"><b>The future of neurodivergent assessment and intelligent reporting.</b> ASD, ADHD and SLD. A diagnostic mind that writes in yours.</p>
+          <p class="desc">Writes the report in your voice. You stay the author.</p>
         </div>
       </div>
     </div>
@@ -618,12 +617,12 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
         <div class="plaque">
           <div class="id"><span>Lab 05</span><span class="led dev"><i></i>Beta preview</span></div>
           <div class="name">InnerLayer</div>
-          <p class="desc"><b>Decision intelligence.</b> InnerLayer reads what's really happening beneath a conversation. 24 clinical markers, one API.</p>
+          <p class="desc"><b>Decision intelligence.</b> InnerLayer reads what's really happening beneath a conversation.</p>
         </div>
       </div>
     </div>
 
-    <a class="chamber" data-prism="oton" href="https://otonomy.ai" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="oton" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -635,7 +634,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
             <line x1="88" y1="74" x2="112" y2="46" stroke="#4A5058" stroke-width="1.5"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>You, in real time.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>You, in real time.</p><span class="welcome">Preview only</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 06</span><span class="led res"><i></i>Research</span></div>
@@ -643,7 +642,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
           <p class="desc">OTO/NOMY brings your body, mind and technology into one continuous conversation. It learns from how you sleep, move, recover, respond and feel, pulling those signals together to understand how you're actually doing in real time, not just showing you another dashboard full of numbers.</p>
         </div>
       </div>
-    </a>
+    </div>
 
   </div>
 
@@ -651,7 +650,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 
   <div class="grid">
 
-    <a class="chamber" data-prism="anima" href="https://animalab.com.au" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="anima" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -663,7 +662,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
             </g>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>Animal sciences.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>Animal sciences.</p><span class="welcome">Preview only</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 07</span><span class="led dev"><i></i>In development</span></div>
@@ -671,9 +670,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
           <p class="desc"><b>Animal sciences.</b> Plant-derived therapeutics for the animals we live with. Evidence-led, formulated in Australia.</p>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a class="chamber" data-prism="bio" href="https://biohack.ilsalabs.com" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="bio" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -681,7 +680,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
             <polyline class="ecg" points="52,60 78,60 88,42 98,78 108,52 114,60 148,60" fill="none" stroke="#4A5058" stroke-width="1.5" stroke-linejoin="round"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>Sleep. Cognition. Recovery.</p><span class="welcome">Welcome →</span></div>
+          <div class="fog"><p>Sleep. Cognition. Recovery.</p><span class="welcome">Preview only</span></div>
         </div>
         <div class="plaque">
           <div class="id"><span>Lab 08</span><span class="led res"><i></i>Research</span></div>
@@ -689,7 +688,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
           <p class="desc"><b>Human performance, measured and optimised.</b> Sleep, cognition, recovery, longevity. The lab turned on ourselves.</p>
         </div>
       </div>
-    </a>
+    </div>
 
   </div>
 </div>
@@ -727,7 +726,6 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
       <span id="prism-ask-label">Ask ILSA about this lab</span>
     </button>
   </div>
-  <div class="skipnote">esc to close</div>
 </div>
 
 <section class="contact wrap">
@@ -797,16 +795,16 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
       brief:"Screening for observable neurodivergence. Parent, teacher, clinician. Live at astonax.com. Not a diagnosis.",
       beats:["A child someone needs to understand.","Parent. Teacher. Clinician. Every perspective, one pathway.","Observable signal, before the assessment begins."]},
     texlex:{id:"Lab 04 · Intelligence",name:"Texlex",status:"Beta preview",
-      brief:"Intelligent reporting for ASD, ADHD and SLD. Beta preview only. No public site.",
-      beats:["ASD. ADHD. SLD.","A diagnostic mind that writes in yours.","The future of neurodivergent assessment is already reporting."]},
+      brief:"Writes the report in your voice. You stay the author. Beta preview only. No public site.",
+      beats:["Writes the report in your voice.","You stay the author.","ASD. ADHD. SLD."]},
     inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",status:"Beta preview",
-      brief:"Decision intelligence. 24 clinical markers, one API. Beta preview only. No public site.",
-      beats:["A conversation streams in.","24 clinical markers read what's beneath the words.","Understanding comes back as an API."]},
+      brief:"Decision intelligence. Reads what's happening beneath a conversation. Beta preview only. No public site.",
+      beats:["A conversation streams in.","It reads what's happening beneath the words.","Understanding comes back as an API."]},
     oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,status:"Research",
-      brief:"Body, mind and technology in one conversation. Research. otonomy.ai.",
+      brief:"Body, mind and technology in one conversation. Research. Preview only.",
       beats:["Body, Mind, Technology speaking together."]},
     anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",status:"In development",
-      brief:"Plant-derived animal therapeutics. Evidence-led, formulated in Australia. animalab.com.au.",
+      brief:"Plant-derived animal therapeutics. Evidence-led, formulated in Australia. Preview only.",
       beats:["Animal sciences.","Plant-derived, evidence-led formulation.","For the animals we live with."]},
     bio:{id:"Lab 08 · Living Systems",name:"Humantech",status:"Research",
       brief:"Human performance. Sleep, cognition, recovery, longevity. Research.",
@@ -823,6 +821,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
       elPreview=document.getElementById('prism-preview'),
       elClose=document.getElementById('prism-close');
   var timer=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var prismOpenedAt=0;
 
   function openPrism(key,href,svg){
     var p=PRISMS[key];if(!p)return false;
@@ -831,17 +830,24 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     elName.className='lab-name'+(p.lower?' lower':'');
     elStage.innerHTML='';
     if(svg)elStage.appendChild(svg.cloneNode(true));
-    if(href){
+    var live=p.status==='Live'&&href;
+    if(live){
       elEnter.href=href;
       elEnter.hidden=false;
       if(elPreview)elPreview.hidden=true;
     }else{
       elEnter.removeAttribute('href');
       elEnter.hidden=true;
-      if(elPreview)elPreview.hidden=false;
+      if(elPreview){
+        elPreview.textContent=p.status==='Beta preview'?'Beta preview only':'Preview only';
+        elPreview.hidden=false;
+      }
     }
     elDots.innerHTML=p.beats.map(function(){return '<i></i>'}).join('');
-    overlay.classList.add('open');
+    overlay.classList.add('open','just-opened');
+    prismOpenedAt=Date.now();
+    window.__ilsaPrismOpenedAt=prismOpenedAt;
+    setTimeout(function(){overlay.classList.remove('just-opened');},500);
     document.body.style.overflow='hidden';
 
     var i=0,dots=elDots.children;
@@ -861,7 +867,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     return true;
   }
   function closePrism(){
-    overlay.classList.remove('open');
+    overlay.classList.remove('open','just-opened');
     document.body.style.overflow='';
     if(timer)clearTimeout(timer);
   }
@@ -907,7 +913,10 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     openPrism(key,card.getAttribute('href'),card.querySelector('svg'));
   });
   document.querySelectorAll('[data-talk]').forEach(function(b){
-    b.addEventListener('click',function(){ closePrism(); });
+    b.addEventListener('click',function(){
+      if(Date.now()-prismOpenedAt<500)return;
+      closePrism();
+    });
   });
 
   /* ---------- glass writer ---------- */
@@ -1188,6 +1197,7 @@ function remindLab(conversation) {
 }
 
 async function talk(trigger) {
+  if (trigger?.id === "prism-ask" && Date.now() - (window.__ilsaPrismOpenedAt || 0) < 500) return;
   const fromLab = focusFromAsk(trigger);
   if (session) {
     if (fromLab) {
