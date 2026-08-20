@@ -1,0 +1,91 @@
+// /api/ilsa/[action].js  — Vercel serverless handler for ILSA server tools.
+// Three actions: capture_lead, request_demo, log_unanswered.
+// ElevenLabs calls these as webhooks. Verify the request signature header name
+// and scheme against current ElevenLabs docs before going live.
+
+const crypto = require("node:crypto");
+
+const SECRET = process.env.ILSA_WEBHOOK_SECRET;          // shared secret configured in the ElevenLabs tool
+const NOTIFY_URL = process.env.ILSA_NOTIFY_URL;          // Slack incoming webhook, or swap for email/CRM
+const SHEET_URL = process.env.ILSA_SHEET_WEBHOOK;        // optional: Apps Script / Sheets endpoint for a simple ledger
+
+const LABS = new Set(["ASTON", "37T", "teo", "InnerLayer", "Texlex", "ILSA Labs", "none"]);
+const SEGMENTS = new Set(["clinician", "developer", "creator", "org", "investor", "press", "unknown"]);
+
+const schemas = {
+  capture_lead: {
+    required: ["name", "contact", "interest"],
+    optional: ["lab", "segment", "summary"],
+  },
+  request_demo: {
+    required: ["name", "contact", "lab"],
+    optional: ["organisation", "preferred_time", "segment", "summary"],
+  },
+  log_unanswered: {
+    required: ["question"],
+    optional: ["lab", "segment"],
+  },
+};
+
+function verify(req, rawBody) {
+  if (!SECRET) return true; // dev only — set the secret in production
+  const sig = req.headers["x-ilsa-signature"] || "";
+  const expected = crypto.createHmac("sha256", SECRET).update(rawBody).digest("hex");
+  return sig.length === expected.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
+}
+
+function clean(s, max = 500) {
+  return String(s ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, max);
+}
+
+function validate(action, body) {
+  const schema = schemas[action];
+  if (!schema) return { error: "unknown action" };
+  const out = {};
+  for (const k of schema.required) {
+    if (!body[k]) return { error: `missing ${k}` };
+    out[k] = clean(body[k]);
+  }
+  for (const k of schema.optional) if (body[k] != null) out[k] = clean(body[k], k === "summary" ? 1500 : 500);
+  if (out.lab && !LABS.has(out.lab)) out.lab = "none";
+  if (out.segment && !SEGMENTS.has(out.segment)) out.segment = "unknown";
+  return { data: out };
+}
+
+async function post(url, payload) {
+  if (!url) return;
+  await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+}
+
+function slackText(action, d) {
+  const head = { capture_lead: "New lead via ILSA", request_demo: "Demo request via ILSA", log_unanswered: "ILSA couldn't answer" }[action];
+  const lines = Object.entries(d).map(([k, v]) => `*${k}:* ${v}`);
+  return { text: `${head}\n${lines.join("\n")}` };
+}
+
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).end();
+
+  const raw = typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {});
+  if (!verify(req, raw)) return res.status(401).json({ error: "bad signature" });
+
+  const action = req.query.action;
+  const { data, error } = validate(action, typeof req.body === "string" ? JSON.parse(raw) : req.body ?? {});
+  if (error) return res.status(400).json({ error });
+
+  const record = { action, ...data, received_at: new Date().toISOString(), source: "ilsa-agent" };
+
+  await Promise.allSettled([
+    post(NOTIFY_URL, slackText(action, data)),
+    post(SHEET_URL, record),
+  ]);
+
+  // The string returned here is what the agent hears back. Keep it short and usable in speech.
+  const reply = {
+    capture_lead: "Captured. Tell the visitor the team will be in touch.",
+    request_demo: "Demo request logged. Tell the visitor the team will confirm a time.",
+    log_unanswered: "Logged.",
+  }[action];
+
+  return res.status(200).json({ result: reply });
+}
