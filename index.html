@@ -255,7 +255,6 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 .prism .enter[hidden]{display:none}
 .prism .enter.preview{border-color:rgba(58,64,72,.28);color:var(--grey);cursor:default;pointer-events:none}
 .prism .enter.preview:hover{background:transparent}
-.prism.just-opened .prism-actions{pointer-events:none}
 .prism-actions{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
 .prism-actions .enter{margin-top:0}
 .askthis{
@@ -821,7 +820,6 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
       elPreview=document.getElementById('prism-preview'),
       elClose=document.getElementById('prism-close');
   var timer=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var prismOpenedAt=0;
 
   function openPrism(key,href,svg){
     var p=PRISMS[key];if(!p)return false;
@@ -844,10 +842,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
       }
     }
     elDots.innerHTML=p.beats.map(function(){return '<i></i>'}).join('');
-    overlay.classList.add('open','just-opened');
-    prismOpenedAt=Date.now();
-    window.__ilsaPrismOpenedAt=prismOpenedAt;
-    setTimeout(function(){overlay.classList.remove('just-opened');},500);
+    overlay.classList.add('open');
     document.body.style.overflow='hidden';
 
     var i=0,dots=elDots.children;
@@ -867,7 +862,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     return true;
   }
   function closePrism(){
-    overlay.classList.remove('open','just-opened');
+    overlay.classList.remove('open');
     document.body.style.overflow='';
     if(timer)clearTimeout(timer);
   }
@@ -879,6 +874,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     function openCard(e){
       var svg=card.querySelector('svg');
       var href=card.getAttribute('href');
+      window.__ilsaPrismOpenTap={t:Date.now(),x:e&&e.clientX,y:e&&e.clientY};
       if(openPrism(card.dataset.prism,href,svg)&&e)e.preventDefault();
     }
     card.addEventListener('click',openCard);
@@ -913,8 +909,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
     openPrism(key,card.getAttribute('href'),card.querySelector('svg'));
   });
   document.querySelectorAll('[data-talk]').forEach(function(b){
-    b.addEventListener('click',function(){
-      if(Date.now()-prismOpenedAt<500)return;
+    b.addEventListener('click',function(e){
+      var tap=window.__ilsaPrismOpenTap;
+      if(b.id==='prism-ask'&&tap&&Date.now()-tap.t<450&&typeof e.clientX==='number'&&Math.hypot(e.clientX-tap.x,e.clientY-tap.y)<36)return;
       closePrism();
     });
   });
@@ -1196,8 +1193,16 @@ function remindLab(conversation) {
   try { conversation.sendContextualUpdate?.(note); } catch (err) { console.error("ILSA error", err); }
 }
 
-async function talk(trigger) {
-  if (trigger?.id === "prism-ask" && Date.now() - (window.__ilsaPrismOpenedAt || 0) < 500) return;
+function isGhostLabAsk(trigger, event) {
+  if (trigger?.id !== "prism-ask") return false;
+  const tap = window.__ilsaPrismOpenTap;
+  if (!tap || Date.now() - tap.t > 450) return false;
+  if (!event || typeof event.clientX !== "number") return false;
+  return Math.hypot(event.clientX - tap.x, event.clientY - tap.y) < 36;
+}
+
+async function talk(trigger, event) {
+  if (isGhostLabAsk(trigger, event)) return;
   const fromLab = focusFromAsk(trigger);
   if (session) {
     if (fromLab) {
@@ -1252,7 +1257,15 @@ async function talk(trigger) {
   showVoice(true);
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
-  if (fromLab) remindLab(session);
+  if (fromLab && session) {
+    remindLab(session);
+    const vars = buildDynamicVariables();
+    const ask = `Tell me about ${vars.focus_lab}.`;
+    try {
+      session.sendUserMessage(ask);
+      noteUserUtterance(ask);
+    } catch (err) { console.error("ILSA error", err); }
+  }
   if (textOnly) typeIn.focus();
 }
 
@@ -1306,7 +1319,7 @@ if (!window.__ilsaUiBound) {
     typeIn.value = "";
   });
   document.querySelectorAll("[data-talk]").forEach((b) => {
-    b.addEventListener("click", () => talk(b));
+    b.addEventListener("click", (e) => talk(b, e));
   });
   window.addEventListener("ilsa:prism-open", (e) => {
     setFocusLab(PRISM_TO_LAB[e.detail?.key] || null);
