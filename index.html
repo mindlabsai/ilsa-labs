@@ -355,11 +355,74 @@ footer .fwordmark{font-family:'Manrope',sans-serif;font-weight:600;letter-spacin
 footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 @media (max-width:640px){footer{flex-direction:column;align-items:center;gap:12px}}
 
-/* nudge ring around the ElevenLabs launcher when Ask ILSA tile is tapped */
-@keyframes nudge{0%{box-shadow:0 0 0 0 rgba(62,140,255,.55)}100%{box-shadow:0 0 0 26px rgba(62,140,255,0)}}
-.nudge-ring{
-  position:fixed;right:14px;bottom:14px;width:72px;height:72px;border-radius:50%;
-  pointer-events:none;z-index:55;animation:nudge 1.1s ease-out 3;
+/* ILSA voice orb + slim glass sheet — no ElevenLabs chrome */
+.ilsa-orb{
+  position:fixed;right:max(16px,env(safe-area-inset-right));
+  bottom:max(18px,env(safe-area-inset-bottom));
+  z-index:62;width:56px;height:56px;border-radius:50%;border:0;padding:0;
+  background:radial-gradient(circle at 35% 30%,#CFE4FF,#3E8CFF 62%);
+  box-shadow:0 0 16px rgba(62,140,255,.45),0 8px 20px rgba(46,52,60,.16);
+  cursor:pointer;opacity:0;pointer-events:none;transform:scale(.92);
+  transition:opacity .3s,transform .3s,filter .3s;
+}
+.ilsa-orb.on{opacity:1;pointer-events:auto;transform:scale(1)}
+.ilsa-orb.idle{filter:saturate(.55) brightness(.86);box-shadow:0 0 8px rgba(62,140,255,.2)}
+.ilsa-orb.listening{filter:none}
+.ilsa-orb.speaking{filter:none}
+@media (prefers-reduced-motion:no-preference){
+  .ilsa-orb.speaking{animation:ilsa-breathe 1.6s ease-in-out infinite}
+  .ilsa-orb.listening{animation:ilsa-pulse 2.2s ease-in-out infinite}
+  @keyframes ilsa-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+  @keyframes ilsa-pulse{
+    0%,100%{box-shadow:0 0 10px rgba(62,140,255,.35)}
+    50%{box-shadow:0 0 22px rgba(62,140,255,.7)}
+  }
+}
+.ilsa-sheet{
+  position:fixed;left:50%;bottom:0;z-index:63;
+  width:min(100%,540px);max-height:35vh;
+  transform:translate(-50%,110%);
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  background:rgba(251,252,253,.78);
+  border:1px solid rgba(58,64,72,.12);border-bottom:0;
+  border-radius:14px 14px 0 0;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 -18px 40px -12px rgba(46,52,60,.22);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .35s ease;
+}
+.ilsa-sheet.open{transform:translate(-50%,0)}
+.ilsa-lines{
+  flex:1;min-height:0;overflow:auto;
+  display:flex;flex-direction:column;gap:8px;
+  font-weight:300;font-size:13.5px;line-height:1.5;color:var(--ink);
+}
+.ilsa-lines p{margin:0}
+.ilsa-lines .who{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--grey);margin-right:8px;
+}
+.ilsa-bar{display:flex;align-items:center;gap:8px}
+.ilsa-bar input{
+  flex:1;min-width:0;
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
+  background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.28);
+  padding:7px 2px;outline:none;
+}
+.ilsa-bar input:focus{border-bottom-color:var(--ink)}
+.ilsa-bar input::placeholder{color:var(--grey)}
+.ilsa-bar button{
+  font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);background:rgba(255,255,255,.4);
+  border:1px solid rgba(58,64,72,.28);border-radius:2px;
+  padding:8px 10px;cursor:pointer;white-space:nowrap;
+}
+.ilsa-bar button[aria-pressed="true"]{color:var(--grey);border-color:rgba(58,64,72,.18)}
+.ilsa-bar .end{border-color:var(--ink)}
+body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(35vh + 14px)}
+@media (min-width:720px){
+  .ilsa-sheet{bottom:18px;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh}
+  body:has(#ilsa-sheet.open) #ilsa-orb.on{bottom:calc(28vh + 36px)}
 }
 </style>
 </head>
@@ -637,23 +700,15 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   <span>ILSA LABS PTY LTD 65 693 769 658 2026</span>
 </footer>
 
-<!-- ===== ASK ILSA · ElevenLabs Conversational AI =====
-     1. Create your agent at elevenlabs.io (Agents), set it Public (Advanced tab)
-     2. Add ilsalabs.com to the Allowlist (Security tab)
-     3. Replace YOUR_AGENT_ID below with your agent ID -->
-<elevenlabs-convai
-  id="ilsa"
-  agent-id="agent_6901m0fbpj0kfjssaw9qwz3mshva"
-  avatar-orb-color-1="#3E8CFF"
-  avatar-orb-color-2="#0B0C0E"
-  avatar-image-url="/apple-touch-icon.png"
-  action-text="Ask ILSA"
-  start-call-text="Talk to ILSA"
-  expand-text="Chat with ILSA"
-  end-call-text="End"
-  dynamic-variables='{"focus_lab":"ILSA Labs","focus_status":"guide","focus_note":"Visitor is on the homepage."}'>
-</elevenlabs-convai>
-<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+<button class="ilsa-orb" id="ilsa-orb" type="button" aria-label="Talk to ILSA" hidden></button>
+<div class="ilsa-sheet" id="ilsa-sheet" hidden>
+  <div class="ilsa-lines" id="ilsa-lines" aria-live="polite"></div>
+  <div class="ilsa-bar">
+    <button type="button" id="ilsa-mic" aria-pressed="false">Mic</button>
+    <input id="ilsa-type" type="text" enterkeyhint="send" autocomplete="off" placeholder="Type instead…">
+    <button type="button" class="end" id="ilsa-end">End</button>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -753,47 +808,32 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
     });
   });
 
-  /* ---------- ILSA-led: talk buttons open the orb with lab context ---------- */
+  /* ---------- ILSA-led: prism focus + client-tool events ---------- */
   var lastPrism=null;
-  function summonIlsa(key){
-    var w=document.getElementById('ilsa')||document.querySelector('elevenlabs-convai');
-    if(!w)return;
-    var focus='ILSA Labs',status='guide',note='Visitor is on the homepage.';
-    var p=key&&PRISMS[key];
-    if(p){
-      focus=p.name;
-      status=p.status||'';
-      note=p.brief||'';
-    }
-    w.setAttribute('dynamic-variables',JSON.stringify({
-      focus_lab:focus,focus_status:status,focus_note:note
-    }));
-    var ring=document.createElement('div');
-    ring.className='nudge-ring';
-    document.body.appendChild(ring);
-    setTimeout(function(){ring.remove()},3500);
-    try{if(typeof w.startConversation==='function')w.startConversation();}catch(e){}
-  }
-  document.querySelectorAll('[data-talk]').forEach(function(b){
-    b.addEventListener('click',function(){
-      var key=b.id==='prism-ask'?lastPrism:null;
-      closePrism();
-      summonIlsa(key);
-    });
-  });
-  document.getElementById('askilsa-tile').addEventListener('click',function(){summonIlsa();});
-
-  /* prism ask-button carries the lab name */
   var askLabel=document.getElementById('prism-ask-label');
   var _open=openPrism;
   openPrism=function(key,href,svg){
     var ok=_open(key,href,svg);
     if(ok){
       lastPrism=key;
+      window.__ilsaLastPrism=key;
       if(askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
+      window.dispatchEvent(new CustomEvent('ilsa:prism-open',{detail:{key:key}}));
     }
     return ok;
   };
+
+  window.addEventListener('ilsa:highlight',function(e){
+    var lab=e.detail&&e.detail.lab;
+    var key={aston:'aston','37t':'t37',teo:'teo',innerlayer:'inner',texlex:'texlex',otonomy:'oton',anima:'anima',humantech:'bio'}[lab]||lab;
+    var card=document.querySelector('.chamber[data-prism="'+key+'"]');
+    if(!card)return;
+    openPrism(key,card.getAttribute('href'),card.querySelector('svg'));
+  });
+  document.querySelectorAll('[data-talk]').forEach(function(b){
+    b.addEventListener('click',function(){ closePrism(); });
+  });
+
   /* ---------- glass writer ---------- */
   var writer=document.getElementById('writer'),
       wChips=document.getElementById('writer-chips'),
@@ -834,7 +874,185 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
       wSend.disabled=false;wSend.textContent='Send again';
     });
   });
+
+  window.addEventListener('ilsa:card',function(e){
+    var d=e.detail||{};
+    writer.classList.add('open');
+    document.body.style.overflow='hidden';
+    var sub=writer.querySelector('.sub');
+    if(d.type==='confirmation'&&sub){
+      sub.textContent=(typeof d.payload==='string'&&d.payload)?d.payload:"We'll be in touch.";
+    }
+    if((d.type==='contact'||d.type==='demo')&&typeof d.payload==='string'&&d.payload){
+      wText.value=d.payload;
+    }
+    wText.focus();
+  });
 })();
+</script>
+<script type="module">
+import { Conversation } from "https://esm.sh/@elevenlabs/client";
+import { startILSA, setFocusLab } from "/site/ilsa.js";
+
+const PRISM_TO_LAB = {
+  teo: "teo",
+  t37: "37t",
+  aston: "aston",
+  texlex: "texlex",
+  inner: "innerlayer",
+  oton: "otonomy",
+  anima: "anima",
+  bio: "humantech",
+};
+
+const orb = document.getElementById("ilsa-orb");
+const sheet = document.getElementById("ilsa-sheet");
+const lines = document.getElementById("ilsa-lines");
+const micBtn = document.getElementById("ilsa-mic");
+const typeIn = document.getElementById("ilsa-type");
+const endBtn = document.getElementById("ilsa-end");
+
+let session = null;
+let textOnly = false;
+let muted = false;
+const turns = [];
+
+function setMode(mode) {
+  orb.classList.remove("speaking", "listening", "idle");
+  orb.classList.add(mode || "idle");
+}
+
+function showVoice(on) {
+  orb.hidden = !on;
+  sheet.hidden = !on;
+  orb.classList.toggle("on", on);
+  sheet.classList.toggle("open", on);
+  if (!on) {
+    setMode("idle");
+    turns.length = 0;
+    lines.innerHTML = "";
+    muted = false;
+    micBtn.setAttribute("aria-pressed", "false");
+    micBtn.textContent = "Mic";
+    micBtn.hidden = false;
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function renderTurns() {
+  const last = turns.slice(-2);
+  lines.innerHTML = last.map((t) => (
+    `<p><span class="who">${esc(t.who)}</span>${esc(t.text)}</p>`
+  )).join("");
+  lines.scrollTop = lines.scrollHeight;
+}
+
+function pushTurn(who, text) {
+  const clean = String(text || "").trim();
+  if (!clean) return;
+  const prev = turns[turns.length - 1];
+  if (prev && prev.who === who) prev.text = clean;
+  else turns.push({ who, text: clean });
+  renderTurns();
+}
+
+function roleOf(msg) {
+  const s = String(msg?.source || msg?.role || "").toLowerCase();
+  if (s === "ai" || s === "agent" || s === "assistant") return "ILSA";
+  if (s === "user" || s === "human") return "You";
+  return "";
+}
+
+function textOf(msg) {
+  if (typeof msg === "string") return msg;
+  return msg?.message || msg?.text || msg?.content || "";
+}
+
+function isPartial(msg) {
+  if (!msg || typeof msg !== "object") return false;
+  if (msg.is_final === false || msg.isFinal === false) return true;
+  return /tentative|partial|interim/i.test(String(msg.type || msg.event || ""));
+}
+
+async function endILSA() {
+  const conv = session;
+  session = null;
+  showVoice(false);
+  if (conv) {
+    try { await conv.endSession(); } catch (e) { console.error("ILSA error", e); }
+  }
+}
+
+async function talk(trigger) {
+  if (session) return;
+  if (trigger?.id === "prism-ask" && window.__ilsaLastPrism) {
+    setFocusLab(PRISM_TO_LAB[window.__ilsaLastPrism] || null);
+  }
+
+  textOnly = false;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach((t) => t.stop());
+  } catch (err) {
+    console.error("ILSA error", err);
+    textOnly = true;
+  }
+
+  try {
+    session = await startILSA(Conversation, {
+      textOnly,
+      onDisconnect: () => { session = null; showVoice(false); },
+      onModeChange: (m) => setMode(m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle"),
+      onMessage: (msg) => {
+        if (isPartial(msg)) return;
+        const who = roleOf(msg);
+        if (who) pushTurn(who, textOf(msg));
+      },
+    });
+  } catch (err) {
+    console.error("ILSA error", err);
+    session = null;
+    showVoice(false);
+    return;
+  }
+
+  showVoice(true);
+  setMode(textOnly ? "idle" : "listening");
+  micBtn.hidden = textOnly;
+  if (textOnly) typeIn.focus();
+}
+
+orb.addEventListener("click", () => talk(orb));
+endBtn.addEventListener("click", endILSA);
+micBtn.addEventListener("click", () => {
+  if (!session || textOnly) return;
+  muted = !muted;
+  session.setMicMuted(muted);
+  micBtn.setAttribute("aria-pressed", String(muted));
+  micBtn.textContent = muted ? "Muted" : "Mic";
+});
+typeIn.addEventListener("input", () => { try { session?.sendUserActivity?.(); } catch (e) {} });
+typeIn.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  const value = typeIn.value.trim();
+  if (!value || !session) return;
+  e.preventDefault();
+  session.sendUserMessage(value);
+  pushTurn("You", value);
+  typeIn.value = "";
+});
+
+document.getElementById("askilsa-tile").addEventListener("click", () => talk());
+document.querySelectorAll("[data-talk]").forEach((b) => {
+  b.addEventListener("click", () => talk(b));
+});
+
+window.addEventListener("ilsa:prism-open", (e) => {
+  setFocusLab(PRISM_TO_LAB[e.detail?.key] || null);
+});
 </script>
 </body>
 </html>
