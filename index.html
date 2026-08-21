@@ -973,7 +973,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 })();
 </script>
 <script type="module">
-import { Conversation } from "https://esm.sh/@elevenlabs/client";
+import { Conversation } from "/site/elevenlabs.js";
 import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab, buildDynamicVariables } from "/site/ilsa.js";
 
 const PRISM_TO_LAB = {
@@ -1032,15 +1032,21 @@ function collapseSheet() {
   sheet.classList.remove("open");
 }
 
-function showHint() {
-  if (localStorage.getItem("ilsa.holdHintSeen") === "1") return;
+function flashHint(text, ms) {
+  hint.textContent = text;
   hint.hidden = false;
   requestAnimationFrame(() => hint.classList.add("on"));
   clearTimeout(hintTimer);
   hintTimer = setTimeout(() => {
     hint.classList.remove("on");
-    localStorage.setItem("ilsa.holdHintSeen", "1");
-  }, 3400);
+    hint.textContent = "Hold to end";
+  }, ms);
+}
+
+function showHint() {
+  if (localStorage.getItem("ilsa.holdHintSeen") === "1") return;
+  flashHint("Hold to end", 3400);
+  setTimeout(() => localStorage.setItem("ilsa.holdHintSeen", "1"), 3400);
 }
 
 function applyLevel(speaking) {
@@ -1218,6 +1224,8 @@ async function talk(trigger, event) {
   }
   if (starting) return;
   starting = true;
+  showVoice(true);
+  setMode("listening");
 
   textOnly = false;
   try {
@@ -1228,28 +1236,44 @@ async function talk(trigger, event) {
     textOnly = true;
   }
 
+  const hooks = {
+    onDisconnect: () => { session = null; starting = false; showVoice(false); },
+    onModeChange: (m) => {
+      const mode = m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle";
+      setMode(mode);
+      if (!textOnly && sheetUserOpen && mode === "speaking" && lastUiMode !== "speaking") collapseSheet();
+      lastUiMode = mode;
+    },
+    onMessage: (msg) => {
+      if (isPartial(msg)) return;
+      const who = roleOf(msg);
+      if (who) pushTurn(who, textOf(msg));
+    },
+  };
+
   try {
-    session = await startILSA(Conversation, {
-      textOnly,
-      onDisconnect: () => { session = null; starting = false; showVoice(false); },
-      onModeChange: (m) => {
-        const mode = m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle";
-        setMode(mode);
-        if (!textOnly && sheetUserOpen && mode === "speaking" && lastUiMode !== "speaking") collapseSheet();
-        lastUiMode = mode;
-      },
-      onMessage: (msg) => {
-        if (isPartial(msg)) return;
-        const who = roleOf(msg);
-        if (who) pushTurn(who, textOf(msg));
-      },
-    });
+    session = await startILSA(Conversation, { textOnly, ...hooks });
   } catch (err) {
     console.error("ILSA error", err);
-    session = null;
-    starting = false;
-    showVoice(false);
-    return;
+    if (!textOnly) {
+      textOnly = true;
+      try {
+        session = await startILSA(Conversation, { textOnly, ...hooks });
+      } catch (retry) {
+        console.error("ILSA error", retry);
+        session = null;
+        starting = false;
+        showVoice(false);
+        flashHint("Can't connect", 3200);
+        return;
+      }
+    } else {
+      session = null;
+      starting = false;
+      showVoice(false);
+      flashHint("Can't connect", 3200);
+      return;
+    }
   }
 
   starting = false;

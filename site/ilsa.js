@@ -2,9 +2,10 @@
 // Computes session context, builds the opening line, registers client tools,
 // and starts the ElevenLabs conversation. Vanilla JS, no build step.
 //
-// Requires the ElevenLabs client SDK loaded on the page:
-//   <script type="module"> import { Conversation } from "https://esm.sh/@elevenlabs/client"; ... </script>
-// Verify the import path and startSession options against current ElevenLabs docs.
+// Client pin lives in site/elevenlabs.js. Always pass ILSA_CONNECTION_TYPE —
+// omitting it lets newer SDKs default voice to WebRTC, which fails on this site.
+
+import { ILSA_CONNECTION_TYPE } from "./elevenlabs.js";
 
 const ILSA_AGENT_ID = "agent_6901m0fbpj0kfjssaw9qwz3mshva";
 
@@ -180,11 +181,8 @@ export async function startILSA(Conversation, extra = {}) {
     dynamicVariables: vars,
     clientTools,
     textOnly,
-    connectionType: textOnly ? "websocket" : undefined,
-    overrides: {
-      agent: { firstMessage: buildOpeningLine() },
-      ...(textOnly ? { conversation: { textOnly: true } } : {}),
-    },
+    connectionType: ILSA_CONNECTION_TYPE,
+    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);

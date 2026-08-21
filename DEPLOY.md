@@ -26,10 +26,17 @@ opening the visitor's mail app (mailto), so no lead is ever lost.
 1. elevenlabs.io → Agents → create the agent. Paste the System prompt, first message and dynamic variables from `ask-ilsa-agent-config.md`.
 2. Advanced tab: set agent to **Public**. Security tab: Allowlist → add ilsalabs.com, www.ilsalabs.com and ilsa-labs.vercel.app.
 3. Widget tab: enable Voice + text so people can talk or type.
-4. Copy the agent ID → in `index.html`, replace `YOUR_AGENT_ID`.
+4. Copy the agent ID → in `site/ilsa.js`, set `ILSA_AGENT_ID`.
 5. Set a monthly usage cap in your ElevenLabs account.
 
 The site tells ILSA which lab the visitor opened (`focus_lab`). Ask ILSA about teo starts on teo. Hero and header start on the lab as a whole.
+
+Voice uses a **pinned** `@elevenlabs/client` over WebSocket (`site/elevenlabs.js`). Do not import the unversioned `esm.sh/@elevenlabs/client` URL — latest can switch voice to WebRTC and Talk to ILSA goes silent.
+
+### Upgrade the voice client
+1. Change `ILSA_CLIENT_VERSION` and the matching esm.sh URL in `site/elevenlabs.js` only. Keep `ILSA_CONNECTION_TYPE` as `"websocket"` unless you have added a conversation-token API for WebRTC.
+2. Hard-refresh ilsalabs.com (or preview). Tap Ask ILSA and Talk to ILSA on desktop and a phone. Confirm mic prompt, her first line, and End.
+3. If connect fails, the page shows **Can't connect** — check the console for `ILSA error` before deploying.
 
 ## Before launch checklist
 - [ ] Replace `YOUR_AGENT_ID` (Ask ILSA won't appear until you do)
