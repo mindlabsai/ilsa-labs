@@ -5,7 +5,7 @@
 // Client pin lives in site/elevenlabs.js. Always pass ILSA_CONNECTION_TYPE —
 // omitting it lets newer SDKs default voice to WebRTC, which fails on this site.
 
-import { ILSA_CONNECTION_TYPE } from "./elevenlabs.js";
+import { ILSA_CONNECTION_TYPE, ILSA_CONNECTION_DELAY } from "./elevenlabs.js";
 
 const ILSA_AGENT_ID = "agent_6901m0fbpj0kfjssaw9qwz3mshva";
 
@@ -182,6 +182,7 @@ export async function startILSA(Conversation, extra = {}) {
     clientTools,
     textOnly,
     connectionType: ILSA_CONNECTION_TYPE,
+    connectionDelay: ILSA_CONNECTION_DELAY,
     overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");

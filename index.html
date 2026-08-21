@@ -973,7 +973,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px)}
 })();
 </script>
 <script type="module">
-import { Conversation } from "/site/elevenlabs.js";
+import { Conversation, unlockILSAAudio } from "/site/elevenlabs.js";
 import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab, buildDynamicVariables } from "/site/ilsa.js";
 
 const PRISM_TO_LAB = {
@@ -1224,17 +1224,10 @@ async function talk(trigger, event) {
   }
   if (starting) return;
   starting = true;
+  textOnly = false;
+  try { unlockILSAAudio(); } catch {}
   showVoice(true);
   setMode("listening");
-
-  textOnly = false;
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    stream.getTracks().forEach((t) => t.stop());
-  } catch (err) {
-    console.error("ILSA error", err);
-    textOnly = true;
-  }
 
   const hooks = {
     onDisconnect: () => { session = null; starting = false; showVoice(false); },
@@ -1255,19 +1248,11 @@ async function talk(trigger, event) {
     session = await startILSA(Conversation, { textOnly, ...hooks });
   } catch (err) {
     console.error("ILSA error", err);
-    if (!textOnly) {
-      textOnly = true;
-      try {
-        session = await startILSA(Conversation, { textOnly, ...hooks });
-      } catch (retry) {
-        console.error("ILSA error", retry);
-        session = null;
-        starting = false;
-        showVoice(false);
-        flashHint("Can't connect", 3200);
-        return;
-      }
-    } else {
+    textOnly = true;
+    try {
+      session = await startILSA(Conversation, { textOnly, ...hooks });
+    } catch (retry) {
+      console.error("ILSA error", retry);
       session = null;
       starting = false;
       showVoice(false);
@@ -1278,19 +1263,13 @@ async function talk(trigger, event) {
 
   starting = false;
   lastUiMode = textOnly ? "idle" : "listening";
-  showVoice(true);
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
-  if (fromLab && session) {
-    remindLab(session);
-    const vars = buildDynamicVariables();
-    const ask = `Tell me about ${vars.focus_lab}.`;
-    try {
-      session.sendUserMessage(ask);
-      noteUserUtterance(ask);
-    } catch (err) { console.error("ILSA error", err); }
+  if (fromLab) remindLab(session);
+  if (textOnly) {
+    showVoice(true);
+    typeIn.focus();
   }
-  if (textOnly) typeIn.focus();
 }
 
 if (!window.__ilsaUiBound) {
