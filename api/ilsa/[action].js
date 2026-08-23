@@ -27,7 +27,7 @@ const schemas = {
 };
 
 function verify(req) {
-  if (!SECRET) return true; // dev only — set the secret in production
+  if (!SECRET) return false;
   const got = String(req.headers["x-ilsa-secret"] || "");
   const a = Buffer.from(got);
   const b = Buffer.from(SECRET);
@@ -55,7 +55,18 @@ function validate(action, body) {
 
 async function post(url, payload) {
   if (!url) return;
-  await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 4000);
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal,
+    });
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 function slackText(action, d) {
@@ -66,12 +77,17 @@ function slackText(action, d) {
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
-
-  const raw = typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {});
+  if (!SECRET) return res.status(503).json({ error: "not configured" });
   if (!verify(req)) return res.status(401).json({ error: "bad signature" });
 
+  let body = req.body;
+  if (typeof body === "string") {
+    try { body = JSON.parse(body); } catch { return res.status(400).json({ error: "bad json" }); }
+  }
+  if (!body || typeof body !== "object") return res.status(400).json({ error: "bad json" });
+
   const action = req.query.action;
-  const { data, error } = validate(action, typeof req.body === "string" ? JSON.parse(raw) : req.body ?? {});
+  const { data, error } = validate(action, body);
   if (error) return res.status(400).json({ error });
 
   const record = { action, ...data, received_at: new Date().toISOString(), source: "ilsa-agent" };

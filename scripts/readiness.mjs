@@ -1,0 +1,77 @@
+// Static production-readiness checks. No secrets, no network writes.
+import { readFileSync, existsSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import assert from "node:assert/strict";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const read = (p) => readFileSync(resolve(root, p), "utf8");
+
+const checks = [];
+function check(name, fn) {
+  try {
+    fn();
+    checks.push({ name, ok: true });
+  } catch (err) {
+    checks.push({ name, ok: false, error: err.message });
+  }
+}
+
+check("core files exist", () => {
+  for (const p of ["index.html", "api/contact.js", "api/ilsa/[action].js", "site/ilsa.js", "site/elevenlabs.js", "vercel.json"]) {
+    assert.equal(existsSync(resolve(root, p)), true, `missing ${p}`);
+  }
+});
+
+check("voice client is pinned and websocket-forced", () => {
+  const el = read("site/elevenlabs.js");
+  assert.match(el, /ILSA_CLIENT_VERSION = "1\.21\.0"/);
+  assert.match(el, /ILSA_CONNECTION_TYPE = "websocket"/);
+  assert.match(el, /esm\.sh\/@elevenlabs\/client@1\.21\.0/);
+  assert.doesNotMatch(el, /esm\.sh\/@elevenlabs\/client(?!@)/);
+});
+
+check("ILSA webhook fails closed without secret", () => {
+  const src = read("api/ilsa/[action].js");
+  assert.match(src, /if \(!SECRET\) return false/);
+  assert.match(src, /503.*not configured/);
+  assert.doesNotMatch(src, /if \(!SECRET\) return true/);
+});
+
+check("ILSA notify has a timeout", () => {
+  assert.match(read("api/ilsa/[action].js"), /setTimeout\(\(\) => ctrl\.abort\(\), 4000\)/);
+});
+
+check("contact send has a timeout and safe parse", () => {
+  const src = read("api/contact.js");
+  assert.match(src, /setTimeout\(\(\) => ctrl\.abort\(\), 8000\)/);
+  assert.match(src, /JSON\.parse/);
+  assert.match(src, /429/);
+});
+
+check("writer falls back to mailto on API failure", () => {
+  assert.match(read("index.html"), /mailto:human@ilsalabs\.com/);
+});
+
+check("security headers are declared", () => {
+  const v = read("vercel.json");
+  for (const h of ["X-Content-Type-Options", "Referrer-Policy", "X-Frame-Options", "Permissions-Policy"]) {
+    assert.match(v, new RegExp(h));
+  }
+});
+
+check("agent id is set", () => {
+  assert.doesNotMatch(read("site/ilsa.js"), /YOUR_AGENT_ID/);
+  assert.match(read("site/ilsa.js"), /agent_6901m0fbpj0kfjssaw9qwz3mshva/);
+});
+
+const failed = checks.filter((c) => !c.ok);
+for (const c of checks) {
+  console.log(`${c.ok ? "PASS" : "FAIL"}  ${c.name}${c.error ? ` — ${c.error}` : ""}`);
+}
+if (failed.length) {
+  process.exitCode = 1;
+  console.error(`\n${failed.length} readiness check(s) failed`);
+} else {
+  console.log(`\n${checks.length} readiness check(s) passed`);
+}

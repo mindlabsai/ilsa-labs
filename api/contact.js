@@ -6,12 +6,50 @@
 //   CONTACT_FROM    — optional, a verified sender on your Resend domain,
 //                     defaults to onboarding@resend.dev (works before domain setup)
 
+const hits = new Map();
+
+function rateLimit(req, limit = 8, windowMs = 60_000) {
+  const ip =
+    String(req.headers['x-forwarded-for'] || '')
+      .split(',')[0]
+      .trim() ||
+    req.socket?.remoteAddress ||
+    'unknown';
+  const now = Date.now();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < windowMs);
+  if (recent.length >= limit) return false;
+  recent.push(now);
+  hits.set(ip, recent);
+  return true;
+}
+
+function parseBody(req) {
+  let body = req.body;
+  if (typeof body === 'string') {
+    try {
+      body = JSON.parse(body);
+    } catch {
+      return null;
+    }
+  }
+  if (body == null) return {};
+  if (typeof body !== 'object') return null;
+  return body;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  if (!rateLimit(req)) return res.status(429).json({ error: 'Try again shortly' });
 
-  const { name = '', email = '', subject = 'Hello', message = '' } = req.body || {};
+  const body = parseBody(req);
+  if (!body) return res.status(400).json({ error: 'Invalid request' });
+
+  const name = String(body.name ?? '');
+  const email = String(body.email ?? '');
+  const subject = String(body.subject ?? 'Hello');
+  const message = String(body.message ?? '');
 
   // Basic validation
   if (!message.trim()) return res.status(400).json({ error: 'Empty message' });
@@ -22,15 +60,23 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Too long' });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'Not configured' });
+  const apiKey = String(process.env.RESEND_API_KEY || '')
+    .replace(/[^\x20-\x7E]/g, '')
+    .trim();
+  if (!apiKey) return res.status(503).json({ error: 'Not configured' });
 
-  const to = process.env.CONTACT_TO || 'human@ilsalabs.com';
-  const from = process.env.CONTACT_FROM || 'ILSA Labs <onboarding@resend.dev>';
+  const to = String(process.env.CONTACT_TO || 'human@ilsalabs.com')
+    .replace(/[^\x20-\x7E]/g, '')
+    .trim();
+  const from = String(process.env.CONTACT_FROM || 'ILSA Labs <onboarding@resend.dev>')
+    .replace(/[^\x20-\x7E]/g, '')
+    .trim() || 'ILSA Labs <onboarding@resend.dev>';
 
   const esc = (t) =>
     t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -38,6 +84,7 @@ export default async function handler(req, res) {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
+      signal: ctrl.signal,
       body: JSON.stringify({
         from,
         to: [to],
@@ -64,5 +111,7 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Send failed' });
+  } finally {
+    clearTimeout(timer);
   }
 }
