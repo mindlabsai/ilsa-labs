@@ -60,17 +60,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Too long' });
   }
 
-  // Dynamic name so the build cannot inline these to empty strings.
-  const envOf = (name) => process.env[name];
-  const rawKey = envOf('RESEND_API_KEY');
-  if (rawKey == null || rawKey === '') return res.status(503).json({ error: 'Not configured' });
-  // Production key was pasted with a leading bullet (U+2022). That character
-  // cannot go in a fetch header and used to 500 before Resend was reached.
-  const apiKey = String(rawKey).replace(/\u2022/g, '').trim();
+  let apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return res.status(503).json({ error: 'Not configured' });
+  apiKey = String(apiKey).replace(/\u2022/g, '').trim();
   if (!apiKey) return res.status(503).json({ error: 'Not configured' });
 
-  const to = String(envOf('CONTACT_TO') || 'human@ilsalabs.com').replace(/\u2022/g, '').trim();
-  const from = String(envOf('CONTACT_FROM') || 'ILSA Labs <onboarding@resend.dev>').replace(/\u2022/g, '').trim();
+  const to = process.env.CONTACT_TO || 'human@ilsalabs.com';
+  const from = process.env.CONTACT_FROM || 'ILSA Labs <onboarding@resend.dev>';
 
   const esc = (t) =>
     t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
