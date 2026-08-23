@@ -47,6 +47,7 @@ check("contact send has a timeout and safe parse", () => {
   assert.match(src, /setTimeout\(\(\) => ctrl\.abort\(\), 8000\)/);
   assert.match(src, /JSON\.parse/);
   assert.match(src, /429/);
+  assert.match(src, /envOf\('RESEND_API_KEY'\)/);
 });
 
 check("writer falls back to mailto on API failure", () => {
