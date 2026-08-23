@@ -60,22 +60,17 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Too long' });
   }
 
-  // Read env at runtime. Do not write process.env.RESEND_API_KEY as a static
-  // member access — Vercel can inline that to "" at build and the send always 503s.
+  // Dynamic name so the build cannot inline these to empty strings.
   const envOf = (name) => process.env[name];
-  const headerSafe = (value) => {
-    let out = '';
-    for (const ch of String(value ?? '')) {
-      const c = ch.codePointAt(0);
-      if (c >= 32 && c <= 126) out += ch;
-    }
-    return out.trim();
-  };
-  const apiKey = headerSafe(envOf('RESEND_API_KEY'));
+  const rawKey = envOf('RESEND_API_KEY');
+  if (rawKey == null || rawKey === '') return res.status(503).json({ error: 'Not configured' });
+  // Production key was pasted with a leading bullet (U+2022). That character
+  // cannot go in a fetch header and used to 500 before Resend was reached.
+  const apiKey = String(rawKey).replace(/\u2022/g, '').trim();
   if (!apiKey) return res.status(503).json({ error: 'Not configured' });
 
-  const to = headerSafe(envOf('CONTACT_TO')) || 'human@ilsalabs.com';
-  const from = headerSafe(envOf('CONTACT_FROM')) || 'ILSA Labs <onboarding@resend.dev>';
+  const to = String(envOf('CONTACT_TO') || 'human@ilsalabs.com').replace(/\u2022/g, '').trim();
+  const from = String(envOf('CONTACT_FROM') || 'ILSA Labs <onboarding@resend.dev>').replace(/\u2022/g, '').trim();
 
   const esc = (t) =>
     t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
