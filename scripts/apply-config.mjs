@@ -30,8 +30,9 @@ const steps = [
   ["prompt text", { conversation_config: { agent: { prompt: { prompt } } } }],
   ["llm + reasoning", { conversation_config: { agent: { prompt: { llm: "claude-sonnet-5", reasoning_effort: "low", temperature: 0 } } } }],
   ["rag on", { conversation_config: { agent: { prompt: { rag: { enabled: true, max_retrieved_rag_chunks_count: 8 } } } } }],
-  ["first message", { conversation_config: { agent: { first_message: "Hello, I'm ILSA, your guide through our labs. You're on {{focus_lab}}. Is there something I can help you with?" } } }],
+  ["first message", { conversation_config: { agent: { first_message: "{{opening_line}}" } } }],
   ["dynamic variable defaults", { conversation_config: { agent: { dynamic_variables: { dynamic_variable_placeholders: {
+      opening_line: "Hello, welcome to ILSA Labs. What would you like to know?",
       focus_lab: "ILSA Labs", focus_lab_tagline: "Technology for the human layer", labs_visited: "none",
       entry_path: "direct", visitor_segment: "unknown", returning: "false", time_of_day_perth: "day" } } } } }],
   ["max duration message", { conversation_config: { agent: { max_conversation_duration_message: "We've reached the end of this session. Thanks for visiting ILSA Labs." } } }],

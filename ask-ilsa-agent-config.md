@@ -4,7 +4,7 @@ Use your knowledge base only. Do not use the Alex template.
 
 ## First message
 ```
-I'm ILSA, the lab guide. You're looking at {{focus_lab}}. What would you like to know?
+{{opening_line}}
 ```
 
 ## System prompt

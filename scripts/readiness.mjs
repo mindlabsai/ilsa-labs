@@ -66,6 +66,13 @@ check("agent id is set", () => {
   assert.match(read("site/ilsa.js"), /agent_6901m0fbpj0kfjssaw9qwz3mshva/);
 });
 
+check("lab greeting uses welcome line", () => {
+  const src = read("site/ilsa.js");
+  assert.match(src, /Hello, welcome to \$\{lab\.name\}\. What would you like to know\?/);
+  assert.match(src, /Hello, welcome to ILSA Labs\. What would you like to know\?/);
+  assert.match(src, /firstMessage: vars\.opening_line/);
+});
+
 const failed = checks.filter((c) => !c.ok);
 for (const c of checks) {
   console.log(`${c.ok ? "PASS" : "FAIL"}  ${c.name}${c.error ? ` — ${c.error}` : ""}`);

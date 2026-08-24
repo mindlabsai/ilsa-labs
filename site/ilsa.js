@@ -10,12 +10,12 @@ import { ILSA_CONNECTION_TYPE, ILSA_CONNECTION_DELAY } from "./elevenlabs.js";
 const ILSA_AGENT_ID = "agent_6901m0fbpj0kfjssaw9qwz3mshva";
 
 const LABS = {
-  aston:      { name: "ASTON",      tagline: "Neurodevelopmental screening for clinicians and schools", url: "https://astonax.com" },
+  aston:      { name: "Aston",      tagline: "Neurodevelopmental screening for clinicians and schools", url: "https://astonax.com" },
   "37t":      { name: "37T",        tagline: "Permission infrastructure for identity and creative work in the AI economy", url: "https://37t.io" },
   teo:        { name: "teo",        tagline: "An AI facilitator for conversations between two people", url: "https://helloteo.com.au" },
   innerlayer: { name: "InnerLayer", tagline: "Conversation intelligence that reads what's happening underneath the words, not yet released", url: null },
   texlex:     { name: "Texlex",     tagline: "The report engine for neurodevelopmental assessment, in beta", url: null },
-  otonomy:    { name: "OTON/OMY",   tagline: "Your body, mind and technology in one continuous conversation, research stage", url: null },
+  otonomy:    { name: "oton/omy",   tagline: "Your body, mind and technology in one continuous conversation, research stage", url: null },
   anima:      { name: "Anima Lab",  tagline: "Plant-derived therapeutics for the animals we live with, in development", url: null },
   humantech:  { name: "Humantech",  tagline: "Human performance, measured and improved, research stage", url: null },
 };
@@ -70,10 +70,8 @@ function inferSegment() {
 
 export function buildOpeningLine() {
   const lab = state.focusLab ? LABS[state.focusLab] : null;
-  const hi = salutation();
-  if (!lab) return `${hi}, I'm ILSA, your guide through our labs. Is there something I can help you with?`;
-  if (state.returning) return `${hi} again, it's ILSA. You're looking at ${lab.name} — ${lab.tagline}. What would you like to know?`;
-  return `${hi}, I'm ILSA. You're looking at ${lab.name} — ${lab.tagline}. What would you like to know?`;
+  if (!lab) return "Hello, welcome to ILSA Labs. What would you like to know?";
+  return `Hello, welcome to ${lab.name}. What would you like to know?`;
 }
 
 export function buildDynamicVariables() {
@@ -183,7 +181,10 @@ export async function startILSA(Conversation, extra = {}) {
     textOnly,
     connectionType: ILSA_CONNECTION_TYPE,
     connectionDelay: ILSA_CONNECTION_DELAY,
-    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
+    overrides: {
+      agent: { firstMessage: vars.opening_line },
+      ...(textOnly ? { conversation: { textOnly: true } } : {}),
+    },
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);
