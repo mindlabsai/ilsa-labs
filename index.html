@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>ILSA LABS</title>
 <meta name="description" content="ILSA LABS. Intelligence + Living Systems. Technology with a pulse.">
 <meta name="theme-color" content="#E9EBEE">
@@ -323,7 +323,8 @@ body:has(.ilsa-orb.on) .prism{
 
 /* ---------- glass writer ---------- */
 .writer{
-  position:fixed;inset:0;z-index:70;display:none;
+  position:fixed;inset:0;z-index:70;display:flex;
+  visibility:hidden;pointer-events:none;
   align-items:center;justify-content:center;
   padding:clamp(16px,4vw,40px);
   padding-top:max(clamp(16px,4vw,40px),env(safe-area-inset-top));
@@ -332,7 +333,7 @@ body:has(.ilsa-orb.on) .prism{
   backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
   overflow:auto;overscroll-behavior:contain;
 }
-.writer.open{display:flex}
+.writer.open{visibility:visible;pointer-events:auto}
 .writer .card{
   width:min(100%,560px);padding:clamp(10px,2vw,20px);
   background:none;border:0;box-shadow:none;
@@ -350,19 +351,21 @@ body:has(.ilsa-orb.on) .prism{
 .writer .chips button:hover,.writer .chips button.sel{color:var(--ink);border-color:var(--ink);background:rgba(255,255,255,.75)}
 .wfields{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .wfields input{
-  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:16px;color:var(--ink);
   background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.35);
   padding:8px 4px;outline:none;text-align:center;min-width:190px;
   transition:border-color .2s;
+  -webkit-user-select:text;user-select:text;touch-action:manipulation;
 }
 .wfields input:focus{border-bottom-color:var(--ink)}
 .wfields input::placeholder{color:var(--grey)}
 .writer .sent{font-weight:300;font-size:clamp(16px,2.4vw,20px);color:var(--ink);padding:40px 0}
 .writer textarea{
   width:100%;margin-top:20px;min-height:110px;resize:vertical;
-  font-family:'Manrope',sans-serif;font-weight:300;font-size:15px;line-height:1.65;color:var(--ink);
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:16px;line-height:1.65;color:var(--ink);
   background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.35);
   padding:10px 4px;outline:none;transition:border-color .2s;text-align:center;
+  -webkit-user-select:text;user-select:text;touch-action:manipulation;
 }
 .writer textarea:focus{border-bottom-color:var(--ink)}
 .writer textarea::placeholder{color:var(--grey)}
@@ -470,10 +473,9 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 }
 .ilsa-hint.on{opacity:1;transform:translateY(0)}
 .ilsa-sheet{
-  position:fixed;z-index:63;bottom:0;left:50%;right:auto;
-  width:min(360px, calc(100% - 32px));
+  position:fixed;z-index:63;left:0;right:0;bottom:-120%;
+  width:min(360px, calc(100% - 32px));margin:0 auto;
   max-height:32vh;max-height:32dvh;
-  transform:translate(-50%,110%);
   padding:12px 12px calc(12px + env(safe-area-inset-bottom));
   background:rgba(251,252,253,.78);
   border:1px solid rgba(58,64,72,.12);border-bottom:0;
@@ -481,10 +483,10 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 -18px 40px -12px rgba(46,52,60,.22);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   display:flex;flex-direction:column;gap:10px;
-  transition:transform .35s ease;
+  transition:bottom .35s ease;
   overflow-x:hidden;
 }
-.ilsa-sheet.open{transform:translate(-50%,0)}
+.ilsa-sheet.open{bottom:0}
 .ilsa-lines{
   flex:1;min-height:0;overflow:auto;
   display:flex;flex-direction:column;gap:8px;
@@ -498,9 +500,10 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
 .ilsa-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .ilsa-bar input{
   flex:1;min-width:0;
-  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:16px;color:var(--ink);
   background:transparent;border:0;border-bottom:1px solid rgba(58,64,72,.28);
   padding:7px 2px;outline:none;
+  -webkit-user-select:text;user-select:text;touch-action:manipulation;
 }
 .ilsa-bar input:focus{border-bottom-color:var(--ink)}
 .ilsa-bar input::placeholder{color:var(--grey)}
@@ -519,10 +522,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
 @media (min-width:720px){
   .ilsa-sheet{
     width:min(400px, calc(100% - 48px));
-    bottom:18px;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh;max-height:28dvh;
-    transform:translate(-50%,110%);
+    bottom:-120%;border-bottom:1px solid rgba(58,64,72,.12);border-radius:14px;max-height:28vh;max-height:28dvh;
   }
-  .ilsa-sheet.open{transform:translate(-50%,0)}
+  .ilsa-sheet.open{bottom:18px}
   body:has(#ilsa-sheet.open) #ilsa-orb.on,
   body:has(#ilsa-sheet.open) #ilsa-chat.on,
   body:has(#ilsa-sheet.open) #ilsa-hangup.on{bottom:calc(28vh + 36px);bottom:calc(28dvh + 36px)}
@@ -776,7 +778,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   <p class="backup"><button type="button" id="open-writer">Prefer to write?</button></p>
 </section>
 
-<div class="writer" id="writer" role="dialog" aria-modal="true" aria-label="Write to ILSA Labs">
+<div class="writer" id="writer" role="dialog" aria-modal="true" aria-label="Write to ILSA Labs" inert>
   <div class="card">
     <button class="wclose" id="writer-close" aria-label="Close">✕</button>
     <h3>Write to the lab</h3>
@@ -789,10 +791,10 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       <button type="button" data-subject="Hello" data-body="Hi ILSA Labs. ">Something else</button>
     </div>
     <div class="wfields">
-      <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name">
-      <input type="email" id="writer-email" placeholder="Your email" aria-label="Your email" autocomplete="email">
+      <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name" inputmode="text" enterkeyhint="next">
+      <input type="email" id="writer-email" placeholder="Your email" aria-label="Your email" autocomplete="email" inputmode="email" enterkeyhint="next">
     </div>
-    <textarea id="writer-text" placeholder="Your message…" aria-label="Your message"></textarea>
+    <textarea id="writer-text" placeholder="Your message…" aria-label="Your message" inputmode="text" enterkeyhint="enter"></textarea>
     <button class="send" id="writer-send" type="button">Send →</button>
     <div class="addr">Delivers to human@ilsalabs.com</div>
   </div>
@@ -815,7 +817,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   <div class="ilsa-lines" id="ilsa-lines" aria-live="polite"></div>
   <div class="ilsa-bar">
     <button type="button" id="ilsa-mic" aria-pressed="false">Mic</button>
-    <input id="ilsa-type" type="text" enterkeyhint="send" autocomplete="off" placeholder="Type instead…">
+    <input id="ilsa-type" type="text" inputmode="text" enterkeyhint="send" autocomplete="off" placeholder="Type instead…">
     <button type="button" class="end" id="ilsa-end">End</button>
   </div>
 </div>
@@ -962,10 +964,22 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       wChips=document.getElementById('writer-chips'),
       wText=document.getElementById('writer-text'),
       wSubject='Hello';
+  function lockPage(on){
+    if(on){
+      writer.inert=false;
+      writer.classList.add('open');
+      if(matchMedia('(hover:hover) and (pointer:fine)').matches)document.body.style.overflow='hidden';
+    }else{
+      writer.classList.remove('open');
+      writer.inert=true;
+      document.body.style.overflow='';
+    }
+  }
   document.getElementById('open-writer').addEventListener('click',function(){
-    writer.classList.add('open');document.body.style.overflow='hidden';wText.focus();
+    lockPage(true);
+    wText.focus();
   });
-  function closeWriter(){writer.classList.remove('open');document.body.style.overflow='';}
+  function closeWriter(){lockPage(false);}
   document.getElementById('writer-close').addEventListener('click',closeWriter);
   writer.addEventListener('click',function(e){if(e.target===writer)closeWriter()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeWriter()});
@@ -976,7 +990,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
     wSubject=b.dataset.subject;
     wText.value=b.dataset.body;
     wText.focus();
-    wText.setSelectionRange(wText.value.length,wText.value.length);
+    if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+      try{wText.setSelectionRange(wText.value.length,wText.value.length);}catch(err){}
+    }
   });
   var wName=document.getElementById('writer-name'),
       wEmail=document.getElementById('writer-email'),
@@ -1007,8 +1023,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
 
   window.addEventListener('ilsa:card',function(e){
     var d=e.detail||{};
-    writer.classList.add('open');
-    document.body.style.overflow='hidden';
+    lockPage(true);
     var sub=writer.querySelector('.sub');
     if(d.type==='confirmation'&&sub){
       sub.textContent=(typeof d.payload==='string'&&d.payload)?d.payload:"We'll be in touch.";
