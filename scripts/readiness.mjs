@@ -70,7 +70,7 @@ check("lab greeting uses welcome line", () => {
   const src = read("site/ilsa.js");
   assert.match(src, /Hello, welcome to \$\{lab\.name\}\. What would you like to know\?/);
   assert.match(src, /Hello, welcome to ILSA Labs\. What would you like to know\?/);
-  assert.match(src, /firstMessage: vars\.opening_line/);
+  assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
 });
 
 const failed = checks.filter((c) => !c.ok);

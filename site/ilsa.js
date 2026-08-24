@@ -181,10 +181,9 @@ export async function startILSA(Conversation, extra = {}) {
     textOnly,
     connectionType: ILSA_CONNECTION_TYPE,
     connectionDelay: ILSA_CONNECTION_DELAY,
-    overrides: {
-      agent: { firstMessage: vars.opening_line },
-      ...(textOnly ? { conversation: { textOnly: true } } : {}),
-    },
+    // Do not override firstMessage here. That field is off on the agent, and
+    // sending it drops the opening line so Talk / Ask ILSA connect in silence.
+    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);

@@ -1240,13 +1240,27 @@ function focusFromAsk(trigger) {
   return Boolean(key);
 }
 
-function remindLab(conversation) {
+function remindLab(conversation, { speak = false } = {}) {
   const vars = buildDynamicVariables();
   if (!vars.focus_lab || vars.focus_lab === "none") return;
+  if (!conversation || typeof conversation.sendContextualUpdate !== "function") return;
   const line = vars.opening_line;
   const note = `The visitor opened ${vars.focus_lab}. ${vars.focus_lab_tagline}. Greet them now with exactly this sentence and then wait: ${line}`;
-  try { conversation.sendContextualUpdate?.(note); } catch (err) { console.error("ILSA error", err); }
+  try { conversation.sendContextualUpdate(note); } catch (err) { console.error("ILSA error", err); }
+  if (speak && typeof conversation.sendUserMessage === "function") {
+    try {
+      conversation.sendUserMessage("Hello");
+      noteUserUtterance("Hello");
+    } catch (err) { console.error("ILSA error", err); }
+  }
   return line;
+}
+
+async function waitForStart() {
+  for (let i = 0; i < 50 && starting && !session; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  return session;
 }
 
 function isGhostLabAsk(trigger, event) {
@@ -1260,8 +1274,9 @@ function isGhostLabAsk(trigger, event) {
 async function talk(trigger, event) {
   if (isGhostLabAsk(trigger, event)) return;
   const fromLab = focusFromAsk(trigger);
+  if (starting && !session) await waitForStart();
   if (session) {
-    if (fromLab) remindLab(session);
+    if (fromLab) remindLab(session, { speak: true });
     return;
   }
   if (starting) return;
@@ -1307,6 +1322,7 @@ async function talk(trigger, event) {
   lastUiMode = textOnly ? "idle" : "listening";
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
+  if (fromLab) remindLab(session);
   if (textOnly) {
     showVoice(true);
     typeIn.focus();
