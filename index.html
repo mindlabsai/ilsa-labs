@@ -18,7 +18,7 @@
 <style>
 :root{
   --env-top:#EEF0F3;--env-bot:#DFE2E7;
-  --ink:#3A4048;--deep:#2E343C;--grey:#63696F;
+  --ink:#3A4048;--deep:#2E343C;--grey:#4F555C;
   --steel-1:#FBFCFD;--steel-2:#C9CDD4;--steel-3:#9AA0A9;
   --led-green:#2FD26A;--led-amber:#F4B23E;
 }
@@ -97,7 +97,7 @@ header{
   box-shadow:-1px -1px 0 rgba(58,64,72,.06);
 }
 .askilsa:hover .tip,.askilsa:focus-visible .tip{opacity:1;transform:translateY(0)}
-.wordmark{font-weight:600;letter-spacing:clamp(.14em,2.2vw,.42em);font-size:clamp(12px,3.4vw,17px);text-transform:uppercase;min-width:0}
+.wordmark{font-weight:600;letter-spacing:clamp(.14em,2.2vw,.42em);font-size:clamp(12px,3.4vw,17px);text-transform:uppercase;min-width:0;color:inherit;text-decoration:none}
 header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--grey);text-transform:uppercase}
 
 .hero{padding:clamp(40px,7vw,96px) 0 clamp(30px,5vw,60px);text-align:center;display:flex;flex-direction:column;align-items:center}
@@ -223,7 +223,11 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
   color:var(--ink);border:1px solid rgba(58,64,72,.5);border-radius:2px;padding:8px 16px;
 }
 @media (hover:none){
-  .fog{display:none}
+  .fog{
+    opacity:1;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+    justify-content:flex-end;padding:10px 12px;
+  }
+  .fog p{display:none}
   .askilsa .tip{display:none}
   .askthis:hover,.askthis:focus-visible{transform:none;box-shadow:none}
 }
@@ -435,6 +439,7 @@ body:has(.ilsa-orb.on) .prism{
 .wfields input:focus{border-bottom-color:var(--ink)}
 .wfields input::placeholder{color:var(--grey)}
 .writer .sent{font-weight:300;font-size:clamp(16px,2.4vw,20px);color:var(--ink);padding:40px 0}
+.writer .werr{margin-top:12px;font-size:13px;color:#8A3A3A;min-height:1.2em}
 .writer textarea{
   width:100%;margin-top:20px;min-height:110px;resize:vertical;
   font-family:'Manrope',sans-serif;font-weight:300;font-size:16px;line-height:1.65;color:var(--ink);
@@ -562,6 +567,7 @@ footer .fright{display:flex;gap:26px;flex-wrap:wrap}
   transition:bottom .35s ease;
   overflow-x:hidden;
 }
+.ilsa-sheet[hidden]{display:none}
 .ilsa-sheet.open{bottom:0}
 .ilsa-lines{
   flex:1;min-height:0;overflow:auto;
@@ -607,10 +613,11 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
 }
 </style>
 </head>
-<body>
+<body id="top">
+<div id="site">
 
 <header class="wrap">
-  <div class="wordmark">Ilsa&nbsp;Labs</div>
+  <a class="wordmark" href="#top">Ilsa&nbsp;Labs</a>
   <button class="askilsa" id="askilsa-tile" type="button" aria-describedby="askilsa-tip">
     <span class="orbdot" aria-hidden="true"></span>
     Ask ILSA
@@ -624,7 +631,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   <p class="herowhat">Asia-Pacific human technology lab operating at the intersection of intelligence, identity and human performance. Our portfolio spans AI platforms, applied research and emerging systems conceived, built and developed in-house.</p>
   <button class="herotalk" type="button" data-talk>
     <span class="orbdot" aria-hidden="true"></span>
-    Talk to ILSA to learn more
+    Talk to ILSA
   </button>
 </section>
 
@@ -633,7 +640,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
 
   <div class="grid">
 
-    <a class="chamber" data-prism="teo" href="https://helloteo.com.au" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="teo" data-href="https://helloteo.com.au" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -650,9 +657,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
           <p class="desc"><b>Two people. One conversation.</b> teo sits between you, listening to both sides, keeping it safe, helping the conversations you've been meaning to have.</p>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a class="chamber" data-prism="t37" href="https://www.37t.io" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="t37" data-href="https://www.37t.io" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -670,9 +677,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
           <p class="desc"><b>Your face. Your voice. Your work. Yours to keep.</b> Digital likeness and authorship. Verified, licensed and paid on the world's permission exchange.</p>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a class="chamber" data-prism="aston" href="https://astonax.com" target="_blank" rel="noopener">
+    <div class="chamber" data-prism="aston" data-href="https://astonax.com" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -693,7 +700,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
           <p class="desc"><b>Advanced Screening Tool for Observable Neurodivergence.</b> Multiple informants. Parent, teacher, clinician. One clear picture of the child.</p>
         </div>
       </div>
-    </a>
+    </div>
 
     <div class="chamber" data-prism="texlex" role="button" tabindex="0">
       <div class="inner">
@@ -830,6 +837,22 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   </ol>
 </div>
 
+<section class="contact wrap">
+  <h3 class="curious">There is more<br>happening inside the lab.</h3>
+  <div class="actions">
+    <button class="herotalk" type="button" data-talk>
+      <span class="orbdot" aria-hidden="true"></span>
+      Talk to ILSA
+    </button>
+    <button class="herotalk" type="button" id="open-writer">Write to us</button>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>ILSA LABS PTY LTD 2026<br>ABN 65 693 769 658</span>
+</footer>
+</div>
+
 <!-- PRISM OVERLAY -->
 <div class="prism" id="prism" role="dialog" aria-modal="true" aria-label="Platform preview">
   <button class="close" id="prism-close" aria-label="Close">✕</button>
@@ -848,42 +871,31 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   </div>
 </div>
 
-<section class="contact wrap">
-  <h3 class="curious">There is more<br>happening inside the lab.</h3>
-  <div class="actions">
-    <button class="herotalk" type="button" data-talk>
-      <span class="orbdot" aria-hidden="true"></span>
-      Talk to ILSA
-    </button>
-    <button class="herotalk" type="button" id="open-writer">Write to us</button>
-  </div>
-</section>
-
 <div class="writer" id="writer" role="dialog" aria-modal="true" aria-label="Write to ILSA Labs" inert>
   <div class="card">
     <button class="wclose" id="writer-close" aria-label="Close">✕</button>
     <h3>Write to the lab</h3>
-    <p class="sub">Pick a starting point, or just write.</p>
-    <div class="chips" id="writer-chips">
-      <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs. I'd like to explore a partnership with ">Partner with a lab</button>
-      <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs. I'm interested in piloting ">Pilot a platform</button>
-      <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs. I'd like to talk about investing in ">Invest</button>
-      <button type="button" data-subject="Media enquiry" data-body="Hi ILSA Labs. I'm writing a piece on ">Media</button>
-      <button type="button" data-subject="Hello" data-body="Hi ILSA Labs. ">Something else</button>
+    <p class="sub" id="writer-sub">Pick a starting point, or just write.</p>
+    <div id="writer-form">
+      <div class="chips" id="writer-chips">
+        <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs. I'd like to explore a partnership with " aria-pressed="false">Partner with a lab</button>
+        <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs. I'm interested in piloting " aria-pressed="false">Pilot a platform</button>
+        <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs. I'd like to talk about investing in " aria-pressed="false">Invest</button>
+        <button type="button" data-subject="Media enquiry" data-body="Hi ILSA Labs. I'm writing a piece on " aria-pressed="false">Media</button>
+        <button type="button" data-subject="Hello" data-body="Hi ILSA Labs. " aria-pressed="false">Something else</button>
+      </div>
+      <div class="wfields">
+        <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name" inputmode="text" enterkeyhint="next">
+        <input type="email" id="writer-email" placeholder="Your email" aria-label="Your email" autocomplete="email" inputmode="email" enterkeyhint="next">
+      </div>
+      <textarea id="writer-text" placeholder="Your message…" aria-label="Your message" inputmode="text" enterkeyhint="enter"></textarea>
+      <p class="werr" id="writer-err" role="alert" hidden></p>
+      <button class="send" id="writer-send" type="button">Send →</button>
+      <div class="addr">Delivers to human@ilsalabs.com</div>
     </div>
-    <div class="wfields">
-      <input type="text" id="writer-name" placeholder="Your name" aria-label="Your name" autocomplete="name" inputmode="text" enterkeyhint="next">
-      <input type="email" id="writer-email" placeholder="Your email" aria-label="Your email" autocomplete="email" inputmode="email" enterkeyhint="next">
-    </div>
-    <textarea id="writer-text" placeholder="Your message…" aria-label="Your message" inputmode="text" enterkeyhint="enter"></textarea>
-    <button class="send" id="writer-send" type="button">Send →</button>
-    <div class="addr">Delivers to human@ilsalabs.com</div>
+    <p class="sent" id="writer-sent" hidden>Sent. We'll be in touch.</p>
   </div>
 </div>
-
-<footer class="wrap">
-  <span>ILSA LABS PTY LTD 2026<br>ABN 65 693 769 658</span>
-</footer>
 
 <div class="ilsa-glow" id="ilsa-glow" hidden aria-hidden="true"></div>
 <button class="ilsa-orb" id="ilsa-orb" type="button" aria-label="Talk to ILSA" hidden></button>
@@ -990,24 +1002,45 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       },wait);
     }
     showBeat();
-    elClose.focus();
     return true;
+  }
+  var site=document.getElementById('site');
+  var lastFocus=null;
+  function focusables(root){
+    return Array.prototype.slice.call(root.querySelectorAll('a[href],button:not([disabled]),input,textarea,select,[tabindex]:not([tabindex="-1"])')).filter(function(el){
+      if(el.hidden||el.closest('[hidden]'))return false;
+      var s=getComputedStyle(el);
+      return s.display!=='none'&&s.visibility!=='hidden';
+    });
+  }
+  function syncLayer(){
+    var writerOpen=writer&&writer.classList.contains('open');
+    var prismOpen=overlay.classList.contains('open');
+    if(site)site.inert=writerOpen||prismOpen;
+    var root=writerOpen?writer:prismOpen?overlay:null;
+    if(!root)return;
+    var list=focusables(root);
+    if(list[0]&&!root.contains(document.activeElement))list[0].focus();
   }
   function closePrism(){
     overlay.classList.remove('open');
     document.body.style.overflow='';
     stopBeats();
+    if(history.replaceState&&/^#/.test(location.hash))history.replaceState(null,'',location.pathname+location.search);
+    syncLayer();
+    if(lastFocus&&lastFocus.focus){lastFocus.focus();lastFocus=null;}
   }
   elClose.addEventListener('click',closePrism);
   overlay.addEventListener('click',function(e){if(e.target===overlay)closePrism()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')closePrism()});
 
   document.querySelectorAll('.chamber[data-prism]').forEach(function(card){
     function openCard(e){
       var svg=card.querySelector('svg');
-      var href=card.getAttribute('href');
+      var href=card.getAttribute('data-href')||card.getAttribute('href');
       window.__ilsaPrismOpenTap={t:Date.now(),x:e&&e.clientX,y:e&&e.clientY};
+      lastFocus=card;
       if(openPrism(card.dataset.prism,href,svg)&&e)e.preventDefault();
+      syncLayer();
     }
     card.addEventListener('click',openCard);
     card.addEventListener('keydown',function(e){
@@ -1019,16 +1052,19 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   var lastPrism=null;
   var askLabel=document.getElementById('prism-ask-label');
   var _open=openPrism;
+  var PRISM_TO_HASH={teo:'teo',t37:'37t',aston:'aston',texlex:'texlex',inner:'innerlayer',oton:'otonomy',anima:'anima',bio:'humantech'};
   openPrism=function(key,href,svg){
     var ok=_open(key,href,svg);
     if(ok){
       lastPrism=key;
       window.__ilsaLastPrism=key;
       var askBtn=document.getElementById('prism-ask');
-      var labKey={teo:'teo',t37:'37t',aston:'aston',texlex:'texlex',inner:'innerlayer',oton:'otonomy',anima:'anima',bio:'humantech'}[key];
+      var labKey=PRISM_TO_HASH[key];
       if(askBtn&&labKey)askBtn.setAttribute('data-focus-lab',labKey);
       if(askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
+      if(history.replaceState&&labKey)history.replaceState(null,'','#'+labKey);
       window.dispatchEvent(new CustomEvent('ilsa:prism-open',{detail:{key:key}}));
+      syncLayer();
     }
     return ok;
   };
@@ -1038,7 +1074,8 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
     var key={aston:'aston','37t':'t37',teo:'teo',innerlayer:'inner',texlex:'texlex',otonomy:'oton',anima:'anima',humantech:'bio'}[lab]||lab;
     var card=document.querySelector('.chamber[data-prism="'+key+'"]');
     if(!card)return;
-    openPrism(key,card.getAttribute('href'),card.querySelector('svg'));
+    lastFocus=card;
+    openPrism(key,card.getAttribute('data-href')||card.getAttribute('href'),card.querySelector('svg'));
   });
   document.querySelectorAll('[data-talk]').forEach(function(b){
     b.addEventListener('click',function(e){
@@ -1053,7 +1090,21 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   var writer=document.getElementById('writer'),
       wChips=document.getElementById('writer-chips'),
       wText=document.getElementById('writer-text'),
+      wForm=document.getElementById('writer-form'),
+      wErr=document.getElementById('writer-err'),
+      wSent=document.getElementById('writer-sent'),
       wSubject='Hello';
+  var wName=document.getElementById('writer-name'),
+      wEmail=document.getElementById('writer-email'),
+      wSend=document.getElementById('writer-send');
+  function showWriterErr(msg,el){
+    if(wErr){wErr.hidden=false;wErr.textContent=msg;}
+    if(el)el.focus();
+  }
+  function clearWriterErr(){
+    if(wErr){wErr.hidden=true;wErr.textContent='';}
+    if(wEmail)wEmail.style.borderBottomColor='';
+  }
   function lockPage(on){
     if(on){
       writer.inert=false;
@@ -1064,33 +1115,47 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       writer.inert=true;
       document.body.style.overflow='';
     }
+    syncLayer();
   }
   document.getElementById('open-writer').addEventListener('click',function(){
+    lastFocus=document.getElementById('open-writer');
+    if(wForm)wForm.hidden=false;
+    if(wSent)wSent.hidden=true;
+    clearWriterErr();
     lockPage(true);
-    wText.focus();
+    if(wName)wName.focus();else wText.focus();
   });
-  function closeWriter(){lockPage(false);}
+  function closeWriter(){
+    lockPage(false);
+    if(lastFocus&&lastFocus.focus){lastFocus.focus();lastFocus=null;}
+  }
   document.getElementById('writer-close').addEventListener('click',closeWriter);
   writer.addEventListener('click',function(e){if(e.target===writer)closeWriter()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeWriter()});
   wChips.addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b)return;
-    wChips.querySelectorAll('button').forEach(function(x){x.classList.remove('sel')});
+    wChips.querySelectorAll('button').forEach(function(x){
+      x.classList.remove('sel');
+      x.setAttribute('aria-pressed','false');
+    });
     b.classList.add('sel');
+    b.setAttribute('aria-pressed','true');
     wSubject=b.dataset.subject;
     wText.value=b.dataset.body;
+    clearWriterErr();
     wText.focus();
     if(matchMedia('(hover:hover) and (pointer:fine)').matches){
       try{wText.setSelectionRange(wText.value.length,wText.value.length);}catch(err){}
     }
   });
-  var wName=document.getElementById('writer-name'),
-      wEmail=document.getElementById('writer-email'),
-      wSend=document.getElementById('writer-send');
   wSend.addEventListener('click',function(){
     var email=wEmail.value.trim();
-    if(!wText.value.trim()){wText.focus();return;}
-    if(!email||email.indexOf('@')<1){wEmail.focus();wEmail.style.borderBottomColor='#B45050';return;}
+    clearWriterErr();
+    if(!wText.value.trim()){showWriterErr('Write a short message first.',wText);return;}
+    if(!email||email.indexOf('@')<1){
+      wEmail.style.borderBottomColor='#B45050';
+      showWriterErr('Add an email so we can reply.',wEmail);
+      return;
+    }
     wSend.disabled=true;wSend.textContent='Sending…';
     var ctrl=typeof AbortController!=='undefined'?new AbortController():null;
     var abortT=ctrl?setTimeout(function(){ctrl.abort()},12000):null;
@@ -1101,7 +1166,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
     }).then(function(r){
       if(abortT)clearTimeout(abortT);
       if(!r.ok)throw new Error('api');
-      document.querySelector('.writer .card').innerHTML='<p class="sent">Sent. We\'ll be in touch.</p>';
+      if(wForm)wForm.hidden=true;
+      if(wSent)wSent.hidden=false;
+      document.getElementById('writer-close').focus();
       setTimeout(closeWriter,2600);
     }).catch(function(){
       if(abortT)clearTimeout(abortT);
@@ -1113,16 +1180,51 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
 
   window.addEventListener('ilsa:card',function(e){
     var d=e.detail||{};
+    lastFocus=document.activeElement;
+    if(wForm)wForm.hidden=false;
+    if(wSent)wSent.hidden=true;
+    clearWriterErr();
     lockPage(true);
-    var sub=writer.querySelector('.sub');
+    var sub=document.getElementById('writer-sub');
     if(d.type==='confirmation'&&sub){
       sub.textContent=(typeof d.payload==='string'&&d.payload)?d.payload:"We'll be in touch.";
     }
     if((d.type==='contact'||d.type==='demo')&&typeof d.payload==='string'&&d.payload){
       wText.value=d.payload;
     }
-    wText.focus();
+    if(wName)wName.focus();else wText.focus();
   });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      if(writer.classList.contains('open')){e.preventDefault();closeWriter();return;}
+      if(overlay.classList.contains('open')){e.preventDefault();closePrism();}
+      return;
+    }
+    if(e.key!=='Tab')return;
+    var root=writer.classList.contains('open')?writer:overlay.classList.contains('open')?overlay:null;
+    if(!root)return;
+    var list=focusables(root);
+    if(!list.length)return;
+    var i=list.indexOf(document.activeElement);
+    if(e.shiftKey){
+      if(i<=0){e.preventDefault();list[list.length-1].focus();}
+    }else if(i===list.length-1||i===-1){
+      e.preventDefault();list[0].focus();
+    }
+  });
+
+  var HASH_TO_PRISM={teo:'teo','37t':'t37',aston:'aston',texlex:'texlex',innerlayer:'inner',otonomy:'oton',anima:'anima',humantech:'bio'};
+  function openFromHash(){
+    var boot=location.hash.replace(/^#/,'').toLowerCase();
+    if(!boot){if(overlay.classList.contains('open'))closePrism();return;}
+    var bootKey=HASH_TO_PRISM[boot];
+    if(!bootKey)return;
+    var bootCard=document.querySelector('.chamber[data-prism="'+bootKey+'"]');
+    if(bootCard)openPrism(bootKey,bootCard.getAttribute('data-href')||bootCard.getAttribute('href'),bootCard.querySelector('svg'));
+  }
+  window.addEventListener('hashchange',openFromHash);
+  openFromHash();
 })();
 </script>
 <script type="module">
