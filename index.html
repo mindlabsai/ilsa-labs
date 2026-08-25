@@ -1094,6 +1094,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       var askBtn=document.getElementById('prism-ask');
       var labKey=PRISM_TO_HASH[key];
       if(askBtn&&labKey)askBtn.setAttribute('data-focus-lab',labKey);
+      window.__ilsaFocusLab=labKey||null;
       if(askLabel)askLabel.textContent='Ask ILSA about '+PRISMS[key].name;
       if(history.replaceState&&labKey)history.replaceState(null,'','#'+labKey);
       window.dispatchEvent(new CustomEvent('ilsa:prism-open',{detail:{key:key}}));
@@ -1290,6 +1291,7 @@ const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 let session = null;
 let starting = false;
 let textOnly = false;
+let lastOpeningLine = null;
 let muted = false;
 let sheetUserOpen = false;
 let voiceMode = "idle";
@@ -1469,15 +1471,25 @@ function isPartial(msg) {
 async function closeSession() {
   session = null;
   starting = false;
+  lastOpeningLine = null;
   showVoice(false);
   await stopILSA();
 }
 
-function focusFromAsk(trigger) {
-  if (trigger?.id !== "prism-ask") return false;
-  const key = trigger.dataset.focusLab || PRISM_TO_LAB[window.__ilsaLastPrism] || null;
-  setFocusLab(key);
-  return Boolean(key);
+function resolveFocusLab(trigger) {
+  const prism = document.getElementById("prism");
+  const ask = document.getElementById("prism-ask");
+  const prismOpen = prism?.classList.contains("open");
+  const key =
+    (trigger?.id === "prism-ask" && (trigger.getAttribute("data-focus-lab") || PRISM_TO_LAB[window.__ilsaLastPrism])) ||
+    (prismOpen && (ask?.getAttribute("data-focus-lab") || window.__ilsaFocusLab || PRISM_TO_LAB[window.__ilsaLastPrism])) ||
+    null;
+  if (key) {
+    setFocusLab(key);
+    return true;
+  }
+  if (!prismOpen) setFocusLab(null);
+  return false;
 }
 
 function remindLab(conversation, { speak = false } = {}) {
@@ -1513,11 +1525,16 @@ function isGhostLabAsk(trigger, event) {
 
 async function talk(trigger, event) {
   if (isGhostLabAsk(trigger, event)) return;
-  const fromLab = focusFromAsk(trigger);
+  const fromLab = resolveFocusLab(trigger);
   if (starting && !session) await waitForStart();
   if (session) {
-    if (fromLab) remindLab(session, { speak: true });
-    return;
+    const wanted = buildDynamicVariables().opening_line;
+    if (fromLab && lastOpeningLine && lastOpeningLine !== wanted) {
+      await closeSession();
+    } else {
+      if (fromLab) remindLab(session, { speak: true });
+      return;
+    }
   }
   if (starting) return;
   starting = true;
@@ -1559,6 +1576,7 @@ async function talk(trigger, event) {
   }
 
   starting = false;
+  lastOpeningLine = buildDynamicVariables().opening_line;
   lastUiMode = textOnly ? "idle" : "listening";
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
@@ -1621,7 +1639,8 @@ if (!window.__ilsaUiBound) {
     b.addEventListener("click", (e) => talk(b, e));
   });
   window.addEventListener("ilsa:prism-open", (e) => {
-    setFocusLab(PRISM_TO_LAB[e.detail?.key] || null);
+    const key = PRISM_TO_LAB[e.detail?.key] || window.__ilsaFocusLab || null;
+    setFocusLab(key);
   });
 }
 </script>

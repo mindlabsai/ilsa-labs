@@ -78,9 +78,10 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /Hello, welcome to Anima Lab\. What would you like to ask\?/);
   assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
   assert.doesNotMatch(src, /I see you are interested/);
-  assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
+  assert.match(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");
-  assert.doesNotMatch(html, /if \(fromLab\) remindLab\(session\);/);
+  assert.match(html, /function resolveFocusLab/);
+  assert.match(html, /lastOpeningLine !== wanted/);
   assert.match(read("prompt/system.md"), /Opening line: \{\{opening_line\}\}/);
 });
 
