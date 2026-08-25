@@ -67,11 +67,22 @@ function inferSegment() {
 }
 
 // ---------- Opening line: routing logic lives here, not in the prompt ----------
+// Same welcome shape, slightly different last clause so labs do not sound identical.
+
+const OPENING = {
+  aston:      "Hello, welcome to Aston. What can I tell you?",
+  "37t":      "Hello, welcome to 37T. Where shall we start?",
+  teo:        "Hello, welcome to teo. What would you like to know?",
+  innerlayer: "Hello, welcome to InnerLayer. What are you curious about?",
+  texlex:     "Hello, welcome to Texlex. How can I help?",
+  otonomy:    "Hello, welcome to oton/omy. Where would you like to begin?",
+  anima:      "Hello, welcome to Anima Lab. What would you like to ask?",
+  humantech:  "Hello, welcome to Humantech. What can I help with?",
+};
 
 export function buildOpeningLine() {
-  const lab = state.focusLab ? LABS[state.focusLab] : null;
-  if (!lab) return "Hello, welcome to ILSA Labs. What would you like to know?";
-  return `Hello, welcome to ${lab.name}. What would you like to know?`;
+  if (state.focusLab && OPENING[state.focusLab]) return OPENING[state.focusLab];
+  return "Hello, welcome to ILSA Labs. What would you like to know?";
 }
 
 export function buildDynamicVariables() {

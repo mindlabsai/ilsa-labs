@@ -1452,7 +1452,7 @@ function remindLab(conversation, { speak = false } = {}) {
   if (!vars.focus_lab || vars.focus_lab === "none") return;
   if (!conversation || typeof conversation.sendContextualUpdate !== "function") return;
   const line = vars.opening_line;
-  const note = `The visitor opened ${vars.focus_lab}. ${vars.focus_lab_tagline}. Greet them now with exactly this sentence and then wait: ${line}`;
+  const note = `The visitor is looking at ${vars.focus_lab}. Say this next sentence word for word, then wait. Do not rephrase. Do not say you see they are interested. Say: ${line}`;
   try { conversation.sendContextualUpdate(note); } catch (err) { console.error("ILSA error", err); }
   if (speak && typeof conversation.sendUserMessage === "function") {
     try {
@@ -1529,7 +1529,6 @@ async function talk(trigger, event) {
   lastUiMode = textOnly ? "idle" : "listening";
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;
-  if (fromLab) remindLab(session);
   if (textOnly) {
     showVoice(true);
     typeIn.focus();

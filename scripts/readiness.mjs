@@ -68,9 +68,20 @@ check("agent id is set", () => {
 
 check("lab greeting uses welcome line", () => {
   const src = read("site/ilsa.js");
-  assert.match(src, /Hello, welcome to \$\{lab\.name\}\. What would you like to know\?/);
   assert.match(src, /Hello, welcome to ILSA Labs\. What would you like to know\?/);
+  assert.match(src, /Hello, welcome to Aston\. What can I tell you\?/);
+  assert.match(src, /Hello, welcome to 37T\. Where shall we start\?/);
+  assert.match(src, /Hello, welcome to teo\. What would you like to know\?/);
+  assert.match(src, /Hello, welcome to InnerLayer\. What are you curious about\?/);
+  assert.match(src, /Hello, welcome to Texlex\. How can I help\?/);
+  assert.match(src, /Hello, welcome to oton\/omy\. Where would you like to begin\?/);
+  assert.match(src, /Hello, welcome to Anima Lab\. What would you like to ask\?/);
+  assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
+  assert.doesNotMatch(src, /I see you are interested/);
   assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
+  const html = read("index.html");
+  assert.doesNotMatch(html, /if \(fromLab\) remindLab\(session\);/);
+  assert.match(read("prompt/system.md"), /Opening line: \{\{opening_line\}\}/);
 });
 
 const failed = checks.filter((c) => !c.ok);
