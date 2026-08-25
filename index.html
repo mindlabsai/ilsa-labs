@@ -277,38 +277,50 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 
 /* ============ PRISM OVERLAY ============ */
 .prism{
-  position:fixed;inset:0;z-index:60;display:none;
+  position:fixed;inset:0;z-index:60;display:flex;
+  visibility:hidden;opacity:0;pointer-events:none;
   background:
     radial-gradient(130% 100% at 50% -20%,rgba(255,255,255,.98) 0%,rgba(240,242,245,.9) 40%,rgba(214,218,224,.96) 100%);
-  backdrop-filter:blur(6px);
-  flex-direction:column;align-items:center;justify-content:flex-start;
-  gap:clamp(8px,1.4vh,16px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,1.8vh,18px);
   padding:clamp(20px,5vw,60px);text-align:center;
   overflow:auto;overscroll-behavior:contain;
   padding-top:max(clamp(20px,5vw,60px),env(safe-area-inset-top));
   padding-bottom:max(clamp(88px,14vh,120px),env(safe-area-inset-bottom));
+  transition:opacity .7s ease,visibility .7s;
 }
-.prism.open{display:flex}
+.prism.open{visibility:visible;opacity:1;pointer-events:auto}
 .prism .stage{
-  width:min(100%,380px);height:min(22vh,22dvh,180px);
-  flex:0 0 auto;overflow:hidden;
+  width:min(86vw,480px);height:min(34vh,34dvh,260px);
+  flex:0 0 auto;overflow:visible;
   display:flex;align-items:center;justify-content:center;position:relative;
 }
-.prism .stage svg{width:min(58%,220px);height:auto;max-height:100%;overflow:hidden;filter:drop-shadow(0 6px 8px rgba(46,52,60,.16))}
-.prism .lab-id{flex:0 0 auto;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);line-height:1.3}
+.prism .stage::after{
+  content:'';position:absolute;inset:-8% -4%;pointer-events:none;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,.46) 38%,rgba(255,255,255,.08) 46%,rgba(255,255,255,0) 50%,rgba(255,255,255,.14) 68%,rgba(255,255,255,0) 74%),
+    linear-gradient(158deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 26%);
+}
+.prism .stage svg{width:min(68%,300px);height:auto;max-height:100%;overflow:visible;filter:drop-shadow(0 6px 8px rgba(46,52,60,.16))}
+.prism .lab-id{flex:0 0 auto;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--grey);line-height:1.3}
 .prism .lab-name{
-  flex:0 0 auto;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-  font-size:clamp(22px,5vw,32px);line-height:1.15;margin:0;
+  flex:0 0 auto;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  font-size:clamp(24px,5vw,40px);line-height:1.15;margin:0;
   max-width:min(18ch,100%);overflow-wrap:anywhere;
 }
 .prism .lab-name.lower{text-transform:lowercase;letter-spacing:.02em;font-weight:600}
 .prism .beat{
-  flex:0 0 auto;margin:0;min-height:2.8em;
-  font-weight:300;font-size:clamp(15px,2.1vw,19px);line-height:1.4;color:var(--ink);
-  max-width:30ch;opacity:0;transition:opacity .6s;
+  flex:0 0 auto;margin:0;min-height:3.2em;
+  font-weight:300;font-size:clamp(16px,2.4vw,22px);line-height:1.45;color:var(--ink);
+  max-width:34ch;opacity:0;transform:translateY(10px);
+  transition:opacity .95s ease,transform .95s ease;
 }
-.prism .beat.show{opacity:1}
-.prism .dots{display:flex;gap:8px;margin-top:10px;justify-content:center}
+.prism .beat.show{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  .prism{transition:none}
+  .prism .beat{transform:none;transition:opacity .2s}
+}
 .prism .dots i{width:6px;height:6px;border-radius:50%;background:rgba(58,64,72,.16);transition:background .3s}
 .prism .dots i.on{background:var(--ink)}
 .prism .enter{
@@ -323,10 +335,9 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 .prism .enter.preview{border-color:rgba(58,64,72,.28);color:var(--grey);cursor:default;pointer-events:none}
 .prism .enter.preview:hover{background:transparent}
 .prism-actions{margin-top:4px;flex:0 0 auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
-.prism .dots{flex:0 0 auto;margin-top:0}
+.prism .dots{display:flex;gap:8px;flex:0 0 auto;margin-top:0;justify-content:center}
 @media (min-height:780px){
-  .prism{justify-content:center}
-  .prism .stage{height:min(30vh,220px)}
+  .prism .stage{height:min(40vh,300px)}
 }
 body:has(.ilsa-orb.on) .prism{
   padding-bottom:max(132px,calc(env(safe-area-inset-bottom) + 108px));
@@ -898,28 +909,28 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   var PRISMS={
     teo:{id:"Lab 01 · Intelligence",name:"teo",lower:true,status:"Live",
       brief:"Two people. One conversation. teo sits between them and keeps it safe. Live at helloteo.com.au.",
-      beats:["Two people. One hard conversation.","teo listens to both sides and keeps it safe.","Say the thing. teo helps it land."]},
+      beats:["Two people. One hard conversation.","teo sits between you, listening to both sides.","The conversations you've been meaning to have."]},
     t37:{id:"Lab 02 · Intelligence",name:"37T",status:"Live",
       brief:"Your face, voice and work. Yours to keep. Permission exchange. Live at 37t.io.",
-      beats:["AI can generate anyone.","Your face. Your voice. Your work. Yours to keep.","Verified. Licensed. Paid. You decide who gets permission."]},
+      beats:["AI can generate anyone.","Your face. Your voice. Your work. Yours to keep.","Verified, licensed and paid. You decide who gets permission."]},
     aston:{id:"Lab 03 · Intelligence",name:"Aston",status:"Live",
       brief:"Screening for observable neurodivergence. Parent, teacher, clinician. Live at astonax.com. Not a diagnosis.",
-      beats:["A child someone needs to understand.","Parent. Teacher. Clinician. Every perspective, one pathway.","Observable signal, before the assessment begins."]},
+      beats:["A child someone needs to understand.","Parent. Teacher. Clinician. Every perspective, one pathway.","One clear picture of the child."]},
     texlex:{id:"Lab 04 · Intelligence",name:"Texlex",status:"Beta preview",
       brief:"Writes the report in your voice. You stay the author. Beta preview only. No public site.",
-      beats:["Writes the report in your voice.","You stay the author.","ASD. ADHD. SLD."]},
+      beats:["Writes the report in your voice.","You stay the author.","Neurodivergent assessment, written as you would write it."]},
     inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",status:"Beta preview",
       brief:"Decision intelligence. Reads what's happening beneath a conversation. Beta preview only. No public site.",
       beats:["A conversation streams in.","It reads what's happening beneath the words.","Understanding comes back as an API."]},
     oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,status:"Research",
       brief:"Body, mind and technology in one conversation. Research. Preview only.",
-      beats:["Body, Mind, Technology speaking together."]},
+      beats:["You, in real time.","Body, mind and technology in one conversation.","How you're actually doing. Not another dashboard."]},
     anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",status:"In development",
       brief:"Plant-derived animal therapeutics. Evidence-led, formulated in Australia. Preview only.",
-      beats:["Animal sciences.","Plant-derived, evidence-led formulation.","For the animals we live with."]},
+      beats:["Animal sciences.","Plant-derived therapeutics, formulated in Australia.","For the animals we live with."]},
     bio:{id:"Lab 08 · Living Systems",name:"Humantech",status:"Research",
       brief:"Human performance. Sleep, cognition, recovery, longevity. Research.",
-      beats:["Sleep. Cognition. Recovery.","Measured, not guessed.","Human performance, optimised."]}
+      beats:["Sleep. Cognition. Recovery.","Measured, not guessed.","The lab turned on ourselves."]}
   };
 
   var overlay=document.getElementById('prism'),
@@ -931,10 +942,17 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       elEnter=document.getElementById('prism-enter'),
       elPreview=document.getElementById('prism-preview'),
       elClose=document.getElementById('prism-close');
-  var timer=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timer=null,fade=null,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function stopBeats(){
+    if(timer){clearTimeout(timer);timer=null;}
+    if(fade){clearTimeout(fade);fade=null;}
+  }
 
   function openPrism(key,href,svg){
     var p=PRISMS[key];if(!p)return false;
+    stopBeats();
+    elBeat.classList.remove('show');
+    elBeat.textContent='';
     elId.textContent=p.id;
     elName.textContent=p.name;
     elName.className='lab-name'+(p.lower?' lower':'');
@@ -957,17 +975,19 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
     overlay.classList.add('open');
     document.body.style.overflow='hidden';
 
-    var i=0,dots=elDots.children;
+    var i=0,dots=elDots.children,first=true;
     function showBeat(){
       if(!overlay.classList.contains('open'))return;
+      var wait=(!first&&!reduced)?950:0;
+      first=false;
       elBeat.classList.remove('show');
-      setTimeout(function(){
+      fade=setTimeout(function(){
         elBeat.textContent=p.beats[i];
         elBeat.classList.add('show');
         for(var d=0;d<dots.length;d++)dots[d].className=d===i?'on':'';
         i=(i+1)%p.beats.length;
-        timer=setTimeout(showBeat,reduced?6000:3400);
-      },reduced?0:350);
+        timer=setTimeout(showBeat,reduced?7000:4800);
+      },wait);
     }
     showBeat();
     elClose.focus();
@@ -976,7 +996,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   function closePrism(){
     overlay.classList.remove('open');
     document.body.style.overflow='';
-    if(timer)clearTimeout(timer);
+    stopBeats();
   }
   elClose.addEventListener('click',closePrism);
   overlay.addEventListener('click',function(e){if(e.target===overlay)closePrism()});
