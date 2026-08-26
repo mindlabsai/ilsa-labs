@@ -27,13 +27,13 @@ check("core files exist", () => {
   }
 });
 
-check("browser icons use the TX mark", () => {
+check("browser icons use the ILSA blue dot", () => {
   const html = read("index.html");
   assert.match(html, /rel="icon" href="\/favicon\.svg"/);
   assert.match(html, /rel="apple-touch-icon" href="\/apple-touch-icon\.png"/);
   assert.match(html, /rel="manifest" href="\/site\.webmanifest"/);
   assert.match(html, /https:\/\/www\.ilsalabs\.com\/ilsa-og-card\.png/);
-  assert.match(read("favicon.svg"), /M148 296H468L516 408/);
+  assert.match(read("favicon.svg"), /#3E8CFF/);
   assert.match(read("site.webmanifest"), /"short_name": "ILSA"/);
 });
 
