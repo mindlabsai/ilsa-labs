@@ -4,7 +4,7 @@
   "description": "Intelligence + Living Systems. Technology with a pulse.",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#EEF0F3",
+  "background_color": "#000000",
   "theme_color": "#E9EBEE",
   "icons": [
     { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
