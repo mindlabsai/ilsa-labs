@@ -18,9 +18,23 @@ function check(name, fn) {
 }
 
 check("core files exist", () => {
-  for (const p of ["index.html", "api/contact.js", "api/ilsa/[action].js", "site/ilsa.js", "site/elevenlabs.js", "vercel.json"]) {
+  for (const p of [
+    "index.html", "api/contact.js", "api/ilsa/[action].js", "site/ilsa.js", "site/elevenlabs.js", "vercel.json",
+    "favicon.svg", "favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
+    "ilsa-og-card.png", "site.webmanifest",
+  ]) {
     assert.equal(existsSync(resolve(root, p)), true, `missing ${p}`);
   }
+});
+
+check("browser icons use the ILSA blue dot", () => {
+  const html = read("index.html");
+  assert.match(html, /rel="icon" href="\/favicon\.svg"/);
+  assert.match(html, /rel="apple-touch-icon" href="\/apple-touch-icon\.png"/);
+  assert.match(html, /rel="manifest" href="\/site\.webmanifest"/);
+  assert.match(html, /https:\/\/www\.ilsalabs\.com\/ilsa-og-card\.png/);
+  assert.match(read("favicon.svg"), /#3E8CFF/);
+  assert.match(read("site.webmanifest"), /"short_name": "ILSA"/);
 });
 
 check("voice client is pinned and websocket-forced", () => {
