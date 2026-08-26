@@ -92,7 +92,7 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /Hello, welcome to Anima Lab\. What would you like to ask\?/);
   assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
   assert.doesNotMatch(src, /I see you are interested/);
-  assert.match(src, /firstMessage:\s*vars\.opening_line/);
+  assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");
   assert.match(html, /function resolveFocusLab/);
   assert.match(html, /lastOpeningLine !== wanted/);

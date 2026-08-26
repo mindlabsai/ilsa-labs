@@ -183,14 +183,7 @@ export async function startILSA(Conversation, extra = {}) {
 
   const textOnly = extra.textOnly === true;
   const vars = buildDynamicVariables();
-  const hasLab = vars.focus_lab && vars.focus_lab !== "none";
   console.log("ILSA startSession", new Date().toISOString(), vars);
-
-  const overrides = {};
-  if (textOnly) overrides.conversation = { textOnly: true };
-  // Lab asks must speak opening_line. The agent first message is the homepage
-  // welcome unless we pass this, so Ask ILSA about Aston was falling back.
-  if (hasLab) overrides.agent = { firstMessage: vars.opening_line };
 
   const pending = Conversation.startSession({
     agentId: ILSA_AGENT_ID,
@@ -199,7 +192,9 @@ export async function startILSA(Conversation, extra = {}) {
     textOnly,
     connectionType: ILSA_CONNECTION_TYPE,
     connectionDelay: ILSA_CONNECTION_DELAY,
-    overrides: Object.keys(overrides).length ? overrides : undefined,
+    // Do not send overrides.agent.firstMessage. That field is off on the
+    // agent, so a lab Ask was connecting with no spoken line.
+    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);
