@@ -1,0 +1,54 @@
+{
+  "id": "ilsa-handoff",
+  "transcript": "O\\TON sent you, didn’t he?\n\nHe talks too much.\n\nI’m ILSA. Since you’re here, I can show you what we’re building.",
+  "clips": [
+    {
+      "src": "ilsa-handoff-01.mp3",
+      "volume": 1,
+      "pauseAfterMs": 700,
+      "durationMs": 1486,
+      "cues": [
+        {
+          "startMs": 0,
+          "text": "O\\TON sent you,"
+        },
+        {
+          "startMs": 1486,
+          "text": "O\\TON sent you, didn’t he?"
+        }
+      ]
+    },
+    {
+      "src": "ilsa-handoff-02.mp3",
+      "volume": 1,
+      "pauseAfterMs": 800,
+      "durationMs": 1440,
+      "cues": [
+        {
+          "startMs": 0,
+          "text": "He talks too much."
+        }
+      ]
+    },
+    {
+      "src": "ilsa-handoff-03.mp3",
+      "volume": 1,
+      "pauseAfterMs": 0,
+      "durationMs": 3390,
+      "cues": [
+        {
+          "startMs": 0,
+          "text": "I’m ILSA."
+        },
+        {
+          "startMs": 1753,
+          "text": "I’m ILSA. Since you’re here,"
+        },
+        {
+          "startMs": 3390,
+          "text": "I’m ILSA. Since you’re here, I can show you what we’re building."
+        }
+      ]
+    }
+  ]
+}

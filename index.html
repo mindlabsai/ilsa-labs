@@ -30,6 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="preload" as="audio" href="/audio/ilsa-handoff-01.mp3" type="audio/mpeg">
 <style>
 :root{
   --env-top:#EEF0F3;--env-bot:#DFE2E7;
@@ -660,6 +661,20 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   body:has(#ilsa-sheet.open) #ilsa-chat.on,
   body:has(#ilsa-sheet.open) #ilsa-hangup.on{bottom:calc(28vh + 36px);bottom:calc(28dvh + 36px)}
 }
+.handoff-line{
+  width:86%;max-width:610px;margin:22px auto 0;
+  font-family:'Manrope',sans-serif;font-weight:300;
+  font-size:clamp(18px,2.4vw,24px);line-height:1.45;color:var(--deep);
+}
+.meetilsa{margin-top:18px}
+#meet-ilsa[hidden],#handoff-line[hidden]{display:none!important}
+.visually-hidden{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+@media (prefers-reduced-motion:reduce){
+  .handoff-line{transition:none}
+}
 </style>
 </head>
 <body id="top">
@@ -678,6 +693,12 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   <h1 class="hero-title">Gen 2 Intelligence + Living Systems</h1>
   <p class="hero-subtitle">Adaptive technology for real-world capability</p>
   <p class="hero-copy">ILSA Labs is an Asia-Pacific technology lab building what comes after the AI wrapper: deterministic intelligence, real-time biometrics, neuro-pragmatic interfaces, and plant-derived technologies for animal systems. Built, engineered, and owned entirely in-house.</p>
+  <p class="visually-hidden" id="handoff-transcript"></p>
+  <p class="handoff-line" id="handoff-line" hidden aria-hidden="true"></p>
+  <button type="button" class="herotalk meetilsa" id="meet-ilsa" hidden>
+    <span class="orbdot" aria-hidden="true"></span>
+    Meet ILSA
+  </button>
   <button class="herotalk" type="button" data-talk>
     <span class="orbdot" aria-hidden="true"></span>
     Talk to ILSA
@@ -1550,6 +1571,7 @@ function isGhostLabAsk(trigger, event) {
 }
 
 async function talk(trigger, event) {
+  if (typeof window.__otonHandoffCancel === "function") window.__otonHandoffCancel();
   if (isGhostLabAsk(trigger, event)) return;
   const fromLab = resolveFocusLab(trigger);
   if (starting && !session) await waitForStart();
@@ -1669,6 +1691,10 @@ if (!window.__ilsaUiBound) {
     setFocusLab(key);
   });
 }
+</script>
+<script type="module">
+import { bootOtonomyHandoff } from "/site/otonomy-handoff.js";
+bootOtonomyHandoff();
 </script>
 </body>
 </html>

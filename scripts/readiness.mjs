@@ -22,6 +22,8 @@ check("core files exist", () => {
     "index.html", "api/contact.js", "api/ilsa/[action].js", "site/ilsa.js", "site/elevenlabs.js", "vercel.json",
     "favicon.svg", "favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
     "ilsa-og-card.png", "site.webmanifest",
+    "site/spoken-intro.js", "site/otonomy-handoff.js",
+    "audio/ilsa-handoff.json", "audio/ilsa-handoff-01.mp3", "audio/ilsa-handoff-02.mp3", "audio/ilsa-handoff-03.mp3",
   ]) {
     assert.equal(existsSync(resolve(root, p)), true, `missing ${p}`);
   }
@@ -97,6 +99,26 @@ check("lab greeting uses welcome line", () => {
   assert.match(html, /function resolveFocusLab/);
   assert.match(html, /lastOpeningLine !== wanted/);
   assert.match(read("prompt/system.md"), /Opening line: \{\{opening_line\}\}/);
+});
+
+check("OTONOMY handoff greeting is deterministic", () => {
+  const html = read("index.html");
+  const boot = read("site/otonomy-handoff.js");
+  const engine = read("site/spoken-intro.js");
+  const audio = read("audio/ilsa-handoff.json");
+  assert.match(html, /Meet ILSA/);
+  assert.match(html, /id="meet-ilsa"/);
+  assert.match(html, /id="handoff-line"/);
+  assert.match(html, /bootOtonomyHandoff/);
+  assert.match(html, /__otonHandoffCancel/);
+  assert.match(engine, /params\.get\("from"\) === "otonomy"/);
+  assert.match(engine, /params\.get\("handoff"\) === "gen2"/);
+  assert.match(engine, /ilsa_otonomy_handoff_played/);
+  assert.match(boot, /ilsa_otonomy_handoff_pending/);
+  assert.match(audio, /O\\\\TON sent you, didn’t he\?/);
+  assert.match(audio, /He talks too much\./);
+  assert.match(audio, /I’m ILSA\. Since you’re here, I can show you what we’re building\./);
+  assert.doesNotMatch(boot, /\/v1\/oton\/speak/);
 });
 
 const failed = checks.filter((c) => !c.ok);
