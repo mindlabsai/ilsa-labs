@@ -6,14 +6,14 @@
       "src": "ilsa-handoff-01.mp3",
       "volume": 1,
       "pauseAfterMs": 700,
-      "durationMs": 1533,
+      "durationMs": 1440,
       "cues": [
         {
           "startMs": 0,
           "text": "O\\TON sent you,"
         },
         {
-          "startMs": 1533,
+          "startMs": 1440,
           "text": "O\\TON sent you, didn’t he?"
         }
       ]
@@ -22,7 +22,7 @@
       "src": "ilsa-handoff-02.mp3",
       "volume": 1,
       "pauseAfterMs": 800,
-      "durationMs": 1440,
+      "durationMs": 1115,
       "cues": [
         {
           "startMs": 0,
@@ -34,18 +34,18 @@
       "src": "ilsa-handoff-03.mp3",
       "volume": 1,
       "pauseAfterMs": 500,
-      "durationMs": 3065,
+      "durationMs": 3111,
       "cues": [
         {
           "startMs": 0,
           "text": "I’m ILSA."
         },
         {
-          "startMs": 1579,
+          "startMs": 1590,
           "text": "I’m ILSA. Since you’re here,"
         },
         {
-          "startMs": 3065,
+          "startMs": 3111,
           "text": "I’m ILSA. Since you’re here, I can show you around the labs."
         }
       ]
