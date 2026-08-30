@@ -47,6 +47,7 @@ const steps = [
         { hostname: "astonax.com" },
         { hostname: "37t.io" },
         { hostname: "helloteo.com.au" },
+        { hostname: "otonomy.com.au" },
         { hostname: "innerlayer.ai" },
         { hostname: "ilsalabs.com" },
       ] } } }],

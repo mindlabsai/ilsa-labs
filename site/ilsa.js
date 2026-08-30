@@ -15,7 +15,7 @@ const LABS = {
   teo:        { name: "teo",        tagline: "An AI facilitator for conversations between two people", url: "https://helloteo.com.au" },
   innerlayer: { name: "InnerLayer", tagline: "Conversation intelligence that reads what's happening underneath the words, not yet released", url: null },
   texlex:     { name: "Texlex",     tagline: "The report engine for neurodevelopmental assessment, in beta", url: null },
-  otonomy:    { name: "oton/omy",   tagline: "Your body, mind and technology in one continuous conversation, research stage", url: null },
+  otonomy:    { name: "oton/omy",   tagline: "Your body, mind and technology in one continuous conversation, beta testing", url: "https://www.otonomy.com.au" },
   anima:      { name: "Anima Lab",  tagline: "Plant-derived therapeutics for the animals we live with, in development", url: null },
   humantech:  { name: "Humantech",  tagline: "Human performance, measured and improved, research stage", url: null },
 };

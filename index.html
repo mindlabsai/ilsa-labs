@@ -810,7 +810,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
       </div>
     </div>
 
-    <div class="chamber" data-prism="oton" role="button" tabindex="0">
+    <div class="chamber" data-prism="oton" data-href="https://www.otonomy.com.au" role="button" tabindex="0">
       <div class="inner">
         <div class="room" aria-hidden="true">
           <svg viewBox="0 0 200 120">
@@ -822,10 +822,10 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
             <line x1="88" y1="74" x2="112" y2="46" stroke="#4A5058" stroke-width="1.5"/>
           </svg>
           <div class="glass"></div>
-          <div class="fog"><p>You, in real time.</p><span class="welcome">Preview only</span></div>
+          <div class="fog"><p>You, in real time.</p><span class="welcome">Welcome →</span></div>
         </div>
         <div class="plaque">
-          <div class="id"><span>Lab 06</span><span class="led res"><i></i>Research</span></div>
+          <div class="id"><span>Lab 06</span><span class="led dev"><i></i>Beta testing</span></div>
           <div class="name lower">oton/omy</div>
           <p class="desc">OTO/NOMY brings your body, mind and technology into one continuous conversation. It learns from how you sleep, move, recover, respond and feel, pulling those signals together to understand how you're actually doing in real time, not just showing you another dashboard full of numbers.</p>
         </div>
@@ -998,8 +998,8 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
     inner:{id:"Lab 05 · Intelligence",name:"InnerLayer",status:"Beta preview",
       brief:"Decision intelligence. Reads what's happening beneath a conversation. Beta preview only. No public site.",
       beats:["A conversation streams in.","It reads what's happening beneath the words.","Understanding comes back as an API."]},
-    oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,status:"Research",
-      brief:"Body, mind and technology in one conversation. Research. Preview only.",
+    oton:{id:"Lab 06 · Intelligence",name:"oton/omy",lower:true,status:"Beta testing",
+      brief:"Body, mind and technology in one conversation. Beta testing. At otonomy.com.au.",
       beats:["You, in real time.","Body, mind and technology in one conversation.","How you're actually doing. Not another dashboard."]},
     anima:{id:"Lab 07 · Living Systems",name:"Anima Lab",status:"In development",
       brief:"Plant-derived animal therapeutics. Evidence-led, formulated in Australia. Preview only.",
@@ -1044,7 +1044,7 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
         elStage.appendChild(svg.cloneNode(true));
       }
     }
-    var live=p.status==='Live'&&href;
+    var live=!!href;
     if(live){
       elEnter.href=href;
       elEnter.hidden=false;
