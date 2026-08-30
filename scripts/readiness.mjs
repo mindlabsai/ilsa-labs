@@ -108,16 +108,19 @@ check("OTONOMY handoff greeting is deterministic", () => {
   const audio = read("audio/ilsa-handoff.json");
   assert.match(html, /Meet ILSA/);
   assert.match(html, /id="meet-ilsa"/);
-  assert.match(html, /id="handoff-line"/);
+  assert.match(html, /id="handoff-transcript"/);
+  assert.doesNotMatch(html, /id="handoff-line"/);
   assert.match(html, /bootOtonomyHandoff/);
   assert.match(html, /__otonHandoffCancel/);
   assert.match(engine, /params\.get\("from"\) === "otonomy"/);
   assert.match(engine, /params\.get\("handoff"\) === "gen2"/);
   assert.match(engine, /ilsa_otonomy_handoff_played/);
   assert.match(boot, /ilsa_otonomy_handoff_pending/);
+  assert.doesNotMatch(boot, /handoff-line/);
   assert.match(audio, /O\\\\TON sent you, didn’t he\?/);
   assert.match(audio, /He talks too much\./);
-  assert.match(audio, /I’m ILSA\. Since you’re here, I can show you what we’re building\./);
+  assert.match(audio, /I’m ILSA\. Since you’re here, I can show you around the labs\./);
+  assert.doesNotMatch(audio, /what we’re building/);
   assert.doesNotMatch(boot, /\/v1\/oton\/speak/);
 });
 

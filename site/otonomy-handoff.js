@@ -6,7 +6,6 @@ import {
 } from "/site/spoken-intro.js";
 
 const PENDING = "ilsa_otonomy_handoff_pending";
-const FALLBACK = "O\\TON sent you, didn’t he? He talks too much. I’m ILSA. Since you’re here, I can show you what we’re building.";
 
 export function captureOtonomyHandoff(locationLike = location, storage) {
   const store = storage || sessionStorage;
@@ -28,7 +27,6 @@ export function captureOtonomyHandoff(locationLike = location, storage) {
 
 export async function bootOtonomyHandoff() {
   if (captureOtonomyHandoff() === false) return null;
-  const line = document.getElementById("handoff-line");
   const meet = document.getElementById("meet-ilsa");
   const transcript = document.getElementById("handoff-transcript");
   let manifest = null;
@@ -38,11 +36,6 @@ export async function bootOtonomyHandoff() {
     manifest = await res.json();
   } catch (error) {
     console.error(error);
-    if (transcript) transcript.textContent = FALLBACK;
-    if (line) {
-      line.hidden = false;
-      line.textContent = FALLBACK;
-    }
     return null;
   }
 
@@ -55,18 +48,7 @@ export async function bootOtonomyHandoff() {
     baseUrl: "/audio/",
   });
 
-  function showLine(text) {
-    if (!line) return;
-    line.hidden = false;
-    line.removeAttribute("aria-hidden");
-    line.textContent = text || "";
-  }
-
-  const opening = manifest.clips?.[0]?.cues?.[0]?.text || FALLBACK.split("\n\n")[0];
-  showLine(opening);
-
   intro.subscribe((message) => {
-    if (message.type === "cue") showLine(message.text);
     if (message.type === "started") {
       try { sessionStorage.removeItem(PENDING); } catch { /* ignore */ }
       if (meet) {
@@ -75,7 +57,6 @@ export async function bootOtonomyHandoff() {
       }
     }
     if (message.type === "autoplay_blocked") {
-      showLine(opening);
       if (meet) {
         meet.hidden = false;
         meet.disabled = false;
@@ -84,8 +65,6 @@ export async function bootOtonomyHandoff() {
       window.addEventListener("pointerdown", resume, { once: true });
       window.addEventListener("keydown", resume, { once: true });
     }
-    if (message.type === "completed") showLine(message.text);
-    if (message.type === "failed") showLine(manifest.transcript.replace(/\n+/g, " "));
   });
 
   meet?.addEventListener("click", () => {
