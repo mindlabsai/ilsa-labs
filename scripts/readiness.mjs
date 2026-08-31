@@ -23,7 +23,7 @@ check("core files exist", () => {
     "favicon.svg", "favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
     "ilsa-og-card.png", "site.webmanifest",
     "site/spoken-intro.js", "site/otonomy-handoff.js",
-    "audio/ilsa-handoff.json", "audio/ilsa-handoff-01.mp3", "audio/ilsa-handoff-02.mp3", "audio/ilsa-handoff-03.mp3",
+    "audio/ilsa-handoff.json", "audio/ilsa-handoff-01.mp3", "audio/ilsa-handoff-02.mp3", "audio/ilsa-handoff-03.mp3", "audio/ilsa-handoff-04.mp3",
   ]) {
     assert.equal(existsSync(resolve(root, p)), true, `missing ${p}`);
   }
@@ -128,8 +128,9 @@ check("OTONOMY handoff greeting is deterministic", () => {
   assert.match(boot, /setOtonomyContinue/);
   assert.doesNotMatch(boot, /meet\.hidden = false/);
   assert.match(boot, /oton-handoff-waiting/);
-  assert.doesNotMatch(boot, /tap to hear/);
-  assert.doesNotMatch(boot, /press to hear/);
+  assert.match(boot, /tap to hear/);
+  assert.match(boot, /press to hear/);
+  assert.match(html, /ilsa-here-cue/);
   assert.match(boot, /armed/);
   assert.match(engine, /starting/);
   assert.match(engine, /elementAudio/);
@@ -137,6 +138,7 @@ check("OTONOMY handoff greeting is deterministic", () => {
   assert.match(audio, /O\\\\TON sent you, didn’t he\?/);
   assert.match(audio, /He talks too much\./);
   assert.match(audio, /I’m ILSA\. Since you’re here, I can show you around the labs\./);
+  assert.match(audio, /You just need to press Talk to ILSA, and we can continue\./);
   assert.doesNotMatch(audio, /what we’re building/);
   assert.doesNotMatch(boot, /\/v1\/oton\/speak/);
 });

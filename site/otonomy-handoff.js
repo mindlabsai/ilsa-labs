@@ -111,7 +111,14 @@ export async function bootOtonomyHandoff() {
     }
     if (message.type === "autoplay_blocked") {
       document.documentElement.classList.add("oton-handoff-waiting");
-      if (here) here.hidden = false;
+      const tap = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      const cue = tap ? "tap to hear" : "press to hear";
+      if (here) {
+        const label = document.getElementById("ilsa-here-cue");
+        if (label) label.textContent = cue;
+        here.hidden = false;
+        here.setAttribute("aria-label", cue);
+      }
       window.addEventListener("pointerdown", resume, { once: true, capture: true });
       window.addEventListener("keydown", resume, { once: true });
     }

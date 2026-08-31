@@ -671,8 +671,10 @@ html.oton-handoff,
 html.oton-handoff-waiting{cursor:pointer}
 html.oton-handoff-waiting .askilsa .orbdot{animation:orbbreathe 1.4s ease-in-out infinite}
 .ilsa-here{
-  margin-top:30px;display:none;align-items:center;justify-content:center;
-  width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;
+  margin-top:30px;display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;width:auto;height:auto;padding:0;border:0;background:none;cursor:pointer;
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:lowercase;
+  color:var(--grey);
 }
 html.oton-handoff-waiting .ilsa-here{display:inline-flex}
 .ilsa-here .orbdot{width:14px;height:14px;box-shadow:0 0 16px rgba(62,140,255,.95)}
@@ -711,8 +713,9 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
     <span class="orbdot" aria-hidden="true"></span>
     Meet ILSA
   </button>
-  <button type="button" class="ilsa-here" id="ilsa-here" hidden aria-label="ILSA">
+  <button type="button" class="ilsa-here" id="ilsa-here" hidden>
     <span class="orbdot" aria-hidden="true"></span>
+    <span class="ilsa-here-cue" id="ilsa-here-cue"></span>
   </button>
   <button class="herotalk" type="button" data-talk>
     <span class="orbdot" aria-hidden="true"></span>
