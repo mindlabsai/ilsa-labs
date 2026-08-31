@@ -1565,6 +1565,7 @@ function isGhostLabAsk(trigger, event) {
 }
 
 async function talk(trigger, event) {
+  if (window.__otonHandoffActive) return;
   if (typeof window.__otonHandoffCancel === "function") window.__otonHandoffCancel();
   if (isGhostLabAsk(trigger, event)) return;
   const fromLab = resolveFocusLab(trigger);

@@ -163,7 +163,26 @@ export function createSpokenIntro(options) {
     return element;
   }
 
-  function playElement(element, volume) {
+  function waitReady(element) {
+    const ready = element.readyState;
+    if (typeof ready !== "number") return Promise.resolve();
+    if (ready >= 2) return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => {
+        element.removeEventListener("canplay", done);
+        element.removeEventListener("loadeddata", done);
+        element.removeEventListener("error", done);
+        resolve();
+      };
+      element.addEventListener("canplay", done);
+      element.addEventListener("loadeddata", done);
+      element.addEventListener("error", done);
+      timer = setTimeout(done, 1000);
+    });
+  }
+
+  async function playElement(element, volume) {
+    await waitReady(element);
     element.volume = volume;
     try { element.currentTime = 0; } catch { /* ignore */ }
     try { element.playbackRate = playbackRate; } catch { /* ignore */ }
@@ -174,18 +193,18 @@ export function createSpokenIntro(options) {
 
   function waitEnded(element) {
     return new Promise((resolve, reject) => {
-      const done = () => {
-        element.removeEventListener("ended", done);
-        element.removeEventListener("error", fail);
-        resolve();
+      let settled = false;
+      const finish = (fn) => () => {
+        if (settled) return;
+        settled = true;
+        element.removeEventListener("ended", onEnded);
+        element.removeEventListener("error", onError);
+        fn();
       };
-      const fail = () => {
-        element.removeEventListener("ended", done);
-        element.removeEventListener("error", fail);
-        reject(new Error("audio failed"));
-      };
-      element.addEventListener("ended", done);
-      element.addEventListener("error", fail);
+      const onEnded = finish(resolve);
+      const onError = finish(() => reject(new Error("audio failed")));
+      element.addEventListener("ended", onEnded);
+      element.addEventListener("error", onError);
     });
   }
 

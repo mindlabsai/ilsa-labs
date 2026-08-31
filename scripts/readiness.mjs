@@ -112,6 +112,9 @@ check("OTONOMY handoff greeting is deterministic", () => {
   assert.doesNotMatch(html, /id="handoff-line"/);
   assert.match(html, /bootOtonomyHandoff/);
   assert.match(html, /__otonHandoffCancel/);
+  assert.match(html, /__otonHandoffActive/);
+  assert.match(boot, /__otonHandoffActive/);
+  assert.match(boot, /stopImmediatePropagation/);
   assert.match(engine, /params\.get\("from"\) === "otonomy"/);
   assert.match(engine, /params\.get\("handoff"\) === "gen2"/);
   assert.match(engine, /ilsa_otonomy_handoff_played/);

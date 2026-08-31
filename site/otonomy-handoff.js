@@ -42,6 +42,7 @@ export async function bootOtonomyHandoff() {
 
   if (transcript) transcript.textContent = manifest.transcript.replace(/\n+/g, " ");
   if (talk) talk.hidden = true;
+  window.__otonHandoffActive = true;
 
   const intro = createSpokenIntro({
     sessionKey: SESSION_ILSA,
@@ -56,6 +57,7 @@ export async function bootOtonomyHandoff() {
     armed = true;
     event?.preventDefault?.();
     event?.stopPropagation?.();
+    event?.stopImmediatePropagation?.();
     if (meet) {
       meet.hidden = true;
       meet.disabled = true;
@@ -64,6 +66,7 @@ export async function bootOtonomyHandoff() {
   };
 
   function showTalk() {
+    window.__otonHandoffActive = false;
     if (talk) talk.hidden = false;
     if (meet) {
       meet.hidden = true;
@@ -97,6 +100,7 @@ export async function bootOtonomyHandoff() {
   });
 
   window.__otonHandoffCancel = () => {
+    window.__otonHandoffActive = false;
     intro.cancel();
     showTalk();
   };
