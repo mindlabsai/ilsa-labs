@@ -26,6 +26,8 @@ export function captureOtonomyHandoff(locationLike = location, storage) {
   let pending = false;
   try { pending = store.getItem(PENDING) === "true"; } catch { pending = false; }
   if (fromQuery) {
+    try { store.removeItem?.(SESSION_ILSA); } catch { /* ignore */ }
+    try { heard?.removeItem?.(HEARD); } catch { /* ignore */ }
     try { store.setItem(PENDING, "true"); } catch { /* private mode */ }
     try {
       const url = new URL(locationLike.href);
