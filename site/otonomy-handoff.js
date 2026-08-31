@@ -28,6 +28,7 @@ export function captureOtonomyHandoff(locationLike = location, storage) {
 export async function bootOtonomyHandoff() {
   if (captureOtonomyHandoff() === false) return null;
   const meet = document.getElementById("meet-ilsa");
+  const talk = document.querySelector("button.herotalk[data-talk]");
   const transcript = document.getElementById("handoff-transcript");
   let manifest = null;
   try {
@@ -40,6 +41,7 @@ export async function bootOtonomyHandoff() {
   }
 
   if (transcript) transcript.textContent = manifest.transcript.replace(/\n+/g, " ");
+  if (talk) talk.hidden = true;
 
   const intro = createSpokenIntro({
     sessionKey: SESSION_ILSA,
@@ -47,6 +49,27 @@ export async function bootOtonomyHandoff() {
     manifest,
     baseUrl: "/audio/",
   });
+
+  let armed = false;
+  const resume = (event) => {
+    if (armed) return;
+    armed = true;
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    if (meet) {
+      meet.hidden = true;
+      meet.disabled = true;
+    }
+    intro.startFromGesture();
+  };
+
+  function showTalk() {
+    if (talk) talk.hidden = false;
+    if (meet) {
+      meet.hidden = true;
+      meet.disabled = true;
+    }
+  }
 
   intro.subscribe((message) => {
     if (message.type === "started") {
@@ -61,24 +84,29 @@ export async function bootOtonomyHandoff() {
         meet.hidden = false;
         meet.disabled = false;
       }
-      const resume = () => intro.startFromGesture();
-      window.addEventListener("pointerdown", resume, { once: true });
+      window.addEventListener("pointerdown", resume, { once: true, capture: true });
       window.addEventListener("keydown", resume, { once: true });
     }
+    if (message.type === "completed" || message.type === "failed") showTalk();
   });
 
-  meet?.addEventListener("click", () => {
-    meet.hidden = true;
-    meet.disabled = true;
-    intro.startFromGesture();
+  meet?.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    resume(event);
   });
 
-  window.__otonHandoffCancel = () => intro.cancel();
+  window.__otonHandoffCancel = () => {
+    intro.cancel();
+    showTalk();
+  };
   window.addEventListener("beforeunload", () => intro.cancel());
   window.addEventListener("pagehide", (event) => {
     if (event.persisted) intro.cancel();
   });
 
   await intro.attemptAutoplay();
+  const now = intro.getState();
+  if (now === "complete" || now === "failed") showTalk();
   return intro;
 }

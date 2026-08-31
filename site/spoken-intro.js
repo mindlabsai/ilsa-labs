@@ -101,6 +101,8 @@ export function createSpokenIntro(options) {
   let raf = 0;
   let cancelled = false;
   let started = false;
+  let starting = false;
+  let elementAudio = null;
   const listeners = new Set();
 
   function emit(message) {
@@ -149,14 +151,21 @@ export function createSpokenIntro(options) {
     if (createAudio) return createAudio(sourceFor(clip));
     const Ctor = audioCtor();
     if (!Ctor) throw new Error("Audio is not available");
-    const element = new Ctor(sourceFor(clip));
+    const element = elementAudio || new Ctor();
+    try { element.pause(); } catch { /* ignore */ }
+    element.src = sourceFor(clip);
+    try { element.load(); } catch { /* ignore */ }
     element.preload = "auto";
     element.playsInline = true;
+    try { element.setAttribute("playsinline", ""); } catch { /* ignore */ }
+    try { element.setAttribute("webkit-playsinline", ""); } catch { /* ignore */ }
+    elementAudio = element;
     return element;
   }
 
   function playElement(element, volume) {
     element.volume = volume;
+    try { element.currentTime = 0; } catch { /* ignore */ }
     try { element.playbackRate = playbackRate; } catch { /* ignore */ }
     const play = element.play();
     if (!play || typeof play.then !== "function") return Promise.resolve(true);
@@ -175,10 +184,6 @@ export function createSpokenIntro(options) {
         element.removeEventListener("error", fail);
         reject(new Error("audio failed"));
       };
-      if (element.ended) {
-        resolve();
-        return;
-      }
       element.addEventListener("ended", done);
       element.addEventListener("error", fail);
     });
@@ -261,12 +266,13 @@ export function createSpokenIntro(options) {
   }
 
   async function startFromGesture() {
-    if (state === OtonIntroState.speaking || state === OtonIntroState.complete) return state;
+    if (starting || state === OtonIntroState.speaking || state === OtonIntroState.complete) return state;
     if (sessionFlag(storage, sessionKey) && state !== OtonIntroState.autoplayBlocked) {
       setState("already_played");
       emit({ type: "completed", text: transcript });
       return state;
     }
+    starting = true;
     locks.set(lockKey, true);
     cancelled = false;
     if (state === OtonIntroState.idle) setState("prepare");
@@ -280,6 +286,8 @@ export function createSpokenIntro(options) {
       await finishSuccess();
     } catch (error) {
       fail(error);
+    } finally {
+      starting = false;
     }
     return state;
   }
@@ -292,6 +300,7 @@ export function createSpokenIntro(options) {
       try { audio.src = ""; } catch { /* ignore */ }
       audio = null;
     }
+    starting = false;
     locks.delete(lockKey);
   }
 
