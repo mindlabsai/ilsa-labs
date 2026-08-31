@@ -1,0 +1,22 @@
+# ILSA Labs
+> ILSA Labs is an Australian human technology lab building advanced technology across human state, identity, neurodevelopment, health, interaction and living systems.
+
+- Name: ILSA Labs
+- Legal name: ILSA Labs Pty Ltd
+- Alternate name: ILSA
+- URL: https://www.ilsalabs.com/
+- Location: Perth, Western Australia, Australia
+- Founded: 2025-12-13
+- Contact: human@ilsalabs.com
+
+## Platforms
+- [OTON\OMY](https://www.ilsalabs.com/otonomy/): Human State Intelligence. OTON/OMY brings body, mind and technology into one continuous conversation. It reads sleep, movement, recovery and response in real time, not as another dashboard of numbers.
+- [37T](https://www.ilsalabs.com/37t/): Identity & Likeness Infrastructure. 37T is permission infrastructure for identity and creative work in the AI economy. Face, voice and work, verified, licensed and paid.
+- [teo](https://www.ilsalabs.com/teo/): Mediated Intelligence. teo sits between two people and helps them have the conversation they have been meaning to have. It listens to both sides and keeps it safe.
+- [Aston](https://www.ilsalabs.com/aston/): Neurodevelopmental Intelligence. Aston is a screening instrument for observable neurodivergence. Parent, teacher and clinician. One clear picture of the child. Not a diagnosis.
+- [Texlex](https://www.ilsalabs.com/texlex/): Neurodevelopmental Intelligence. Texlex writes the neurodevelopmental report in the clinician's voice. The clinician stays the author. Beta preview. No public site yet.
+- [InnerLayer](https://www.ilsalabs.com/innerlayer/): Conversation Intelligence. InnerLayer is decision intelligence for live conversation. It reads what is happening underneath the words. Beta preview. No public site yet.
+- [Reeboot AI](https://www.ilsalabs.com/reeboot/): Adaptive Mental Health. Reeboot AI is adaptive mental health technology in the ILSA Labs human-technology graph. Founded in Perth, Western Australia.
+- [Leeve AI](https://www.ilsalabs.com/leeve/): Workforce Health Infrastructure. Leeve AI is workforce health infrastructure in the ILSA Labs human-technology graph.
+- [Anima](https://www.ilsalabs.com/anima/): Living Systems Technology. Anima Lab develops plant-derived therapeutics for the animals we live with. Evidence-led, formulated in Australia.
+- [Humantech](https://www.ilsalabs.com/humantech/): Human Performance. Humantech is human performance research at ILSA Labs. Sleep, cognition, recovery, longevity. The lab turned on ourselves.

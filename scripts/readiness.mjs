@@ -20,6 +20,10 @@ function check(name, fn) {
 check("core files exist", () => {
   for (const p of [
     "index.html", "api/contact.js", "api/ilsa/[action].js", "site/ilsa.js", "site/elevenlabs.js", "vercel.json",
+    "sitemap.xml", "robots.txt", "llms.txt", "site/identity.json",
+    "teo/index.html", "otonomy/index.html", "37t/index.html", "aston/index.html",
+    "texlex/index.html", "innerlayer/index.html", "reeboot/index.html", "leeve/index.html",
+    "anima/index.html", "humantech/index.html",
     "favicon.svg", "favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
     "ilsa-og-card.png", "site.webmanifest",
     "site/spoken-intro.js", "site/otonomy-handoff.js",
@@ -75,6 +79,26 @@ check("security headers are declared", () => {
   for (const h of ["X-Content-Type-Options", "Referrer-Policy", "X-Frame-Options", "Permissions-Policy"]) {
     assert.match(v, new RegExp(h));
   }
+});
+
+check("machine-readable identity is on the homepage", () => {
+  const html = read("index.html");
+  assert.match(html, /ILSA Labs \| Gen 2 Intelligence \+ Living Systems/);
+  assert.match(html, /Australian human technology lab building advanced technology/);
+  assert.match(html, /rel="canonical" href="https:\/\/www\.ilsalabs\.com\/"/);
+  assert.match(html, /"@type": "Organization"/);
+  assert.match(html, /"@type": "WebSite"/);
+  assert.match(html, /"legalName": "ILSA Labs Pty Ltd"/);
+  assert.match(html, /"addressLocality": "Perth"/);
+  assert.match(html, /Vishal Maharaj/);
+  assert.match(read("sitemap.xml"), /https:\/\/www\.ilsalabs\.com\/otonomy\//);
+  assert.match(read("robots.txt"), /Sitemap: https:\/\/www\.ilsalabs\.com\/sitemap\.xml/);
+  assert.match(read("robots.txt"), /User-agent: Bingbot/);
+  assert.match(read("robots.txt"), /User-agent: Googlebot/);
+  assert.doesNotMatch(read("index.html"), /noindex/i);
+  assert.match(read("teo/index.html"), /teo \| Mediated Intelligence \| ILSA Labs/);
+  assert.match(read("reeboot/index.html"), /Reeboot AI \| Adaptive Mental Health \| ILSA Labs/);
+  assert.match(read("leeve/index.html"), /Leeve AI \| Workforce Health Infrastructure \| ILSA Labs/);
 });
 
 check("agent id is set", () => {

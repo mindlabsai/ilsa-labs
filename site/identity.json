@@ -1,0 +1,130 @@
+{
+  "origin": "https://www.ilsalabs.com",
+  "organization": {
+    "name": "ILSA Labs",
+    "legalName": "ILSA Labs Pty Ltd",
+    "alternateName": ["ILSA", "ILSA LABS"],
+    "url": "https://www.ilsalabs.com/",
+    "logo": "https://www.ilsalabs.com/icon-512.png",
+    "image": "https://www.ilsalabs.com/ilsa-og-card.png",
+    "email": "human@ilsalabs.com",
+    "foundingDate": "2025-12-13",
+    "abn": "65 693 769 658",
+    "acn": "693 769 658",
+    "address": {
+      "addressLocality": "Perth",
+      "addressRegion": "WA",
+      "postalCode": "6154",
+      "addressCountry": "AU"
+    },
+    "founders": [
+      {
+        "name": "Vishal Maharaj",
+        "jobTitle": "Founder",
+        "sameAs": "https://www.linkedin.com/in/vishal-maharaj-018b25b0"
+      },
+      {
+        "name": "Ilahn Maharaj",
+        "jobTitle": "Founding Engineer"
+      }
+    ],
+    "sameAs": []
+  },
+  "home": {
+    "title": "ILSA Labs | Gen 2 Intelligence + Living Systems",
+    "description": "ILSA Labs is an Australian human technology lab building advanced technology across human state, identity, neurodevelopment, health, interaction and living systems."
+  },
+  "platforms": [
+    {
+      "slug": "otonomy",
+      "name": "OTON\\OMY",
+      "display": "oton/omy",
+      "title": "OTON\\OMY | Human State Intelligence | ILSA Labs",
+      "category": "Human State Intelligence",
+      "description": "OTON/OMY brings body, mind and technology into one continuous conversation. It reads sleep, movement, recovery and response in real time, not as another dashboard of numbers.",
+      "sameAs": ["https://www.otonomy.com.au"],
+      "hash": "otonomy"
+    },
+    {
+      "slug": "37t",
+      "name": "37T",
+      "title": "37T | Identity & Likeness Infrastructure | ILSA Labs",
+      "category": "Identity & Likeness Infrastructure",
+      "description": "37T is permission infrastructure for identity and creative work in the AI economy. Face, voice and work, verified, licensed and paid.",
+      "sameAs": ["https://www.37t.io"],
+      "hash": "37t"
+    },
+    {
+      "slug": "teo",
+      "name": "teo",
+      "title": "teo | Mediated Intelligence | ILSA Labs",
+      "category": "Mediated Intelligence",
+      "description": "teo sits between two people and helps them have the conversation they have been meaning to have. It listens to both sides and keeps it safe.",
+      "sameAs": ["https://helloteo.com.au"],
+      "hash": "teo"
+    },
+    {
+      "slug": "aston",
+      "name": "Aston",
+      "title": "Aston | Neurodevelopmental Intelligence | ILSA Labs",
+      "category": "Neurodevelopmental Intelligence",
+      "description": "Aston is a screening instrument for observable neurodivergence. Parent, teacher and clinician. One clear picture of the child. Not a diagnosis.",
+      "sameAs": ["https://astonax.com"],
+      "hash": "aston"
+    },
+    {
+      "slug": "texlex",
+      "name": "Texlex",
+      "title": "Texlex | Neurodevelopmental Intelligence | ILSA Labs",
+      "category": "Neurodevelopmental Intelligence",
+      "description": "Texlex writes the neurodevelopmental report in the clinician's voice. The clinician stays the author. Beta preview. No public site yet.",
+      "sameAs": [],
+      "hash": "texlex"
+    },
+    {
+      "slug": "innerlayer",
+      "name": "InnerLayer",
+      "title": "InnerLayer | Conversation Intelligence | ILSA Labs",
+      "category": "Conversation Intelligence",
+      "description": "InnerLayer is decision intelligence for live conversation. It reads what is happening underneath the words. Beta preview. No public site yet.",
+      "sameAs": [],
+      "hash": "innerlayer"
+    },
+    {
+      "slug": "reeboot",
+      "name": "Reeboot AI",
+      "title": "Reeboot AI | Adaptive Mental Health | ILSA Labs",
+      "category": "Adaptive Mental Health",
+      "description": "Reeboot AI is adaptive mental health technology in the ILSA Labs human-technology graph. Founded in Perth, Western Australia.",
+      "sameAs": [],
+      "hash": null
+    },
+    {
+      "slug": "leeve",
+      "name": "Leeve AI",
+      "title": "Leeve AI | Workforce Health Infrastructure | ILSA Labs",
+      "category": "Workforce Health Infrastructure",
+      "description": "Leeve AI is workforce health infrastructure in the ILSA Labs human-technology graph.",
+      "sameAs": [],
+      "hash": null
+    },
+    {
+      "slug": "anima",
+      "name": "Anima",
+      "title": "Anima | Living Systems Technology | ILSA Labs",
+      "category": "Living Systems Technology",
+      "description": "Anima Lab develops plant-derived therapeutics for the animals we live with. Evidence-led, formulated in Australia.",
+      "sameAs": [],
+      "hash": "anima"
+    },
+    {
+      "slug": "humantech",
+      "name": "Humantech",
+      "title": "Humantech | Human Performance | ILSA Labs",
+      "category": "Human Performance",
+      "description": "Humantech is human performance research at ILSA Labs. Sleep, cognition, recovery, longevity. The lab turned on ourselves.",
+      "sameAs": [],
+      "hash": "humantech"
+    }
+  ]
+}
