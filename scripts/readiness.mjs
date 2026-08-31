@@ -93,6 +93,8 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /Hello, welcome to oton\/omy\. Where would you like to begin\?/);
   assert.match(src, /Hello, welcome to Anima Lab\. What would you like to ask\?/);
   assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
+  assert.match(src, /I can show you around\. What are you curious about\?/);
+  assert.match(src, /Welcome back\. What would you like to know\?/);
   assert.doesNotMatch(src, /I see you are interested/);
   assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");
@@ -108,6 +110,8 @@ check("OTONOMY handoff greeting is deterministic", () => {
   const audio = read("audio/ilsa-handoff.json");
   assert.match(html, /Meet ILSA/);
   assert.match(html, /id="meet-ilsa"/);
+  assert.match(html, /id="ilsa-here"/);
+  assert.match(html, /oton-handoff-waiting/);
   assert.match(html, /id="handoff-transcript"/);
   assert.doesNotMatch(html, /id="handoff-line"/);
   assert.match(html, /bootOtonomyHandoff/);
@@ -119,6 +123,13 @@ check("OTONOMY handoff greeting is deterministic", () => {
   assert.match(engine, /params\.get\("handoff"\) === "gen2"/);
   assert.match(engine, /ilsa_otonomy_handoff_played/);
   assert.match(boot, /ilsa_otonomy_handoff_pending/);
+  assert.match(boot, /ilsa_otonomy_handoff_heard/);
+  assert.match(boot, /SETTLE_MS = 2000/);
+  assert.match(boot, /setOtonomyContinue/);
+  assert.doesNotMatch(boot, /meet\.hidden = false/);
+  assert.match(boot, /oton-handoff-waiting/);
+  assert.doesNotMatch(boot, /tap to hear/);
+  assert.doesNotMatch(boot, /press to hear/);
   assert.match(boot, /armed/);
   assert.match(engine, /starting/);
   assert.match(engine, /elementAudio/);

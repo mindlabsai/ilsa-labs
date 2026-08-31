@@ -343,3 +343,4 @@ function lastSentence(transcript) {
 
 export const SESSION_OTON = "oton_intro_played";
 export const SESSION_ILSA = "ilsa_otonomy_handoff_played";
+export const STORE_ILSA = "ilsa_otonomy_handoff_heard";

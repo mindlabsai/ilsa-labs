@@ -3,12 +3,25 @@ import {
   isOtonomyHandoff,
   SESSION_ILSA,
   sessionFlag,
+  markSessionFlag,
 } from "/site/spoken-intro.js";
+import { setOtonomyContinue } from "/site/ilsa.js";
 
 const PENDING = "ilsa_otonomy_handoff_pending";
+const HEARD = "ilsa_otonomy_handoff_heard";
+const SETTLE_MS = 2000;
+
+function lastingStore() {
+  try {
+    return localStorage;
+  } catch {
+    return null;
+  }
+}
 
 export function captureOtonomyHandoff(locationLike = location, storage) {
   const store = storage || sessionStorage;
+  const heard = lastingStore();
   const fromQuery = isOtonomyHandoff(locationLike.search || "");
   let pending = false;
   try { pending = store.getItem(PENDING) === "true"; } catch { pending = false; }
@@ -22,12 +35,19 @@ export function captureOtonomyHandoff(locationLike = location, storage) {
     } catch { /* ignore */ }
   }
   if ((fromQuery || pending) === false) return false;
-  return sessionFlag(store, SESSION_ILSA) === false;
+  if (sessionFlag(store, SESSION_ILSA) || sessionFlag(heard, HEARD)) return false;
+  return true;
+}
+
+function markHeard() {
+  markSessionFlag(sessionStorage, SESSION_ILSA);
+  markSessionFlag(lastingStore(), HEARD);
 }
 
 export async function bootOtonomyHandoff() {
   if (captureOtonomyHandoff() === false) return null;
   const meet = document.getElementById("meet-ilsa");
+  const here = document.getElementById("ilsa-here");
   const talk = document.querySelector("button.herotalk[data-talk]");
   const transcript = document.getElementById("handoff-transcript");
   let manifest = null;
@@ -42,6 +62,12 @@ export async function bootOtonomyHandoff() {
 
   if (transcript) transcript.textContent = manifest.transcript.replace(/\n+/g, " ");
   if (talk) talk.hidden = true;
+  if (here) here.hidden = true;
+  if (meet) {
+    meet.hidden = true;
+    meet.disabled = true;
+  }
+  document.documentElement.classList.add("oton-handoff");
   window.__otonHandoffActive = true;
 
   const intro = createSpokenIntro({
@@ -58,15 +84,18 @@ export async function bootOtonomyHandoff() {
     event?.preventDefault?.();
     event?.stopPropagation?.();
     event?.stopImmediatePropagation?.();
-    if (meet) {
-      meet.hidden = true;
-      meet.disabled = true;
-    }
     intro.startFromGesture();
   };
 
+  function hideHere() {
+    document.documentElement.classList.remove("oton-handoff-waiting");
+    if (here) here.hidden = true;
+  }
+
   function showTalk() {
     window.__otonHandoffActive = false;
+    document.documentElement.classList.remove("oton-handoff", "oton-handoff-waiting");
+    hideHere();
     if (talk) talk.hidden = false;
     if (meet) {
       meet.hidden = true;
@@ -77,26 +106,20 @@ export async function bootOtonomyHandoff() {
   intro.subscribe((message) => {
     if (message.type === "started") {
       try { sessionStorage.removeItem(PENDING); } catch { /* ignore */ }
-      if (meet) {
-        meet.hidden = true;
-        meet.disabled = true;
-      }
+      markHeard();
+      hideHere();
     }
     if (message.type === "autoplay_blocked") {
-      if (meet) {
-        meet.hidden = false;
-        meet.disabled = false;
-      }
+      document.documentElement.classList.add("oton-handoff-waiting");
+      if (here) here.hidden = false;
       window.addEventListener("pointerdown", resume, { once: true, capture: true });
       window.addEventListener("keydown", resume, { once: true });
     }
-    if (message.type === "completed" || message.type === "failed") showTalk();
-  });
-
-  meet?.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    resume(event);
+    if (message.type === "completed") {
+      setOtonomyContinue(true);
+      showTalk();
+    }
+    if (message.type === "failed") showTalk();
   });
 
   window.__otonHandoffCancel = () => {
@@ -109,6 +132,7 @@ export async function bootOtonomyHandoff() {
     if (event.persisted) intro.cancel();
   });
 
+  await new Promise((resolve) => setTimeout(resolve, SETTLE_MS));
   await intro.attemptAutoplay();
   const now = intro.getState();
   if (now === "complete" || now === "failed") showTalk();

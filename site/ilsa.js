@@ -28,7 +28,12 @@ const state = {
   focusLab: null,                 // set by the prism UI: "aston" | "37t" | ...
   visited: new Set(JSON.parse(sessionStorage.getItem("ilsa.visited") || "[]")),
   returning: localStorage.getItem("ilsa.seen") === "1",
+  otonomyContinue: false,
 };
+
+export function setOtonomyContinue(value) {
+  state.otonomyContinue = value === true;
+}
 
 export function setFocusLab(key) {
   state.focusLab = key in LABS ? key : null;
@@ -82,6 +87,8 @@ const OPENING = {
 
 export function buildOpeningLine() {
   if (state.focusLab && OPENING[state.focusLab]) return OPENING[state.focusLab];
+  if (state.otonomyContinue) return "I can show you around. What are you curious about?";
+  if (state.returning) return "Welcome back. What would you like to know?";
   return "Hello, welcome to ILSA Labs. What would you like to know?";
 }
 

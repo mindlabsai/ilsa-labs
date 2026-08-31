@@ -31,6 +31,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet">
 <link rel="preload" as="audio" href="/audio/ilsa-handoff-01.mp3" type="audio/mpeg">
+<script>
+if (/[?&]from=otonomy(?:&|$)/.test(location.search) && /[?&]handoff=gen2(?:&|$)/.test(location.search)) {
+  document.documentElement.classList.add("oton-handoff");
+}
+</script>
 <style>
 :root{
   --env-top:#EEF0F3;--env-bot:#DFE2E7;
@@ -661,8 +666,21 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   body:has(#ilsa-sheet.open) #ilsa-chat.on,
   body:has(#ilsa-sheet.open) #ilsa-hangup.on{bottom:calc(28vh + 36px);bottom:calc(28dvh + 36px)}
 }
+html.oton-handoff .hero .herotalk[data-talk]{visibility:hidden}
+html.oton-handoff,
+html.oton-handoff-waiting{cursor:pointer}
+html.oton-handoff-waiting .askilsa .orbdot{animation:orbbreathe 1.4s ease-in-out infinite}
+.ilsa-here{
+  margin-top:30px;display:none;align-items:center;justify-content:center;
+  width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;
+}
+html.oton-handoff-waiting .ilsa-here{display:inline-flex}
+.ilsa-here .orbdot{width:14px;height:14px;box-shadow:0 0 16px rgba(62,140,255,.95)}
+@media (prefers-reduced-motion:no-preference){
+  html.oton-handoff-waiting .ilsa-here .orbdot{animation:orbbreathe 1.6s ease-in-out infinite}
+}
 .meetilsa{margin-top:18px}
-#meet-ilsa[hidden]{display:none!important}
+#meet-ilsa[hidden],#ilsa-here[hidden]{display:none!important}
 .visually-hidden{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
@@ -692,6 +710,9 @@ body:has(#ilsa-sheet.open) #ilsa-hint{bottom:calc(35vh + 78px);bottom:calc(35dvh
   <button type="button" class="herotalk meetilsa" id="meet-ilsa" hidden>
     <span class="orbdot" aria-hidden="true"></span>
     Meet ILSA
+  </button>
+  <button type="button" class="ilsa-here" id="ilsa-here" hidden aria-label="ILSA">
+    <span class="orbdot" aria-hidden="true"></span>
   </button>
   <button class="herotalk" type="button" data-talk>
     <span class="orbdot" aria-hidden="true"></span>

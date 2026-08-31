@@ -5,7 +5,7 @@
     {
       "src": "ilsa-handoff-01.mp3",
       "volume": 1,
-      "pauseAfterMs": 700,
+      "pauseAfterMs": 1100,
       "durationMs": 1300,
       "cues": [
         {
@@ -21,7 +21,7 @@
     {
       "src": "ilsa-handoff-02.mp3",
       "volume": 1,
-      "pauseAfterMs": 800,
+      "pauseAfterMs": 1000,
       "durationMs": 1254,
       "cues": [
         {
@@ -33,7 +33,7 @@
     {
       "src": "ilsa-handoff-03.mp3",
       "volume": 1,
-      "pauseAfterMs": 500,
+      "pauseAfterMs": 900,
       "durationMs": 3344,
       "cues": [
         {
