@@ -216,12 +216,9 @@ export async function startILSA(Conversation, extra = {}) {
     textOnly,
     connectionType: ILSA_CONNECTION_TYPE,
     connectionDelay: ILSA_CONNECTION_DELAY,
-    // Talk to ILSA must not send firstMessage — that used to connect silent.
-    // Engineer for you does: the live first line is still the old welcome.
-    overrides: (textOnly || state.engineerBrief) ? {
-      ...(textOnly ? { conversation: { textOnly: true } } : {}),
-      ...(state.engineerBrief ? { agent: { firstMessage: "What are you wanting to build?" } } : {}),
-    } : undefined,
+    // Do not send overrides.agent.firstMessage. That field is off on the
+    // agent, so Engineer for you was connecting with no spoken line.
+    overrides: textOnly ? { conversation: { textOnly: true } } : undefined,
     onConnect: (info) => {
       localStorage.setItem("ilsa.seen", "1");
       console.log("ILSA connect", info);
