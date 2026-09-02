@@ -608,24 +608,25 @@ body:has(.ilsa-orb.on) .prism{
   color:var(--ink);line-height:1.35;
 }
 .contact .actions{
-  margin-top:clamp(22px,4vw,30px);width:min(300px,86%);max-width:100%;
-  display:flex;align-items:stretch;justify-content:center;gap:8px;
+  margin-top:clamp(22px,4vw,30px);width:min(320px,86%);max-width:100%;
+  display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:8px;
 }
 .contact .actions .herotalk{
-  margin-top:0;flex:1 1 0;justify-content:center;
-  min-width:0;height:auto;
-  padding:10px 12px;
-  font-size:clamp(9px,2.2vw,11px);letter-spacing:.1em;
+  margin-top:0;flex:none;justify-content:center;
+  min-width:0;height:auto;width:100%;
+  padding:12px 14px;
+  font-size:clamp(10px,2.4vw,12px);letter-spacing:.12em;
   background:transparent;color:var(--ink);border:1px solid var(--ink);
   white-space:nowrap;
 }
 .contact .actions .herotalk:hover,
 .contact .actions .herotalk:focus-visible{background:rgba(58,64,72,.06)}
 .needbuilt{
-  margin-top:18px;padding:0;border:0;background:none;cursor:pointer;
-  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--grey);
+  margin-top:14px;padding:0;border:0;background:none;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
+  text-decoration:underline;text-underline-offset:3px;
 }
-.needbuilt:hover,.needbuilt:focus-visible{color:var(--ink)}
+.needbuilt:hover,.needbuilt:focus-visible{color:var(--grey)}
 .writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
 @media (max-width:400px){
   header{gap:8px}
@@ -636,8 +637,8 @@ body:has(.ilsa-orb.on) .prism{
   .winghead{flex-direction:column;align-items:flex-start;gap:6px}
   .winghead h2{letter-spacing:.12em}
   .founders-head{letter-spacing:.12em}
-  .contact .actions{width:min(280px,84%);gap:7px}
-  .contact .actions .herotalk{padding:9px 10px;letter-spacing:.08em;gap:6px;font-size:9px}
+  .contact .actions{width:min(300px,88%);gap:8px}
+  .contact .actions .herotalk{padding:12px 12px;letter-spacing:.1em;gap:8px;font-size:10px}
 }
 
 /* ---------- glass writer ---------- */
@@ -1118,8 +1119,12 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
       Talk to ILSA
     </button>
     <button class="herotalk" type="button" id="open-writer">Write to us</button>
+    <button class="herotalk engineer" type="button" id="need-built" data-talk data-engineer>
+      <span class="orbdot" aria-hidden="true"></span>
+      Engineer for you
+    </button>
   </div>
-  <button class="needbuilt" type="button" id="need-built" data-talk data-engineer>Need something built?</button>
+  <button class="needbuilt" type="button" id="write-engineer">Or write it to the lab</button>
 </section>
 
 <footer class="wrap">
@@ -1419,6 +1424,10 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
   document.getElementById('open-writer').addEventListener('click',function(){
     lastFocus=document.getElementById('open-writer');
     openWriter();
+  });
+  document.getElementById('write-engineer').addEventListener('click',function(){
+    lastFocus=document.getElementById('write-engineer');
+    openWriter('Engineer enquiry');
   });
   function closeWriter(){
     lockPage(false);

@@ -92,7 +92,7 @@ const OPENING = {
 };
 
 export function buildOpeningLine() {
-  if (state.engineerBrief) return "Tell me what you need built. Not the secrets — the problem.";
+  if (state.engineerBrief) return "What are you wanting to build?";
   if (state.focusLab && OPENING[state.focusLab]) return OPENING[state.focusLab];
   if (state.otonomyContinue) return "I can show you around. What are you curious about?";
   if (state.returning) return "Welcome back. What would you like to know?";

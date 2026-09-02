@@ -76,9 +76,10 @@ check("writer falls back to mailto on API failure", () => {
 
 check("engineer for you is a quiet door to the lab", () => {
   const html = read("index.html");
-  assert.match(html, /Need something built\?/);
+  assert.match(html, /Or write it to the lab/);
   assert.match(html, /data-engineer/);
   assert.match(html, /Engineer for you/);
+  assert.match(html, /id="write-engineer"/);
   assert.match(html, /data-subject="Engineer enquiry"/);
   assert.match(html, /The lab treats this as confidential/);
   assert.match(html, /boot==='engineer'/);
@@ -132,7 +133,7 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
   assert.match(src, /I can show you around\. What are you curious about\?/);
   assert.match(src, /Welcome back\. What would you like to know\?/);
-  assert.match(src, /Tell me what you need built\. Not the secrets/);
+  assert.match(src, /What are you wanting to build\?/);
   assert.doesNotMatch(src, /I see you are interested/);
   assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");
