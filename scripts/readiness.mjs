@@ -134,6 +134,9 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /I can show you around\. What are you curious about\?/);
   assert.match(src, /Welcome back\. What would you like to know\?/);
   assert.match(src, /What are you wanting to build\?/);
+  assert.match(src, /engineer_brief/);
+  assert.match(read("prompt/system.md"), /What are you wanting to build, in a few words\?/);
+  assert.match(read("index.html"), /remindEngineer/);
   assert.doesNotMatch(src, /I see you are interested/);
   assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");

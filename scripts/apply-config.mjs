@@ -33,6 +33,7 @@ const steps = [
   ["first message", { conversation_config: { agent: { first_message: "{{opening_line}}" } } }],
   ["dynamic variable defaults", { conversation_config: { agent: { dynamic_variables: { dynamic_variable_placeholders: {
       opening_line: "Hello, welcome to ILSA Labs. What would you like to know?",
+      engineer_brief: "false",
       focus_lab: "ILSA Labs", focus_lab_tagline: "Technology for the human layer", labs_visited: "none",
       entry_path: "direct", visitor_segment: "unknown", returning: "false", time_of_day_perth: "day" } } } } }],
   ["max duration message", { conversation_config: { agent: { max_conversation_duration_message: "We've reached the end of this session. Thanks for visiting ILSA Labs." } } }],

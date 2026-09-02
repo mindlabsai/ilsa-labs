@@ -103,6 +103,7 @@ export function buildDynamicVariables() {
   const lab = state.focusLab ? LABS[state.focusLab] : null;
   return {
     opening_line: buildOpeningLine(),
+    engineer_brief: state.engineerBrief ? "true" : "false",
     focus_lab: lab ? lab.name : "none",
     focus_lab_tagline: lab ? lab.tagline : "",
     labs_visited: [...state.visited].map(k => LABS[k].name).join(", ") || "none",
