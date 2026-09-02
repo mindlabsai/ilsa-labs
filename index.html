@@ -1578,6 +1578,8 @@ let session = null;
 let starting = false;
 let textOnly = false;
 let lastOpeningLine = null;
+let sessionEngineer = false;
+let engineerForced = false;
 let muted = false;
 let sheetUserOpen = false;
 let voiceMode = "idle";
@@ -1758,6 +1760,8 @@ async function closeSession() {
   session = null;
   starting = false;
   lastOpeningLine = null;
+  sessionEngineer = false;
+  engineerForced = false;
   showVoice(false);
   await stopILSA();
 }
@@ -1794,11 +1798,33 @@ function remindLab(conversation, { speak = false } = {}) {
   return line;
 }
 
+function heardBuildQuestion() {
+  return turns.some(function (t) {
+    return t.who === "ILSA" && /what are you wanting to build/i.test(t.text || "");
+  });
+}
+
 function remindEngineer(conversation) {
-  if (!conversation || typeof conversation.sendContextualUpdate !== "function") return;
+  if (!conversation) return;
+  engineerForced = true;
   const line = "What are you wanting to build?";
   const note = "The visitor tapped Engineer for you. Say this next sentence word for word, then wait. Do not welcome them to the lab. Do not rephrase. Say: " + line;
-  try { conversation.sendContextualUpdate(note); } catch (err) { console.error("ILSA error", err); }
+  try { conversation.sendContextualUpdate?.(note); } catch (err) { console.error("ILSA error", err); }
+  if (typeof conversation.sendUserMessage === "function") {
+    try {
+      conversation.sendUserMessage("Engineer for you");
+      noteUserUtterance("Engineer for you");
+    } catch (err) { console.error("ILSA error", err); }
+  }
+}
+
+function watchEngineerOpening(conversation) {
+  const kick = function () {
+    if (session !== conversation || engineerForced) return;
+    if (heardBuildQuestion()) return;
+    remindEngineer(conversation);
+  };
+  setTimeout(kick, 2600);
 }
 
 async function waitForStart() {
@@ -1827,11 +1853,16 @@ async function talk(trigger, event) {
   if (starting && !session) await waitForStart();
   if (session) {
     const wanted = buildDynamicVariables().opening_line;
-    if (lastOpeningLine && lastOpeningLine !== wanted) {
+    if (engineer) {
+      if (sessionEngineer && lastOpeningLine === wanted) {
+        remindEngineer(session);
+        return;
+      }
+      await closeSession();
+    } else if (lastOpeningLine && lastOpeningLine !== wanted) {
       await closeSession();
     } else {
-      if (engineer) remindEngineer(session);
-      else if (fromLab) remindLab(session, { speak: true });
+      if (fromLab) remindLab(session, { speak: true });
       return;
     }
   }
@@ -1848,6 +1879,9 @@ async function talk(trigger, event) {
       const mode = m?.mode === "speaking" ? "speaking" : m?.mode === "listening" ? "listening" : "idle";
       setMode(mode);
       if (!textOnly && sheetUserOpen && mode === "speaking" && lastUiMode !== "speaking") collapseSheet();
+      if (engineer && session && !engineerForced && mode === "listening" && lastUiMode === "speaking" && !heardBuildQuestion()) {
+        remindEngineer(session);
+      }
       lastUiMode = mode;
     },
     onMessage: (msg) => {
@@ -1875,8 +1909,9 @@ async function talk(trigger, event) {
   }
 
   starting = false;
+  sessionEngineer = engineer;
   lastOpeningLine = buildDynamicVariables().opening_line;
-  if (engineer) remindEngineer(session);
+  if (engineer) watchEngineerOpening(session);
   lastUiMode = textOnly ? "idle" : "listening";
   setMode(textOnly ? "idle" : "listening");
   micBtn.hidden = textOnly;

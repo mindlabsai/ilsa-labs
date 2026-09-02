@@ -29,6 +29,7 @@ const state = {
   visited: new Set(JSON.parse(sessionStorage.getItem("ilsa.visited") || "[]")),
   returning: localStorage.getItem("ilsa.seen") === "1",
   otonomyContinue: false,
+  engineerBrief: false,
 };
 
 export function setOtonomyContinue(value) {
@@ -142,6 +143,7 @@ const clientTools = {
 // ---------- Start (one session at a time) ----------
 
 let activeConversation = null;
+let startedWith = null;
 let ending = false;
 let farewellPending = false;
 let lastMode = null;
@@ -176,6 +178,7 @@ export async function endILSA() {
   if (ending && !activeConversation) return;
   ending = true;
   farewellPending = false;
+  startedWith = null;
   const conv = activeConversation;
   activeConversation = null;
   const resolved = conv && typeof conv.then === "function"
@@ -187,17 +190,23 @@ export async function endILSA() {
 }
 
 export async function startILSA(Conversation, extra = {}) {
+  const textOnly = extra.textOnly === true;
+  const vars = buildDynamicVariables();
+  const sig = vars.opening_line + "|" + vars.engineer_brief;
+
   if (activeConversation) {
-    console.log("ILSA startSession reused", new Date().toISOString());
-    return activeConversation;
+    if (startedWith === sig) {
+      console.log("ILSA startSession reused", new Date().toISOString());
+      return activeConversation;
+    }
+    console.log("ILSA startSession replacing", startedWith, "→", sig);
+    await endILSA();
   }
 
   ending = false;
   farewellPending = false;
   lastMode = null;
-
-  const textOnly = extra.textOnly === true;
-  const vars = buildDynamicVariables();
+  startedWith = sig;
   console.log("ILSA startSession", new Date().toISOString(), vars);
 
   const pending = Conversation.startSession({
@@ -218,6 +227,7 @@ export async function startILSA(Conversation, extra = {}) {
     onDisconnect: (info) => {
       console.log("ILSA disconnect", info);
       activeConversation = null;
+      startedWith = null;
       extra.onDisconnect?.(info);
     },
     onError: (e) => {
