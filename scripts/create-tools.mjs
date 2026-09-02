@@ -43,7 +43,7 @@ const tools = [
         properties: {
           name: { type: "string", description: "Visitor's name" },
           contact: { type: "string", description: "Email or phone, as the visitor gave it" },
-          interest: { type: "string", description: "What they want: pilot, partner, invest, integrate, learn, other" },
+          interest: { type: "string", description: "What they want: engineering, pilot, partner, invest, integrate, learn, other" },
           lab: { type: "string", description: "ASTON, 37T, teo, InnerLayer, Texlex or none" },
           segment: { type: "string", description: "clinician, developer, creator, org, investor, press or unknown" },
           summary: { type: "string", description: "One-line summary of the conversation so far" },

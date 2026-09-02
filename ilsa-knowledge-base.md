@@ -412,6 +412,9 @@ ILSA should take the person's name, contact details and area of interest, and sa
 ### Can I partner with / integrate with / pilot one of the platforms?
 Same approach — capture the details and the specific platform, and hand over to the team.
 
+### Can ILSA Labs engineer something for me or my company?
+Yes. People and companies can ask the lab to engineer something. ILSA takes a short confidential brief — the problem, who it is for, what happens today without it, and how to reach them — and passes it to the team at human@ilsalabs.com. She does not quote, scope a build, or ask them to sign anything. If they need an NDA before they talk, she puts them in front of the team. Health records, children's data, identity files and source code should not be sent in the first conversation.
+
 ### Can I see a demo?
 InnerLayer has a live demo on its site. 37T is live to register and explore. teo is live at helloteo.com.au. ASTON demos are arranged through the team for clinicians and services. Texlex demonstrations are arranged by the team.
 

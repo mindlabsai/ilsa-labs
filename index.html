@@ -621,6 +621,12 @@ body:has(.ilsa-orb.on) .prism{
 }
 .contact .actions .herotalk:hover,
 .contact .actions .herotalk:focus-visible{background:rgba(58,64,72,.06)}
+.needbuilt{
+  margin-top:18px;padding:0;border:0;background:none;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--grey);
+}
+.needbuilt:hover,.needbuilt:focus-visible{color:var(--ink)}
+.writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
 @media (max-width:400px){
   header{gap:8px}
   .wordmark{letter-spacing:.14em;font-size:12px}
@@ -1113,6 +1119,7 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
     </button>
     <button class="herotalk" type="button" id="open-writer">Write to us</button>
   </div>
+  <button class="needbuilt" type="button" id="need-built" data-talk data-engineer>Need something built?</button>
 </section>
 
 <footer class="wrap">
@@ -1145,6 +1152,7 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
     <p class="sub" id="writer-sub">Pick a starting point, or just write.</p>
     <div id="writer-form">
       <div class="chips" id="writer-chips">
+        <button type="button" data-subject="Engineer enquiry" data-body="Hi ILSA Labs. I need something built. " aria-pressed="false">Engineer for you</button>
         <button type="button" data-subject="Partnership enquiry" data-body="Hi ILSA Labs. I'd like to explore a partnership with " aria-pressed="false">Partner with a lab</button>
         <button type="button" data-subject="Pilot enquiry" data-body="Hi ILSA Labs. I'm interested in piloting " aria-pressed="false">Pilot a platform</button>
         <button type="button" data-subject="Investment enquiry" data-body="Hi ILSA Labs. I'd like to talk about investing in " aria-pressed="false">Invest</button>
@@ -1159,6 +1167,7 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
       <p class="werr" id="writer-err" role="alert" hidden></p>
       <button class="send" id="writer-send" type="button">Send →</button>
       <div class="addr">Delivers to human@ilsalabs.com</div>
+      <p class="wnote">The lab treats this as confidential. Tell us the problem, not the secrets.</p>
     </div>
     <p class="sent" id="writer-sent" hidden>Sent. We'll be in touch.</p>
   </div>
@@ -1395,13 +1404,21 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
     }
     syncLayer();
   }
-  document.getElementById('open-writer').addEventListener('click',function(){
-    lastFocus=document.getElementById('open-writer');
+  function selectWriterChip(subject){
+    var b=wChips.querySelector('[data-subject="'+subject+'"]');
+    if(b)b.click();
+  }
+  function openWriter(subject){
     if(wForm)wForm.hidden=false;
     if(wSent)wSent.hidden=true;
     clearWriterErr();
     lockPage(true);
+    if(subject)selectWriterChip(subject);
     if(wName)wName.focus();else wText.focus();
+  }
+  document.getElementById('open-writer').addEventListener('click',function(){
+    lastFocus=document.getElementById('open-writer');
+    openWriter();
   });
   function closeWriter(){
     lockPage(false);
@@ -1496,6 +1513,11 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
   function openFromHash(){
     var boot=location.hash.replace(/^#/,'').toLowerCase();
     if(!boot){if(overlay.classList.contains('open'))closePrism();return;}
+    if(boot==='engineer'){
+      lastFocus=document.getElementById('need-built')||document.getElementById('open-writer');
+      openWriter('Engineer enquiry');
+      return;
+    }
     var bootKey=HASH_TO_PRISM[boot];
     if(!bootKey)return;
     var bootCard=document.querySelector('.chamber[data-prism="'+bootKey+'"]');
@@ -1507,7 +1529,7 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
 </script>
 <script type="module">
 import { Conversation, unlockILSAAudio } from "/site/elevenlabs.js";
-import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab, buildDynamicVariables } from "/site/ilsa.js";
+import { startILSA, endILSA as stopILSA, noteUserUtterance, setFocusLab, setEngineerBrief, buildDynamicVariables } from "/site/ilsa.js";
 
 const PRISM_TO_LAB = {
   teo: "teo",
@@ -1771,11 +1793,14 @@ async function talk(trigger, event) {
   if (window.__otonHandoffActive) return;
   if (typeof window.__otonHandoffCancel === "function") window.__otonHandoffCancel();
   if (isGhostLabAsk(trigger, event)) return;
-  const fromLab = resolveFocusLab(trigger);
+  const engineer = !!(trigger && trigger.hasAttribute && trigger.hasAttribute("data-engineer"));
+  const fromLab = engineer ? false : resolveFocusLab(trigger);
+  if (engineer) setEngineerBrief(true);
+  else if (!(trigger && trigger.id === "prism-ask")) setEngineerBrief(false);
   if (starting && !session) await waitForStart();
   if (session) {
     const wanted = buildDynamicVariables().opening_line;
-    if (fromLab && lastOpeningLine && lastOpeningLine !== wanted) {
+    if (lastOpeningLine && lastOpeningLine !== wanted) {
       await closeSession();
     } else {
       if (fromLab) remindLab(session, { speak: true });

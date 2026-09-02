@@ -89,7 +89,7 @@ export default async function handler(req, res) {
         html: `
           <div style="font-family:sans-serif;max-width:560px">
             <p style="color:#8A9099;font-size:12px;letter-spacing:.1em;text-transform:uppercase">
-              Glass writer · ilsalabs.com</p>
+              ${/engineer/i.test(subject) ? 'Engineer for you · confidential brief' : 'Glass writer · ilsalabs.com'}</p>
             <p><strong>${esc(name || 'No name given')}</strong> · ${esc(email)}</p>
             <p><strong>${esc(subject)}</strong></p>
             <p style="white-space:pre-wrap;line-height:1.6">${esc(message)}</p>

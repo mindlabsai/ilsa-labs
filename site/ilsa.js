@@ -35,9 +35,15 @@ export function setOtonomyContinue(value) {
   state.otonomyContinue = value === true;
 }
 
+export function setEngineerBrief(on) {
+  state.engineerBrief = on === true;
+  if (state.engineerBrief) state.focusLab = null;
+}
+
 export function setFocusLab(key) {
   state.focusLab = key in LABS ? key : null;
   if (state.focusLab) {
+    state.engineerBrief = false;
     state.visited.add(state.focusLab);
     sessionStorage.setItem("ilsa.visited", JSON.stringify([...state.visited]));
   }
@@ -86,6 +92,7 @@ const OPENING = {
 };
 
 export function buildOpeningLine() {
+  if (state.engineerBrief) return "Tell me what you need built. Not the secrets — the problem.";
   if (state.focusLab && OPENING[state.focusLab]) return OPENING[state.focusLab];
   if (state.otonomyContinue) return "I can show you around. What are you curious about?";
   if (state.returning) return "Welcome back. What would you like to know?";

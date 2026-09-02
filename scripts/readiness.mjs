@@ -74,6 +74,19 @@ check("writer falls back to mailto on API failure", () => {
   assert.match(read("index.html"), /mailto:human@ilsalabs\.com/);
 });
 
+check("engineer for you is a quiet door to the lab", () => {
+  const html = read("index.html");
+  assert.match(html, /Need something built\?/);
+  assert.match(html, /data-engineer/);
+  assert.match(html, /Engineer for you/);
+  assert.match(html, /data-subject="Engineer enquiry"/);
+  assert.match(html, /The lab treats this as confidential/);
+  assert.match(html, /boot==='engineer'/);
+  assert.match(read("prompt/system.md"), /interest "engineering"/);
+  assert.match(read("site/ilsa.js"), /setEngineerBrief/);
+  assert.match(read("api/contact.js"), /Engineer for you · confidential brief/);
+});
+
 check("security headers are declared", () => {
   const v = read("vercel.json");
   for (const h of ["X-Content-Type-Options", "Referrer-Policy", "X-Frame-Options", "Permissions-Policy"]) {
@@ -119,6 +132,7 @@ check("lab greeting uses welcome line", () => {
   assert.match(src, /Hello, welcome to Humantech\. What can I help with\?/);
   assert.match(src, /I can show you around\. What are you curious about\?/);
   assert.match(src, /Welcome back\. What would you like to know\?/);
+  assert.match(src, /Tell me what you need built\. Not the secrets/);
   assert.doesNotMatch(src, /I see you are interested/);
   assert.doesNotMatch(src, /firstMessage:\s*vars\.opening_line/);
   const html = read("index.html");
