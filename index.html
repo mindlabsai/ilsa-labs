@@ -261,13 +261,17 @@ header{
   background:linear-gradient(180deg,rgba(238,240,243,.94),rgba(238,240,243,.8));
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
+.header-actions{
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;
+  flex-shrink:0;min-width:0;
+}
 .askilsa{
-  position:relative;display:inline-flex;align-items:center;gap:8px;
-  flex-shrink:0;align-self:center;
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  flex:0 0 auto;align-self:center;height:36px;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--ink);background:transparent;
   border:1px solid rgba(58,64,72,.45);border-radius:2px;
-  padding:9px 16px;cursor:pointer;
+  padding:0 14px;cursor:pointer;white-space:nowrap;
   transition:background .25s,border-color .25s;
 }
 .askilsa:hover,.askilsa:focus-visible{border-color:var(--ink)}
@@ -608,37 +612,41 @@ body:has(.ilsa-orb.on) .prism{
   color:var(--ink);line-height:1.35;
 }
 .contact .actions{
-  margin-top:clamp(22px,4vw,30px);width:min(320px,86%);max-width:100%;
-  display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:8px;
+  margin-top:clamp(22px,4vw,30px);width:min(440px,92%);max-width:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+}
+.contact .action-row{
+  display:flex;align-items:stretch;justify-content:center;gap:8px;width:100%;
 }
 .contact .actions .herotalk{
-  margin-top:0;flex:none;justify-content:center;
-  min-width:0;height:auto;width:100%;
-  padding:12px 14px;
-  font-size:clamp(10px,2.4vw,12px);letter-spacing:.12em;
+  margin-top:0;flex:1 1 0;justify-content:center;
+  min-width:0;height:auto;width:auto;
+  padding:12px 10px;
+  font-size:clamp(9px,2.1vw,11px);letter-spacing:.1em;
   background:transparent;color:var(--ink);border:1px solid var(--ink);
   white-space:nowrap;
 }
 .contact .actions .herotalk:hover,
 .contact .actions .herotalk:focus-visible{background:rgba(58,64,72,.06)}
-.needbuilt{
-  margin-top:14px;padding:0;border:0;background:none;cursor:pointer;
+.contact .writeplain{
+  margin:0;padding:0;border:0;background:none;cursor:pointer;
   font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:var(--ink);
   text-decoration:underline;text-underline-offset:3px;
 }
-.needbuilt:hover,.needbuilt:focus-visible{color:var(--grey)}
+.contact .writeplain:hover,.contact .writeplain:focus-visible{color:var(--grey)}
 .writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
 @media (max-width:400px){
   header{gap:8px}
   .wordmark{letter-spacing:.14em;font-size:12px}
-  .askilsa{padding:8px 10px;letter-spacing:.12em;font-size:9px}
+  .askilsa{padding:0 8px;letter-spacing:.1em;font-size:8px;height:32px;gap:6px}
+  .header-actions{gap:6px}
   .hero-subtitle{letter-spacing:.12em}
   .hero .herotalk{padding:14px 16px;letter-spacing:.1em;font-size:11px}
   .winghead{flex-direction:column;align-items:flex-start;gap:6px}
   .winghead h2{letter-spacing:.12em}
   .founders-head{letter-spacing:.12em}
-  .contact .actions{width:min(300px,88%);gap:8px}
-  .contact .actions .herotalk{padding:12px 12px;letter-spacing:.1em;gap:8px;font-size:10px}
+  .contact .actions{width:min(360px,94%);gap:12px}
+  .contact .actions .herotalk{padding:11px 8px;letter-spacing:.08em;gap:6px;font-size:9px}
 }
 
 /* ---------- glass writer ---------- */
@@ -883,11 +891,17 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
 
 <header class="wrap">
   <a class="wordmark" href="#top">Ilsa&nbsp;Labs</a>
-  <button class="askilsa" id="askilsa-tile" type="button" aria-describedby="askilsa-tip">
-    <span class="orbdot" aria-hidden="true"></span>
-    Ask ILSA
-    <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab, a voice that can answer anything about ILSA and every platform inside it.</span>
-  </button>
+  <div class="header-actions">
+    <button class="askilsa" id="askilsa-tile" type="button" aria-describedby="askilsa-tip">
+      <span class="orbdot" aria-hidden="true"></span>
+      Talk to ILSA
+      <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab, a voice that can answer anything about ILSA and every platform inside it.</span>
+    </button>
+    <button class="askilsa" id="header-engineer" type="button" data-talk data-engineer>
+      <span class="orbdot" aria-hidden="true"></span>
+      Engineer for you
+    </button>
+  </div>
 </header>
 
 <section class="hero wrap">
@@ -1114,17 +1128,18 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
 <section class="contact wrap">
   <h3 class="curious">There is more<br>happening inside the lab.</h3>
   <div class="actions">
-    <button class="herotalk" type="button" data-talk>
-      <span class="orbdot" aria-hidden="true"></span>
-      Talk to ILSA
-    </button>
-    <button class="herotalk" type="button" id="open-writer">Write to us</button>
-    <button class="herotalk engineer" type="button" id="need-built" data-talk data-engineer>
-      <span class="orbdot" aria-hidden="true"></span>
-      Engineer for you
-    </button>
+    <div class="action-row">
+      <button class="herotalk" type="button" data-talk>
+        <span class="orbdot" aria-hidden="true"></span>
+        Talk to ILSA
+      </button>
+      <button class="herotalk" type="button" id="need-built" data-talk data-engineer>
+        <span class="orbdot" aria-hidden="true"></span>
+        Engineer for you
+      </button>
+    </div>
+    <button class="writeplain" type="button" id="open-writer">Write to us</button>
   </div>
-  <button class="needbuilt" type="button" id="write-engineer">Or write it to the lab</button>
 </section>
 
 <footer class="wrap">
@@ -1424,10 +1439,6 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
   document.getElementById('open-writer').addEventListener('click',function(){
     lastFocus=document.getElementById('open-writer');
     openWriter();
-  });
-  document.getElementById('write-engineer').addEventListener('click',function(){
-    lastFocus=document.getElementById('write-engineer');
-    openWriter('Engineer enquiry');
   });
   function closeWriter(){
     lockPage(false);

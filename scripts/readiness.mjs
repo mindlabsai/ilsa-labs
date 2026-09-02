@@ -76,10 +76,11 @@ check("writer falls back to mailto on API failure", () => {
 
 check("engineer for you is a quiet door to the lab", () => {
   const html = read("index.html");
-  assert.match(html, /Or write it to the lab/);
+  assert.match(html, /id="header-engineer"/);
+  assert.match(html, /id="open-writer"/);
+  assert.match(html, /class="writeplain"/);
   assert.match(html, /data-engineer/);
   assert.match(html, /Engineer for you/);
-  assert.match(html, /id="write-engineer"/);
   assert.match(html, /data-subject="Engineer enquiry"/);
   assert.match(html, /The lab treats this as confidential/);
   assert.match(html, /boot==='engineer'/);
