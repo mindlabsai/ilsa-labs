@@ -271,13 +271,10 @@ header{
   position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
   flex:0 0 auto;align-self:center;height:36px;
   font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink);background:transparent;
-  border:1px solid rgba(58,64,72,.45);border-radius:2px;
-  padding:0 14px;cursor:pointer;white-space:nowrap;
-  transition:background .25s,border-color .25s;
+  color:var(--ink);background:none;border:0;
+  padding:0;cursor:pointer;white-space:nowrap;
 }
-.askilsa:hover,.askilsa:focus-visible{border-color:var(--ink)}
-.askilsa:hover,.askilsa:focus-visible{background:rgba(58,64,72,.06)}
+.askilsa:hover,.askilsa:focus-visible{color:var(--grey)}
 .orbdot{
   width:9px;height:9px;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#CFE4FF,#3E8CFF 60%);
@@ -639,15 +636,15 @@ body:has(.ilsa-orb.on) .prism{
 .contact .writeplain:hover,.contact .writeplain:focus-visible{color:var(--grey)}
 .writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
 @media (max-width:720px){
-  header{flex-wrap:nowrap;gap:12px}
-  .wordmark{flex:1 1 auto;font-weight:700;letter-spacing:.22em;font-size:clamp(16px,5.4vw,20px)}
-  .header-actions{flex:0 0 auto;justify-content:flex-end;gap:2px}
+  header{flex-wrap:nowrap;gap:10px}
+  .wordmark{flex:1 1 auto;font-weight:700;letter-spacing:.2em;font-size:clamp(15px,4.8vw,19px)}
+  .header-actions{flex:0 0 auto;justify-content:flex-end}
   .askilsa{
-    flex:0 0 auto;width:44px;height:44px;min-height:0;min-width:44px;
-    padding:0;border:0;background:none;font-size:0;letter-spacing:0;gap:0;
+    flex:0 0 auto;width:auto;height:44px;min-height:0;min-width:0;
+    padding:0;border:0;background:none;font-size:10px;letter-spacing:.08em;gap:7px;
   }
   .askilsa:hover,.askilsa:focus-visible{border:0;background:none}
-  .askilsa .orbdot{width:12px;height:12px;flex:0 0 auto;box-shadow:0 0 12px rgba(62,140,255,.95)}
+  .askilsa .orbdot{width:11px;height:11px;flex:0 0 auto;box-shadow:0 0 12px rgba(62,140,255,.95)}
   .hero-subtitle{letter-spacing:.1em;width:100%;max-width:100%;overflow-wrap:anywhere}
   .hero-copy{width:100%;max-width:100%;font-size:16px}
   .hero .herotalk{padding:14px 16px;letter-spacing:.1em;font-size:11px}
@@ -912,10 +909,6 @@ html.oton-handoff-waiting .ilsa-here{display:inline-flex}
       <span class="orbdot" aria-hidden="true"></span>
       Talk to ILSA
       <span class="tip" id="askilsa-tip" role="tooltip">Talk to the lab, a voice that can answer anything about ILSA and every platform inside it.</span>
-    </button>
-    <button class="askilsa" id="header-engineer" type="button" data-talk data-engineer>
-      <span class="orbdot" aria-hidden="true"></span>
-      Engineer for you
     </button>
   </div>
 </header>

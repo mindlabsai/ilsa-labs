@@ -76,12 +76,12 @@ check("writer falls back to mailto on API failure", () => {
 
 check("engineer for you is a quiet door to the lab", () => {
   const html = read("index.html");
-  assert.match(html, /id="header-engineer"/);
+  assert.doesNotMatch(html, /id="header-engineer"/);
+  assert.match(html, /id="askilsa-tile"/);
   assert.match(html, /id="open-writer"/);
   assert.match(html, /class="writeplain"/);
   assert.match(html, /@media \(max-width:720px\)/);
   assert.match(html, /header\{flex-wrap:nowrap/);
-  assert.match(html, /\.askilsa\{\s*flex:0 0 auto;width:44px;height:44px/);
   assert.match(html, /data-engineer/);
   assert.match(html, /Engineer for you/);
   assert.match(html, /data-subject="Engineer enquiry"/);
