@@ -639,15 +639,15 @@ body:has(.ilsa-orb.on) .prism{
 .contact .writeplain:hover,.contact .writeplain:focus-visible{color:var(--grey)}
 .writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
 @media (max-width:720px){
-  header{flex-wrap:wrap;gap:10px}
-  .wordmark{letter-spacing:.16em;font-size:13px}
-  .header-actions{flex:1 1 100%;justify-content:stretch;gap:6px}
+  header{flex-wrap:nowrap;gap:12px}
+  .wordmark{flex:1 1 auto;font-weight:700;letter-spacing:.22em;font-size:clamp(16px,5.4vw,20px)}
+  .header-actions{flex:0 0 auto;justify-content:flex-end;gap:2px}
   .askilsa{
-    flex:1 1 0;min-width:0;height:auto;min-height:40px;
-    padding:8px 6px;letter-spacing:.05em;font-size:9px;gap:6px;
-    white-space:normal;line-height:1.2;text-align:center;
+    flex:0 0 auto;width:44px;height:44px;min-height:0;min-width:44px;
+    padding:0;border:0;background:none;font-size:0;letter-spacing:0;gap:0;
   }
-  .askilsa .orbdot{width:7px;height:7px;flex:0 0 auto}
+  .askilsa:hover,.askilsa:focus-visible{border:0;background:none}
+  .askilsa .orbdot{width:12px;height:12px;flex:0 0 auto;box-shadow:0 0 12px rgba(62,140,255,.95)}
   .hero-subtitle{letter-spacing:.1em;width:100%;max-width:100%;overflow-wrap:anywhere}
   .hero-copy{width:100%;max-width:100%;font-size:16px}
   .hero .herotalk{padding:14px 16px;letter-spacing:.1em;font-size:11px}
@@ -658,8 +658,6 @@ body:has(.ilsa-orb.on) .prism{
   }
 }
 @media (max-width:400px){
-  .wordmark{letter-spacing:.14em;font-size:12px}
-  .askilsa{padding:7px 4px;letter-spacing:.04em;font-size:8px;min-height:38px}
   .hero-subtitle{letter-spacing:.08em;font-size:11px}
   .winghead{flex-direction:column;align-items:flex-start;gap:6px}
   .winghead h2{letter-spacing:.12em}
