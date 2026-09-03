@@ -79,6 +79,8 @@ check("engineer for you is a quiet door to the lab", () => {
   assert.match(html, /id="header-engineer"/);
   assert.match(html, /id="open-writer"/);
   assert.match(html, /class="writeplain"/);
+  assert.match(html, /@media \(max-width:720px\)/);
+  assert.match(html, /header\{flex-wrap:wrap/);
   assert.match(html, /data-engineer/);
   assert.match(html, /Engineer for you/);
   assert.match(html, /data-subject="Engineer enquiry"/);

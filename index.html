@@ -247,10 +247,12 @@ body{
 }
 button,a,.chamber{touch-action:manipulation;-webkit-tap-highlight-color:rgba(58,64,72,.08)}
 .wrap{
-  max-width:1200px;margin:0 auto;
-  padding-left:max(clamp(18px,4.5vw,56px),env(safe-area-inset-left));
-  padding-right:max(clamp(18px,4.5vw,56px),env(safe-area-inset-right));
+  width:100%;max-width:1200px;margin:0 auto;
+  padding-left:max(clamp(16px,4.5vw,56px),env(safe-area-inset-left));
+  padding-right:max(clamp(16px,4.5vw,56px),env(safe-area-inset-right));
+  min-width:0;
 }
+#site{width:100%;max-width:100%;overflow-x:clip;min-width:0}
 header{
   position:sticky;top:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -263,7 +265,7 @@ header{
 }
 .header-actions{
   display:flex;align-items:center;justify-content:flex-end;gap:10px;
-  flex-shrink:0;min-width:0;
+  flex:1 1 auto;min-width:0;
 }
 .askilsa{
   position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -307,11 +309,12 @@ header .mono{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2
 .hero{padding:clamp(40px,7vw,96px) 0 clamp(30px,5vw,60px);text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero-title{
   font-weight:800;
-  font-size:clamp(38px,10.5vw,64px);
+  font-size:clamp(28px,8.4vw,64px);
   line-height:.98;
   letter-spacing:-.045em;
-  max-width:680px;
+  width:100%;max-width:min(680px,100%);
   margin-inline:auto;
+  overflow-wrap:anywhere;word-break:break-word;
 }
 .hero-subtitle{
   margin-top:28px;font-family:'Space Mono',monospace;font-weight:400;
@@ -635,18 +638,33 @@ body:has(.ilsa-orb.on) .prism{
 }
 .contact .writeplain:hover,.contact .writeplain:focus-visible{color:var(--grey)}
 .writer .wnote{margin-top:10px;font-weight:300;font-size:12px;line-height:1.5;color:var(--grey)}
-@media (max-width:400px){
-  header{gap:8px}
-  .wordmark{letter-spacing:.14em;font-size:12px}
-  .askilsa{padding:0 8px;letter-spacing:.1em;font-size:8px;height:32px;gap:6px}
-  .header-actions{gap:6px}
-  .hero-subtitle{letter-spacing:.12em}
+@media (max-width:720px){
+  header{flex-wrap:wrap;gap:10px}
+  .wordmark{letter-spacing:.16em;font-size:13px}
+  .header-actions{flex:1 1 100%;justify-content:stretch;gap:6px}
+  .askilsa{
+    flex:1 1 0;min-width:0;height:auto;min-height:40px;
+    padding:8px 6px;letter-spacing:.05em;font-size:9px;gap:6px;
+    white-space:normal;line-height:1.2;text-align:center;
+  }
+  .askilsa .orbdot{width:7px;height:7px;flex:0 0 auto}
+  .hero-subtitle{letter-spacing:.1em;width:100%;max-width:100%;overflow-wrap:anywhere}
+  .hero-copy{width:100%;max-width:100%;font-size:16px}
   .hero .herotalk{padding:14px 16px;letter-spacing:.1em;font-size:11px}
+  .contact .actions{width:100%;max-width:100%;gap:12px}
+  .contact .actions .herotalk{
+    padding:12px 6px;letter-spacing:.05em;gap:6px;
+    font-size:clamp(8px,2.2vw,10px);white-space:normal;line-height:1.2;
+  }
+}
+@media (max-width:400px){
+  .wordmark{letter-spacing:.14em;font-size:12px}
+  .askilsa{padding:7px 4px;letter-spacing:.04em;font-size:8px;min-height:38px}
+  .hero-subtitle{letter-spacing:.08em;font-size:11px}
   .winghead{flex-direction:column;align-items:flex-start;gap:6px}
   .winghead h2{letter-spacing:.12em}
   .founders-head{letter-spacing:.12em}
-  .contact .actions{width:min(360px,94%);gap:12px}
-  .contact .actions .herotalk{padding:11px 8px;letter-spacing:.08em;gap:6px;font-size:9px}
+  .contact .actions .herotalk{padding:11px 4px;letter-spacing:.04em;font-size:8px}
 }
 
 /* ---------- glass writer ---------- */
