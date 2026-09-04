@@ -80,6 +80,7 @@ check("engineer for you is a quiet door to the lab", () => {
   assert.match(html, /id="askilsa-tile"/);
   assert.match(html, /id="open-writer"/);
   assert.match(html, /class="writeplain"/);
+  assert.match(html, /\.contact \.actions \.herotalk\{[\s\S]*?border:0/);
   assert.match(html, /@media \(max-width:720px\)/);
   assert.match(html, /header\{flex-wrap:nowrap/);
   assert.match(html, /data-engineer/);
